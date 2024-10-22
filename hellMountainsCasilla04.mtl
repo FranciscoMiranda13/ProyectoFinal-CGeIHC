@@ -1,0 +1,45 @@
+# Blender 4.2.1 LTS MTL File: 'None'
+# www.blender.org
+
+newmtl Upper_Skull_Mountain_Collar_Mic.001
+Ns 10.000005
+Ka 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 1
+map_Kd Skull_Mountain_Collar_Diff.png
+map_Ks Skull_Mountain_Collar_Spec.png
+map_Bump Skull_Mountain_Norm.png
+
+newmtl Upper_Skull_Mountain_Exterior_Mic.001
+Ns 10.000005
+Ka 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 1
+map_Kd Skull_Mountain_Diff.png
+map_Ks Skull_Mountain_Spec.png
+map_Bump Skull_Mountain_Norm.png
+
+newmtl Upper_Skull_Mountain_Interior_Mic.001
+Ns 10.000005
+Ka 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 1
+map_Kd Skull_Mountain_Diff.png
+map_Ks Skull_Mountain_Spec.png
+map_Bump Skull_Mountain_Norm.png
+
+newmtl Upper_Skull_Mountain_LavaFlow_Mic.001
+Ns 10.000005
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 1
+map_Kd MainArena_Lava1_Emis.png
+map_Ke MainArena_Lava1_Emis.png
