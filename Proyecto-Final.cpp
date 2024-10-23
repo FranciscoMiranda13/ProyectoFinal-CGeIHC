@@ -136,6 +136,7 @@ Model modeloCasilla01M;
 Model modeloCasilla02M;
 Model modeloCasilla03M;
 Model modeloCasilla04M;
+Model modeloCasilla23M;
 
 Model Kitt_M;
 Model Llanta_M;
@@ -300,102 +301,6 @@ int main()
 	AgaveTexture = Texture("Textures/Agave.tga");
 	AgaveTexture.LoadTextureA();
 
-	// TEXTURAS EXTRAS
-	colorBlanco = Texture("Textures/colorBlanco.png");
-	colorBlanco.LoadTextureA();
-
-	// DADOS TEXTURAS
-	dado4CarasT = Texture("Textures/dado4Caras.png");
-	dado4CarasT.LoadTextureA();
-	dado8CarasT = Texture("Textures/dado8Caras.png");
-	dado8CarasT.LoadTextureA();
-
-	// CASILLAS TEXTURAS
-	casilla01T = Texture("Textures/texturaCasilla01.png");
-	casilla01T.LoadTextureA();
-	casilla02T = Texture("Textures/texturaCasilla02.png");
-	casilla02T.LoadTextureA();
-	casilla03T = Texture("Textures/texturaCasilla03.png");
-	casilla03T.LoadTextureA();
-	casilla04T = Texture("Textures/texturaCasilla04.png");
-	casilla04T.LoadTextureA();
-	casilla05T = Texture("Textures/texturaCasilla05.png");
-	casilla05T.LoadTextureA();
-	casilla06T = Texture("Textures/texturaCasilla06.png");
-	casilla06T.LoadTextureA();
-	casilla07T = Texture("Textures/texturaCasilla07.png");
-	casilla07T.LoadTextureA();
-	casilla08T = Texture("Textures/texturaCasilla08.png");
-	casilla08T.LoadTextureA();
-	casilla09T = Texture("Textures/texturaCasilla09.png");
-	casilla09T.LoadTextureA();
-	casilla10T = Texture("Textures/texturaCasilla10.png");
-	casilla10T.LoadTextureA();
-	casilla11T = Texture("Textures/texturaCasilla11.png");
-	casilla11T.LoadTextureA();
-	casilla12T = Texture("Textures/texturaCasilla12.png");
-	casilla12T.LoadTextureA();
-	casilla13T = Texture("Textures/texturaCasilla13.png");
-	casilla13T.LoadTextureA();
-	casilla14T = Texture("Textures/texturaCasilla14.png");
-	casilla14T.LoadTextureA();
-	casilla15T = Texture("Textures/texturaCasilla15.png");
-	casilla15T.LoadTextureA();
-	casilla16T = Texture("Textures/texturaCasilla16.png");
-	casilla16T.LoadTextureA();
-	casilla17T = Texture("Textures/texturaCasilla17.png");
-	casilla17T.LoadTextureA();
-	casilla18T = Texture("Textures/texturaCasilla18.png");
-	casilla18T.LoadTextureA();
-	casilla19T = Texture("Textures/texturaCasilla19.png");
-	casilla19T.LoadTextureA();
-	casilla20T = Texture("Textures/texturaCasilla20.png");
-	casilla20T.LoadTextureA();
-	casilla21T = Texture("Textures/texturaCasilla21.png");
-	casilla21T.LoadTextureA();
-	casilla22T = Texture("Textures/texturaCasilla22.png");
-	casilla22T.LoadTextureA();
-	casilla23T = Texture("Textures/texturaCasilla23.png");
-	casilla23T.LoadTextureA();
-	casilla24T = Texture("Textures/texturaCasilla24.png");
-	casilla24T.LoadTextureA();
-	casilla25T = Texture("Textures/texturaCasilla25.png");
-	casilla25T.LoadTextureA();
-	casilla26T = Texture("Textures/texturaCasilla26.png");
-	casilla26T.LoadTextureA();
-	casilla27T = Texture("Textures/texturaCasilla27.png");
-	casilla27T.LoadTextureA();
-
-	// TEXTURAS DE LOS MODELOS DE LAS CASILLAS
-	modeloCasilla01T01 = Texture("Textures/Raiden_Accessory_Diff.png");
-	modeloCasilla01T01.LoadTextureA();
-	modeloCasilla01T02 = Texture("Textures/Raiden_Diff.png");
-	modeloCasilla01T02.LoadTextureA();
-	modeloCasilla02T01 = Texture("Textures/MK-X_iOS_EARTHREALM_Hanzo_Hasashi_Scorpion_MK-X_Body_D.png");
-	modeloCasilla02T01.LoadTextureA();
-	modeloCasilla03T01 = Texture("Textures/ShaoKahn_Cape_Diff.png");
-	modeloCasilla03T01.LoadTextureA();
-	modeloCasilla03T02 = Texture("Textures/ShaoKahn_Diff.png");
-	modeloCasilla03T02.LoadTextureA();
-	modeloCasilla04T01 = Texture("Textures/MainArena_Lava1_Emis.png");
-	modeloCasilla04T01.LoadTextureA();
-	modeloCasilla04T02 = Texture("Textures/Skull_Mountain_Collar_Diff.png");
-	modeloCasilla04T02.LoadTextureA();
-	modeloCasilla04T03 = Texture("Textures/Skull_Mountain_Collar_Spec.png");
-	modeloCasilla04T03.LoadTextureA();
-	modeloCasilla04T04 = Texture("Textures/Skull_Mountain_Diff.png");
-	modeloCasilla04T04.LoadTextureA();
-	modeloCasilla04T05 = Texture("Textures/Skull_Mountain_Norm.png");
-	modeloCasilla04T05.LoadTextureA();
-	modeloCasilla04T06 = Texture("Textures/Skull_Mountain_Spec.png");
-	modeloCasilla04T06.LoadTextureA();
-
-	Kitt_M = Model();
-	Kitt_M.LoadModel("Models/kitt_optimizado.obj");
-	Llanta_M = Model();
-	Llanta_M.LoadModel("Models/llanta_optimizada.obj");
-	Blackhawk_M = Model();
-	Blackhawk_M.LoadModel("Models/uh60.obj");
 
 	// DADOS MODELOS
 	dado4CarasM = Model();
@@ -470,6 +375,8 @@ int main()
 	modeloCasilla03M.LoadModel("Models/shaoKahnCasilla03.obj");
 	modeloCasilla04M = Model();
 	modeloCasilla04M.LoadModel("Models/hellMountainsCasilla04.obj");
+	modeloCasilla23M = Model();
+	modeloCasilla23M.LoadModel("Models/babytCasilla23.obj");
 
 	std::vector<std::string> skyboxFaces;
 	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_rt.tga");
@@ -587,48 +494,48 @@ int main()
 
 		meshList[2]->RenderMesh();
 
-		//Instancia del coche 
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f + mainWindow.getmuevex(), 0.5f, -3.0f));
-		modelaux = model;
-		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Kitt_M.RenderModel();
+		////Instancia del coche 
+		//model = glm::mat4(1.0);
+		//model = glm::translate(model, glm::vec3(0.0f + mainWindow.getmuevex(), 0.5f, -3.0f));
+		//modelaux = model;
+		//model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		//model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//Kitt_M.RenderModel();
 
-		//Llanta delantera izquierda
-		model = modelaux;
-		model = glm::translate(model, glm::vec3(7.0f, -0.5f, 8.0f));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
-		color = glm::vec3(0.5f, 0.5f, 0.5f);//llanta con color gris
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Llanta_M.RenderModel();
+		////Llanta delantera izquierda
+		//model = modelaux;
+		//model = glm::translate(model, glm::vec3(7.0f, -0.5f, 8.0f));
+		//model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
+		//color = glm::vec3(0.5f, 0.5f, 0.5f);//llanta con color gris
+		//glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//Llanta_M.RenderModel();
 
-		//Llanta trasera izquierda
-		model = modelaux;
-		model = glm::translate(model, glm::vec3(15.5f, -0.5f, 8.0f));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Llanta_M.RenderModel();
+		////Llanta trasera izquierda
+		//model = modelaux;
+		//model = glm::translate(model, glm::vec3(15.5f, -0.5f, 8.0f));
+		//model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
+		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//Llanta_M.RenderModel();
 
-		//Llanta delantera derecha
-		model = modelaux;
-		model = glm::translate(model, glm::vec3(7.0f, -0.5f, 1.5f));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Llanta_M.RenderModel();
+		////Llanta delantera derecha
+		//model = modelaux;
+		//model = glm::translate(model, glm::vec3(7.0f, -0.5f, 1.5f));
+		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
+		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//Llanta_M.RenderModel();
 
-		//Llanta trasera derecha
-		model = modelaux;
-		model = glm::translate(model, glm::vec3(15.5f, -0.5f, 1.5f));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Llanta_M.RenderModel();
+		////Llanta trasera derecha
+		//model = modelaux;
+		//model = glm::translate(model, glm::vec3(15.5f, -0.5f, 1.5f));
+		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
+		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//Llanta_M.RenderModel();
 	
 
 		model = glm::mat4(1.0);
@@ -1133,20 +1040,16 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		modeloCasilla04M.RenderModel();
 
-
-		//Agave ¿qué sucede si lo renderizan antes del coche y el helicóptero?
+		// HELL MOUNTAIN - CASILLA 04
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, 1.0f, -4.0f));
-		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+
+		model = glm::translate(model, glm::vec3(-120.0f, 4.4f, 20.0));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.06f, 0.06f, 0.06f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		
-		//blending: transparencia o traslucidez
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		AgaveTexture.UseTexture();
-		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		meshList[3]->RenderMesh();
-		glDisable(GL_BLEND);
+		modeloCasilla04M.RenderModel();
+
+
 
 		glUseProgram(0);
 
