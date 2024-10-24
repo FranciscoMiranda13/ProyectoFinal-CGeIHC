@@ -87,7 +87,13 @@ Model modeloCasilla01M;
 Model modeloCasilla02M;
 Model modeloCasilla03M;
 Model modeloCasilla04M;
+Model modeloCasilla21M;
+Model modeloCasilla22M;
 Model modeloCasilla23M;
+Model modeloCasilla24M;
+Model modeloCasilla25M;
+Model modeloCasilla26M;
+Model modeloCasilla27M;
 
 Model Kitt_M;
 Model Llanta_M;
@@ -326,8 +332,20 @@ int main()
 	modeloCasilla03M.LoadModel("Models/shaoKahnCasilla03.obj");
 	modeloCasilla04M = Model();
 	modeloCasilla04M.LoadModel("Models/hellMountainsCasilla04.obj");
+	modeloCasilla21M = Model();
+	modeloCasilla21M.LoadModel("Models/pinstripeCasilla21.obj");
+	modeloCasilla22M = Model();
+	modeloCasilla22M.LoadModel("Models/lionCasilla22.obj");
 	modeloCasilla23M = Model();
 	modeloCasilla23M.LoadModel("Models/babytCasilla23.obj");
+	modeloCasilla24M = Model();
+	modeloCasilla24M.LoadModel("Models/aku_akuCasilla24.obj");
+	modeloCasilla25M = Model();
+	modeloCasilla25M.LoadModel("Models/palm_treeCasilla25.obj");
+	/*modeloCasilla26M = Model();
+	modeloCasilla26M.LoadModel("Models/palm_treeCasilla26.obj");*/
+	modeloCasilla27M = Model();
+	modeloCasilla27M.LoadModel("Models/basic_treeCasilla27.obj");
 
 	std::vector<std::string> skyboxFaces;
 	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_rt.tga");
@@ -948,6 +966,60 @@ int main()
 		model = glm::scale(model, glm::vec3(0.06f, 0.06f, 0.06f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		modeloCasilla04M.RenderModel();
+		
+		// PINSTRIPE - CASILLA 21
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(120.0f, 9.5f, -100.0));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(6.0f, 6.0f, 6.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla21M.RenderModel();
+
+		// LION - CASILLA 22
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(120.0f, 6.0f, -80.0));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.25f, 1.25f, 1.25f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla22M.RenderModel();
+
+		// BABY T - CASILLA 23
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(120.0f, 5.2f, -60.0));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla23M.RenderModel();
+
+		// AKU AKU - CASILLA 24
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(120.0f, 5.2f, -40.0));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla24M.RenderModel();
+
+		// PALM_TREE - CASILLA 25
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(120.0f, 5.2f, -40.0));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla25M.RenderModel();
+
+		// BASIC_TREE - CASILLA 27
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(120.0f, 5.2f, 20.0));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla27M.RenderModel();
 
 
 
