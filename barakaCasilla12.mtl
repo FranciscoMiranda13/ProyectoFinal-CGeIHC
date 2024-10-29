@@ -1,0 +1,13 @@
+# Blender 4.2.3 LTS MTL File: 'None'
+# www.blender.org
+
+newmtl Character_MIC
+Ns 250.000000
+Ka 0.100000 0.100000 0.100000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 3
+map_Kd Baraka_Diff.png
+map_Ks Baraka_Spec.png
+map_d Baraka_Diff.png
+map_Bump -bm 3.000000 Baraka_NormHQA.png
