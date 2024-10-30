@@ -1,4 +1,3 @@
-
 // PROYECTO DE LABORATORIO
 
 //para cargar imagen
@@ -34,7 +33,36 @@
 #include "PointLight.h"
 #include "SpotLight.h"
 #include "Material.h"
+
+// PARA ELEGIR LOS GRADOS DE MANERA RANDOM
+#include <iostream>
+#include <cstdlib> // Para rand() y srand()
+#include <ctime>   // Para time()
+
 const float toRadians = 3.14159265f / 180.0f;
+
+// VARIABLES PARA ANIMACION DEL DADO DE 8 CARAS
+float subeBajaDado8 = 35.0f;
+float subeBajaDadoOffset8 = 0.3f;
+float rotaDadox8 = 0.0f;
+float rotaDadoxOffset8 = 1.0f;
+float rotaDadoy8 = 0.0f;
+float rotaDadoyOffset8 = 1.0f;
+float rotaDadoz8 = 0.0f;
+float rotaDadozOffset8 = 1.0f;
+
+// VARIABLES PARA ANIMACION DEL DADO DE 4 CARAS
+float subeBajaDado4 = 35.0f;
+float subeBajaDadoOffset4 = 0.3f;
+float rotaDadox4 = 0.0f;
+float rotaDadoxOffset4 = 1.0f;
+float rotaDadoy4 = 0.0f;
+float rotaDadoyOffset4 = 1.0f;
+
+// RRESULTADO DEL DADO
+int resultado4Caras = 0;
+int resultado8Caras = 0;
+int resultado = 0;
 
 Window mainWindow;
 std::vector<Mesh*> meshList;
@@ -47,6 +75,9 @@ Texture dirtTexture;
 Texture plainTexture;
 Texture pisoTexture;
 Texture AgaveTexture;
+
+// SUELO (PASTO)
+Texture pasto;
 
 // DADOS MODELOS
 Model dado4CarasM;
@@ -137,10 +168,10 @@ Model casilla38A;
 Model casilla39A;
 Model casilla40A;
 
-
 //CASILLAS "ILUMINADA"
 Model casilla01AR;
 Model casilla01R;
+
 // MODELOS DE LAS CASILLAS
 Model modeloCasilla01M;
 Model modeloCasilla02M;
@@ -259,16 +290,19 @@ void CreateObjects()
 			0.0f, 1.0f, 0.0f,		0.5f, 1.0f,		0.0f, 0.0f, 0.0f
 	};
 
-	unsigned int floorIndices[] = {
-		0, 2, 1,
-		1, 2, 3
+	// PISO (PASTO)
+	unsigned int pisoPastoIndices[] = {
+		0, 1, 2,
+		0, 2, 3
 	};
 
-	GLfloat floorVertices[] = {
-		-10.0f, 0.0f, -10.0f,	0.0f, 0.0f,		0.0f, -1.0f, 0.0f,
-		10.0f, 0.0f, -10.0f,	10.0f, 0.0f,	0.0f, -1.0f, 0.0f,
-		-10.0f, 0.0f, 10.0f,	0.0f, 10.0f,	0.0f, -1.0f, 0.0f,
-		10.0f, 0.0f, 10.0f,		10.0f, 10.0f,	0.0f, -1.0f, 0.0f
+	GLfloat pisoPastoVertices[] = {
+		// LA TEXTURA SE VERA REPETIDA 10 VECES
+		-10.0f, 0.0f, 10.0f,	0.0f, 0.0f,			0.0f, -1.0f, 0.0f,
+		-10.0f, 0.0f, -10.0f,	0.0f, 20.0f,		0.0f, -1.0f, 0.0f,
+		10.0f, 0.0f, -10.0f,	20.0f, 20.0f,		0.0f, -1.0f, 0.0f,
+		10.0f, 0.0f, 10.0f,		20.0f, 0.0f,		0.0f, -1.0f, 0.0f,
+
 	};
 
 	unsigned int vegetacionIndices[] = {
@@ -291,17 +325,18 @@ void CreateObjects()
 
 
 	};
-	
-	Mesh *obj1 = new Mesh();
+
+	Mesh* obj1 = new Mesh();
 	obj1->CreateMesh(vertices, indices, 32, 12);
 	meshList.push_back(obj1);
 
-	Mesh *obj2 = new Mesh();
+	Mesh* obj2 = new Mesh();
 	obj2->CreateMesh(vertices, indices, 32, 12);
 	meshList.push_back(obj2);
 
-	Mesh *obj3 = new Mesh();
-	obj3->CreateMesh(floorVertices, floorIndices, 32, 6);
+	// PISO (PASTO)
+	Mesh* obj3 = new Mesh();
+	obj3->CreateMesh(pisoPastoVertices, pisoPastoIndices, 32, 6);
 	meshList.push_back(obj3);
 
 	Mesh* obj4 = new Mesh();
@@ -317,11 +352,10 @@ void CreateObjects()
 
 void CreateShaders()
 {
-	Shader *shader1 = new Shader();
+	Shader* shader1 = new Shader();
 	shader1->CreateFromFiles(vShader, fShader);
 	shaderList.push_back(*shader1);
 }
-
 
 
 int main()
@@ -345,6 +379,9 @@ int main()
 	AgaveTexture = Texture("Textures/Agave.tga");
 	AgaveTexture.LoadTextureA();
 
+	// PISO (PASTO)
+	pasto = Texture("Textures/pasto.png");
+	pasto.LoadTextureA();
 
 	// DADOS MODELOS
 	dado4CarasM = Model();
@@ -602,8 +639,6 @@ int main()
 	casilla40A = Model();
 	casilla40A.LoadModel("Models/casilla40A.obj");*/
 
-
-	
 	// MODELOS DE LAS CASILLAS
 	modeloCasilla01M = Model();
 	modeloCasilla01M.LoadModel("Models/raidenCasilla01.obj");
@@ -700,17 +735,16 @@ int main()
 
 	//luz direccional, sólo 1 y siempre debe de existir
 	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
-		0.3f, 0.1f,
-		0.0f, -1.0f, 0.0f);
+		0.9f, 0.3f, // ESTABA 0.3 Y 0.3
+		0.0f, 0.0f, -1.0f);
 	//contador de luces puntuales
 	unsigned int pointLightCount = 0;
 	//Declaración de primer luz puntual
 	pointLights[0] = PointLight(1.0f, 0.0f, 0.0f,
 		0.0f, 1.0f,
-		-200.0f, 4.0f, 80.0f,
+		-6.0f, 1.5f, 1.5f,
 		0.3f, 0.2f, 0.1f);
 	pointLightCount++;
-
 	unsigned int spotLightCount = 0;
 	//linterna
 	spotLights[0] = SpotLight(1.0f, 1.0f, 1.0f,
@@ -720,25 +754,52 @@ int main()
 		1.0f, 0.0f, 0.0f,
 		5.0f);
 	spotLightCount++;
-
-	//LUZ textura 
-	spotLights[1] = SpotLight(1.0f, 0.0f, 0.0f,
-		0.8f, 8.0f,
-		-100.0f, 20.0f, 100.0f,
-		0.0f, -1.0f, 0.0f,
-		0.3f, 0.1f, 0.001f,
-		40.0f);
+	//luz fija
+	spotLights[1] = SpotLight(0.0f, 1.0f, 0.0f,
+		1.0f, 2.0f,
+		5.0f, 10.0f, 0.0f,
+		0.0f, -5.0f, 0.0f,
+		1.0f, 0.0f, 0.0f,
+		15.0f);
 	spotLightCount++;
-	
-
-
-	
 	//se crean mas luces puntuales y spotlight 
 
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0,
 		uniformSpecularIntensity = 0, uniformShininess = 0;
 	GLuint uniformColor = 0;
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
+
+	// PARA CONTROLAR EL TIEMPO, AUN NO LO ESTOY OCUPANDO
+	glfwSetTime(0);
+
+	// GRADOS ALEATORIOS 
+	// Inicializar la semilla solo una vez
+	std::srand(static_cast<unsigned>(std::time(0)));
+
+	// PARA GRADOS DE X DADO 8 CARAS
+	std::vector<int> listaX = { 180, -180 };
+	int gradosDeX = listaX[std::rand() % listaX.size()];
+
+	// PARA GRADOS DE Y DADO 8 CARAS
+	std::vector<int> listaY = { 45, 135, 225, 315, -45, -135, -225, -315 };
+	int gradosDeY = listaY[std::rand() % listaY.size()];
+
+	// PARA GRADOS DE Z DADO 8 CARAS
+	std::vector<int> listaZ = { 25,-25 };
+	int gradosDeZ = listaZ[std::rand() % listaZ.size()];
+
+	// PARA GRADOS DE X_1 DADO DE 4 CARAS
+	std::vector<int> listaX_1 = { 0, 115, 115 , 115 };
+	int gradosDeX_1 = listaX_1[std::rand() % listaX_1.size()];
+
+	// PARA GRADOS DE X_2 DADO DE 4 CARAS
+	std::vector<int> listaX_2 = { 0, -115, -115 , -115 };
+	int gradosDeX_2 = listaX_2[std::rand() % listaX_2.size()];
+
+	// PARA GRADOS DE Y_1 DADO DE 4 CARAS
+	std::vector<int> listaY_1 = { 60, 120, 180, 240, 300, 360, -60, -120, -180, -240, -300, -360 };
+	int gradosDeY_1 = listaY_1[std::rand() % listaY_1.size()];
+
 	////Loop mientras no se cierra la ventana
 	while (!mainWindow.getShouldClose())
 	{
@@ -746,6 +807,827 @@ int main()
 		deltaTime = now - lastTime;
 		deltaTime += (now - lastTime) / limitFPS;
 		lastTime = now;
+
+		// PARA BAJAR
+		// TECLA Y
+		if (mainWindow.getsubeBajaDado() == true)
+		{
+			// HACER QUE EL DADO BAJE
+			if (subeBajaDado8 > 7.0f)
+			{
+				subeBajaDado8 -= subeBajaDadoOffset8 * deltaTime;
+			}
+			// CUANDO LLEGUE AL FINAL
+			else
+			{
+				// ROTAR EN X
+				switch (gradosDeX)
+				{
+				case 180:
+					if (rotaDadox8 < 180)
+					{
+						rotaDadox8 += rotaDadoxOffset8 * deltaTime;
+					}
+					else
+					{
+						// ROTAR EN Y
+						switch (gradosDeY)
+						{
+						case 45:
+							if (rotaDadoy8 < 45)
+							{
+								rotaDadoy8 += rotaDadoyOffset8 * deltaTime;
+							}
+							else
+							{
+								// ROTAR EN Z
+								// ELEGIR EL NUMERO DEL LADO
+								switch (gradosDeZ)
+								{
+								case 25:
+									if (rotaDadoz8 < 25)
+									{
+										rotaDadoz8 += rotaDadozOffset8 * deltaTime;
+									}
+									resultado8Caras = 6; 
+									break;
+								case -25:
+									if (rotaDadoz8 > -25)
+									{
+										rotaDadoz8 -= rotaDadozOffset8 * deltaTime;
+									}
+									resultado8Caras = 3; 
+									break;
+								}
+							}
+							break;
+						case -45:
+							if (rotaDadoy8 > -45)
+							{
+								rotaDadoy8 -= rotaDadoyOffset8 * deltaTime;
+							}
+							else
+							{
+								switch (gradosDeZ)
+								{
+								case 25:
+									if (rotaDadoz8 < 25)
+									{
+										rotaDadoz8 += rotaDadozOffset8 * deltaTime;
+									}
+									resultado8Caras = 7; 
+									break;
+								case -25:
+									if (rotaDadoz8 > -25)
+									{
+										rotaDadoz8 -= rotaDadozOffset8 * deltaTime;
+									}
+									resultado8Caras = 2; 
+									break;
+								}
+							}
+							break;
+						case 135:
+							if (rotaDadoy8 < 135)
+							{
+								rotaDadoy8 += rotaDadoyOffset8 * deltaTime;
+							}
+							else
+							{
+								// ROTAR EN Z
+								// ELEGIR EL NUMERO DEL LADO
+								switch (gradosDeZ)
+								{
+								case 25:
+									if (rotaDadoz8 < 25)
+									{
+										rotaDadoz8 += rotaDadozOffset8 * deltaTime;
+									}
+									resultado8Caras = 5; 
+									break;
+								case -25:
+									if (rotaDadoz8 > -25)
+									{
+										rotaDadoz8 -= rotaDadozOffset8 * deltaTime;
+									}
+									resultado8Caras = 4; 
+									break;
+								}
+							}
+							break;
+						case -135:
+							if (rotaDadoy8 > -135)
+							{
+								rotaDadoy8 -= rotaDadoyOffset8 * deltaTime;
+							}
+							else
+							{
+								switch (gradosDeZ)
+								{
+								case 25:
+									if (rotaDadoz8 < 25)
+									{
+										rotaDadoz8 += rotaDadozOffset8 * deltaTime;
+									}
+									resultado8Caras = 8; 
+									break;
+								case -25:
+									if (rotaDadoz8 > -25)
+									{
+										rotaDadoz8 -= rotaDadozOffset8 * deltaTime;
+									}
+									resultado8Caras = 1; 
+									break;
+								}
+							}
+							break;
+						case 225:
+							if (rotaDadoy8 < 225)
+							{
+								rotaDadoy8 += rotaDadoyOffset8 * deltaTime;
+							}
+							else
+							{
+								// ROTAR EN Z
+								// ELEGIR EL NUMERO DEL LADO
+								switch (gradosDeZ)
+								{
+								case 25:
+									if (rotaDadoz8 < 25)
+									{
+										rotaDadoz8 += rotaDadozOffset8 * deltaTime;
+									}
+									resultado8Caras = 8; 
+									break;
+								case -25:
+									if (rotaDadoz8 > -25)
+									{
+										rotaDadoz8 -= rotaDadozOffset8 * deltaTime;
+									}
+									resultado8Caras = 1; 
+									break;
+								}
+							}
+							break;
+						case -225:
+							if (rotaDadoy8 > -225)
+							{
+								rotaDadoy8 -= rotaDadoyOffset8 * deltaTime;
+							}
+							else
+							{
+								switch (gradosDeZ)
+								{
+								case 25:
+									if (rotaDadoz8 < 25)
+									{
+										rotaDadoz8 += rotaDadozOffset8 * deltaTime;
+									}
+									resultado8Caras = 5; 
+									break;
+								case -25:
+									if (rotaDadoz8 > -25)
+									{
+										rotaDadoz8 -= rotaDadozOffset8 * deltaTime;
+									}
+									resultado8Caras = 4; 
+									break;
+								}
+							}
+							break;
+						case 315:
+							if (rotaDadoy8 < 315)
+							{
+								rotaDadoy8 += rotaDadoyOffset8 * deltaTime;
+							}
+							else
+							{
+								// ROTAR EN Z
+								// ELEGIR EL NUMERO DEL LADO
+								switch (gradosDeZ)
+								{
+								case 25:
+									if (rotaDadoz8 < 25)
+									{
+										rotaDadoz8 += rotaDadozOffset8 * deltaTime;
+									}
+									resultado8Caras = 7; 
+									break;
+								case -25:
+									if (rotaDadoz8 > -25)
+									{
+										rotaDadoz8 -= rotaDadozOffset8 * deltaTime;
+									}
+									resultado8Caras = 2; 
+									break;
+								}
+							}
+							break;
+						case -315:
+							if (rotaDadoy8 > -315)
+							{
+								rotaDadoy8 -= rotaDadoyOffset8 * deltaTime;
+							}
+							else
+							{
+								switch (gradosDeZ)
+								{
+								case 25:
+									if (rotaDadoz8 < 25)
+									{
+										rotaDadoz8 += rotaDadozOffset8 * deltaTime;
+									}
+									resultado8Caras = 6; 
+									break;
+								case -25:
+									if (rotaDadoz8 > -25)
+									{
+										rotaDadoz8 -= rotaDadozOffset8 * deltaTime;
+									}
+									resultado8Caras = 3; 
+									break;
+								}
+							}
+							break;
+						}
+					}
+					break;
+				case -180:
+					if (rotaDadox8 > -180)
+					{
+						rotaDadox8 -= rotaDadoxOffset8 * deltaTime;
+					}
+					else
+					{
+						// ROTAR EN Y
+						switch (gradosDeY)
+						{
+						case 45:
+							if (rotaDadoy8 < 45)
+							{
+								rotaDadoy8 += rotaDadoyOffset8 * deltaTime;
+							}
+							else
+							{
+								// ROTAR EN Z
+								// ELEGIR EL NUMERO DEL LADO
+								switch (gradosDeZ)
+								{
+								case 25:
+									if (rotaDadoz8 < 25)
+									{
+										rotaDadoz8 += rotaDadozOffset8 * deltaTime;
+									}
+									resultado8Caras = 6; 
+									break;
+								case -25:
+									if (rotaDadoz8 > -25)
+									{
+										rotaDadoz8 -= rotaDadozOffset8 * deltaTime;
+									}
+									resultado8Caras = 3; 
+									break;
+								}
+							}
+							break;
+						case -45:
+							if (rotaDadoy8 > -45)
+							{
+								rotaDadoy8 -= rotaDadoyOffset8 * deltaTime;
+							}
+							else
+							{
+								switch (gradosDeZ)
+								{
+								case 25:
+									if (rotaDadoz8 < 25)
+									{
+										rotaDadoz8 += rotaDadozOffset8 * deltaTime;
+									}
+									resultado8Caras = 7; 
+									break;
+								case -25:
+									if (rotaDadoz8 > -25)
+									{
+										rotaDadoz8 -= rotaDadozOffset8 * deltaTime;
+									}
+									resultado8Caras = 2;
+									break;
+								}
+							}
+							break;
+						case 135:
+							if (rotaDadoy8 < 135)
+							{
+								rotaDadoy8 += rotaDadoyOffset8 * deltaTime;
+							}
+							else
+							{
+								// ROTAR EN Z
+								// ELEGIR EL NUMERO DEL LADO
+								switch (gradosDeZ)
+								{
+								case 25:
+									if (rotaDadoz8 < 25)
+									{
+										rotaDadoz8 += rotaDadozOffset8 * deltaTime;
+									}
+									resultado8Caras = 5; 
+									break;
+								case -25:
+									if (rotaDadoz8 > -25)
+									{
+										rotaDadoz8 -= rotaDadozOffset8 * deltaTime;
+									}
+									resultado8Caras = 4; 
+									break;
+								}
+							}
+							break;
+						case -135:
+							if (rotaDadoy8 > -135)
+							{
+								rotaDadoy8 -= rotaDadoyOffset8 * deltaTime;
+							}
+							else
+							{
+								switch (gradosDeZ)
+								{
+								case 25:
+									if (rotaDadoz8 < 25)
+									{
+										rotaDadoz8 += rotaDadozOffset8 * deltaTime;
+									}
+									resultado8Caras = 8;
+									break;
+								case -25:
+									if (rotaDadoz8 > -25)
+									{
+										rotaDadoz8 -= rotaDadozOffset8 * deltaTime;
+									}
+									resultado8Caras = 1; 
+									break;
+								}
+							}
+							break;
+						case 225:
+							if (rotaDadoy8 < 225)
+							{
+								rotaDadoy8 += rotaDadoyOffset8 * deltaTime;
+							}
+							else
+							{
+								// ROTAR EN Z
+								// ELEGIR EL NUMERO DEL LADO
+								switch (gradosDeZ)
+								{
+								case 25:
+									if (rotaDadoz8 < 25)
+									{
+										rotaDadoz8 += rotaDadozOffset8 * deltaTime;
+									}
+									resultado8Caras = 8; 
+									break;
+								case -25:
+									if (rotaDadoz8 > -25)
+									{
+										rotaDadoz8 -= rotaDadozOffset8 * deltaTime;
+									}
+									resultado8Caras = 1; 
+									break;
+								}
+							}
+							break;
+						case -225:
+							if (rotaDadoy8 > -225)
+							{
+								rotaDadoy8 -= rotaDadoyOffset8 * deltaTime;
+							}
+							else
+							{
+								switch (gradosDeZ)
+								{
+								case 25:
+									if (rotaDadoz8 < 25)
+									{
+										rotaDadoz8 += rotaDadozOffset8 * deltaTime;
+									}
+									resultado8Caras = 5; 
+									break;
+								case -25:
+									if (rotaDadoz8 > -25)
+									{
+										rotaDadoz8 -= rotaDadozOffset8 * deltaTime;
+									}
+									resultado8Caras = 4; 
+									break;
+								}
+							}
+							break;
+						case 315:
+							if (rotaDadoy8 < 315)
+							{
+								rotaDadoy8 += rotaDadoyOffset8 * deltaTime;
+							}
+							else
+							{
+								// ROTAR EN Z
+								// ELEGIR EL NUMERO DEL LADO
+								switch (gradosDeZ)
+								{
+								case 25:
+									if (rotaDadoz8 < 25)
+									{
+										rotaDadoz8 += rotaDadozOffset8 * deltaTime;
+									}
+									resultado8Caras = 7; 
+									break;
+								case -25:
+									if (rotaDadoz8 > -25)
+									{
+										rotaDadoz8 -= rotaDadozOffset8 * deltaTime;
+									}
+									resultado8Caras = 2; 
+									break;
+								}
+							}
+							break;
+						case -315:
+							if (rotaDadoy8 > -315)
+							{
+								rotaDadoy8 -= rotaDadoyOffset8 * deltaTime;
+							}
+							else
+							{
+								switch (gradosDeZ)
+								{
+								case 25:
+									if (rotaDadoz8 < 25)
+									{
+										rotaDadoz8 += rotaDadozOffset8 * deltaTime;
+									}
+									resultado8Caras = 6; 
+									break;
+								case -25:
+									if (rotaDadoz8 > -25)
+									{
+										rotaDadoz8 -= rotaDadozOffset8 * deltaTime;
+									}
+									resultado8Caras = 3; 
+									break;
+								}
+							}
+							break;
+						}
+					}
+					break;
+				}
+			} // AQUI TERMINA EL ELSE DEL DADO 8
+		}
+		
+		// PARA BAJAR
+		// TECLA Y
+		if (mainWindow.getsubeBajaDado() == true)
+		{
+			// HACER QUE EL DADO BAJE
+			if (subeBajaDado4 > 3.1f)
+			{
+				subeBajaDado4 -= subeBajaDadoOffset4 * deltaTime;
+			}
+			// CUANDO LLEGUE AL FINAL
+			else
+			{
+				// ROTAR EN Y
+				switch (gradosDeY_1)
+				{
+				case 60:
+					if (rotaDadoy4 < 60)
+					{
+						rotaDadoy4 += rotaDadoyOffset4 * deltaTime;
+					}
+					else
+					{
+						// ROTAR EN X
+						switch (gradosDeX_2)
+						{
+						case 0:
+							resultado4Caras = 1;
+							break;
+						case -115:
+							if (rotaDadox4 > -115)
+							{
+								rotaDadox4 -= rotaDadoxOffset4 * deltaTime;
+							}
+							resultado4Caras = 2;
+							break;
+						}
+					}
+					break;
+				case -60:
+					if (rotaDadoy4 > -60)
+					{
+						rotaDadoy4 -= rotaDadoyOffset4 * deltaTime;
+					}
+					else
+					{
+						// ROTAR EN X
+						switch (gradosDeX_2)
+						{
+						case 0:
+							resultado4Caras = 1;
+							break;
+						case -115:
+							if (rotaDadox4 > -115)
+							{
+								rotaDadox4 -= rotaDadoxOffset4 * deltaTime;
+							}
+							resultado4Caras = 4;
+							break;
+						}
+					}
+					break;
+				case 120:
+					if (rotaDadoy4 < 120)
+					{
+						rotaDadoy4 += rotaDadoyOffset4 * deltaTime;
+					}
+					else
+					{
+						// ROTAR EN X
+						switch (gradosDeX_1)
+						{
+						case 0:
+							resultado4Caras = 1;
+							break;
+						case 115:
+							if (rotaDadox4 < 115)
+							{
+								rotaDadox4 += rotaDadoxOffset4 * deltaTime;
+							}
+							resultado4Caras = 4;
+							break;
+						}
+					}
+					break;
+				case -120:
+					if (rotaDadoy4 > -120)
+					{
+						rotaDadoy4 -= rotaDadoyOffset4 * deltaTime;
+					}
+					else
+					{
+						// ROTAR EN X
+						switch (gradosDeX_1)
+						{
+						case 0:
+							resultado4Caras = 1;
+							break;
+						case 115:
+							if (rotaDadox4 < 115)
+							{
+								rotaDadox4 += rotaDadoxOffset4 * deltaTime;
+							}
+							resultado4Caras = 2;
+							break;
+						}
+					}
+					break;
+				case 180:
+					if (rotaDadoy4 < 180)
+					{
+						rotaDadoy4 += rotaDadoyOffset4 * deltaTime;
+					}
+					else
+					{
+						// ROTAR EN X
+						switch (gradosDeX_2)
+						{
+						case 0:
+							resultado4Caras = 1;
+							break;
+						case -115:
+							if (rotaDadox4 > -115)
+							{
+								rotaDadox4 -= rotaDadoxOffset4 * deltaTime;
+							}
+							resultado4Caras = 3;
+							break;
+						}
+					}
+					break;
+				case -180:
+					if (rotaDadoy4 > -180)
+					{
+						rotaDadoy4 -= rotaDadoyOffset4 * deltaTime;
+					}
+					else
+					{
+						// ROTAR EN X
+						switch (gradosDeX_2)
+						{
+						case 0:
+							resultado4Caras = 1;
+							break;
+						case -115:
+							if (rotaDadox4 > -115)
+							{
+								rotaDadox4 -= rotaDadoxOffset4 * deltaTime;
+							}
+							resultado4Caras = 3;
+							break;
+						}
+					}
+					break;
+				case 240:
+					if (rotaDadoy4 < 240)
+					{
+						rotaDadoy4 += rotaDadoyOffset4 * deltaTime;
+					}
+					else
+					{
+						// ROTAR EN X
+						switch (gradosDeX_1)
+						{
+						case 0:
+							resultado4Caras = 1;
+							break;
+						case 115:
+							if (rotaDadox4 < 115)
+							{
+								rotaDadox4 += rotaDadoxOffset4 * deltaTime;
+							}
+							resultado4Caras = 2;
+							break;
+						}
+					}
+					break;
+				case -240:
+					if (rotaDadoy4 > -240)
+					{
+						rotaDadoy4 -= rotaDadoyOffset4 * deltaTime;
+					}
+					else
+					{
+						// ROTAR EN X
+						switch (gradosDeX_1)
+						{
+						case 0:
+							resultado4Caras = 1;
+							break;
+						case 115:
+							if (rotaDadox4 < 115)
+							{
+								rotaDadox4 += rotaDadoxOffset4 * deltaTime;
+							}
+							resultado4Caras = 4;
+							break;
+						}
+					}
+					break;
+				case 300:
+					if (rotaDadoy4 < 300)
+					{
+						rotaDadoy4 += rotaDadoyOffset4 * deltaTime;
+					}
+					else
+					{
+						// ROTAR EN X
+						switch (gradosDeX_2)
+						{
+						case 0:
+							resultado4Caras = 1;
+							break;
+						case -115:
+							if (rotaDadox4 > -115)
+							{
+								rotaDadox4 -= rotaDadoxOffset4 * deltaTime;
+							}
+							resultado4Caras = 4;
+							break;
+						}
+					}
+					break;
+				case -300:
+					if (rotaDadoy4 > -300)
+					{
+						rotaDadoy4 -= rotaDadoyOffset4 * deltaTime;
+					}
+					else
+					{
+						// ROTAR EN X
+						switch (gradosDeX_2)
+						{
+						case 0:
+							resultado4Caras = 1;
+							break;
+						case -115:
+							if (rotaDadox4 > -115)
+							{
+								rotaDadox4 -= rotaDadoxOffset4 * deltaTime;
+							}
+							resultado4Caras = 2;
+							break;
+						}
+					}
+					break;
+				case 360:
+					if (rotaDadoy4 < 360)
+					{
+						rotaDadoy4 += rotaDadoyOffset4 * deltaTime;
+					}
+					else
+					{
+						// ROTAR EN X
+						switch (gradosDeX_1)
+						{
+						case 0:
+							resultado4Caras = 1;
+							break;
+						case 115:
+							if (rotaDadox4 < 115)
+							{
+								rotaDadox4 += rotaDadoxOffset4 * deltaTime;
+							}
+							resultado4Caras = 3;
+							break;
+						}
+					}
+					break;
+				case -360:
+					if (rotaDadoy4 > -360)
+					{
+						rotaDadoy4 -= rotaDadoyOffset4 * deltaTime;
+					}
+					else
+					{
+						// ROTAR EN X
+						switch (gradosDeX_1)
+						{
+						case 0:
+							resultado4Caras = 1;
+							break;
+						case 115:
+							if (rotaDadox4 < 115)
+							{
+								rotaDadox4 += rotaDadoxOffset4 * deltaTime;
+							}
+							resultado4Caras = 3;
+							break;
+						}
+					}
+					break;
+				}
+			}
+		}
+
+		// RESULTADO DE LOS DADOS
+		if (resultado8Caras != 0 && resultado4Caras != 0)
+		{
+			resultado = resultado4Caras + resultado8Caras;
+			printf("RESULTADO = %i", resultado);
+		}
+
+		// PARA SUBIR
+		// U
+		if (mainWindow.getsubeBajaDado() == false)
+		{
+			if (subeBajaDado8 < 35.0f)
+			{
+				subeBajaDado8 += subeBajaDadoOffset8 * deltaTime;
+			}
+			else
+			{
+				// REGRESAR A SU ESTADO ORIGINAL Y REASIGNAR LOS VALORES DE LOS GRADOS
+				gradosDeX = listaX[std::rand() % listaX.size()];
+				rotaDadox8 = 0.0f;
+				gradosDeY = listaY[std::rand() % listaY.size()];
+				rotaDadoy8 = 0.0f;
+				gradosDeZ = listaZ[std::rand() % listaZ.size()];
+				rotaDadoz8 = 0.0f;
+				resultado8Caras = 0;
+			}
+		}
+
+		// PARA SUBIR
+		// U
+		if (mainWindow.getsubeBajaDado() == false)
+		{
+			if (subeBajaDado4 < 35.0f)
+			{
+				subeBajaDado4 += subeBajaDadoOffset4 * deltaTime;
+			}
+			else
+			{
+				// REGRESAR A SU ESTADO ORIGINAL Y REASIGNAR LOS VALORES DE LOS GRADOS
+
+				gradosDeX_1 = listaX_1[std::rand() % listaX_1.size()];
+				gradosDeX_2 = listaX_2[std::rand() % listaX_2.size()];
+				rotaDadox4 = 0.0f;
+				gradosDeY_1 = listaY_1[std::rand() % listaY_1.size()];
+				rotaDadoy4 = 0.0f;
+				resultado4Caras = 0;
+			}
+		}
 
 		//Recibir eventos del usuario
 		glfwPollEvents();
@@ -766,23 +1648,21 @@ int main()
 		//información en el shader de intensidad especular y brillo
 		uniformSpecularIntensity = shaderList[0].GetSpecularIntensityLocation();
 		uniformShininess = shaderList[0].GetShininessLocation();
-
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
 		glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 
 		// luz ligada a la cámara de tipo flash
+
 		//sirve para que en tiempo de ejecución (dentro del while) se cambien propiedades de la luz
 		glm::vec3 lowerLight = camera.getCameraPosition();
 		lowerLight.y -= 0.3f;
-		/*spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());*/
+		spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());
 
 		//información al shader de fuentes de iluminación
 		shaderList[0].SetDirectionalLight(&mainLight);
 		shaderList[0].SetPointLights(pointLights, pointLightCount);
 		shaderList[0].SetSpotLights(spotLights, spotLightCount);
-
-
 
 		glm::mat4 model(1.0);
 		glm::mat4 modelaux(1.0);
@@ -792,32 +1672,37 @@ int main()
 
 		glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
 
+		// PISO (PASTO)
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(30.0f, 20.0f, 30.0f));
+		model = glm::scale(model, glm::vec3(30.0f, 1.0f, 30.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
-
-		pisoTexture.UseTexture();
+		pasto.UseTexture();
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
-
 		meshList[2]->RenderMesh();
-
 
 		// DADO DE 4 CARAS
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, 40.0f, 10.0));
+		model = glm::translate(model, glm::vec3(0.0f, subeBajaDado4, 20.0));
+		// ANIMACION DEL DADO
+		model = glm::rotate(model, rotaDadox4 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, rotaDadoy4 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(8.0f, 8.0f, 8.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		dado4CarasM.RenderModel();
 
 		// DADO DE 8 CARAS
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, 40.0f, -10.0));
+		model = glm::translate(model, glm::vec3(0.0f, subeBajaDado8, -20.0));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::scale(model, glm::vec3(8.0f, 8.0f, 8.0f));
+		// ANIMACION DEL DADO
+		model = glm::rotate(model, rotaDadox8 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, rotaDadoz8 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, rotaDadoy8 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		dado8CarasM.RenderModel();
-
 
 		// CASILLAS 
 		model = glm::mat4(1.0);
@@ -1201,7 +2086,7 @@ int main()
 		model = modelauxCasillas; // A PARTIR DE 
 
 		// 33
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f,-20.0));
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
 
 		modelauxCasillas = model; // GUARDA
 
@@ -1293,6 +2178,8 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		//casilla40M.RenderModel();
 		casilla40A.RenderModel();
+
+		// MODELOS DE LAS CASILLAS
 
 		// RAIDEN - CASILLA 02
 		model = glm::mat4(1.0);
@@ -1439,7 +2326,7 @@ int main()
 		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		modeloCasilla18M.RenderModel();
-		
+
 		// POLAR - CASILLA 19
 		model = glm::mat4(1.0);
 
