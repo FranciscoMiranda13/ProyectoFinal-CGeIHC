@@ -137,8 +137,10 @@ Model casilla38A;
 Model casilla39A;
 Model casilla40A;
 
-//CASILLAS AZUL
-Model casilla01Azul;
+
+//CASILLAS "ILUMINADA"
+Model casilla01AR;
+Model casilla01R;
 // MODELOS DE LAS CASILLAS
 Model modeloCasilla01M;
 Model modeloCasilla02M;
@@ -516,6 +518,91 @@ int main()
 	casilla40A = Model();
 	casilla40A.LoadModel("Models/casilla40A.obj");
 
+	//CASILLAS COLOR "ILUMINADAS"
+	//casilla01AR = Model();
+	//casilla01AR.LoadModel("Models/casilla01AR.obj");
+	//casilla01R = Model();
+	//casilla01R.LoadModel("Models/casilla01R.obj");
+	/*casilla02A = Model();
+	casilla02A.LoadModel("Models/casilla02A.obj");
+	casilla03A = Model();
+	casilla03A.LoadModel("Models/casilla03A.obj");
+	casilla04A = Model();
+	casilla04A.LoadModel("Models/casilla04A.obj");
+	casilla05A = Model();
+	casilla05A.LoadModel("Models/casilla05A.obj");
+	casilla06A = Model();
+	casilla06A.LoadModel("Models/casilla06A.obj");
+	casilla07A = Model();
+	casilla07A.LoadModel("Models/casilla07A.obj");
+	casilla08A = Model();
+	casilla08A.LoadModel("Models/casilla08A.obj");
+	casilla09A = Model();
+	casilla09A.LoadModel("Models/casilla09A.obj");
+	casilla10A = Model();
+	casilla10A.LoadModel("Models/casilla10A.obj");
+	casilla11A = Model();
+	casilla11A.LoadModel("Models/casilla11A.obj");
+	casilla12A = Model();
+	casilla12A.LoadModel("Models/casilla12A.obj");
+	casilla13A = Model();
+	casilla13A.LoadModel("Models/casilla13A.obj");
+	casilla14A = Model();
+	casilla14A.LoadModel("Models/casilla14A.obj");
+	casilla15A = Model();
+	casilla15A.LoadModel("Models/casilla15A.obj");
+	casilla16A = Model();
+	casilla16A.LoadModel("Models/casilla16A.obj");
+	casilla17A = Model();
+	casilla17A.LoadModel("Models/casilla17A.obj");
+	casilla18A = Model();
+	casilla18A.LoadModel("Models/casilla18A.obj");
+	casilla19A = Model();
+	casilla19A.LoadModel("Models/casilla19A.obj");
+	casilla20A = Model();
+	casilla20A.LoadModel("Models/casilla20A.obj");
+	casilla21A = Model();
+	casilla21A.LoadModel("Models/casilla21A.obj");
+	casilla22A = Model();
+	casilla22A.LoadModel("Models/casilla22A.obj");
+	casilla23A = Model();
+	casilla23A.LoadModel("Models/casilla23A.obj");
+	casilla24A = Model();
+	casilla24A.LoadModel("Models/casilla24A.obj");
+	casilla25A = Model();
+	casilla25A.LoadModel("Models/casilla25A.obj");
+	casilla26A = Model();
+	casilla26A.LoadModel("Models/casilla26A.obj");
+	casilla27A = Model();
+	casilla27A.LoadModel("Models/casilla27A.obj");
+	casilla28A = Model();
+	casilla28A.LoadModel("Models/casilla28A.obj");
+	casilla29A = Model();
+	casilla29A.LoadModel("Models/casilla29A.obj");
+	casilla30A = Model();
+	casilla30A.LoadModel("Models/casilla30A.obj");
+	casilla31A = Model();
+	casilla31A.LoadModel("Models/casilla31A.obj");
+	casilla32A = Model();
+	casilla32A.LoadModel("Models/casilla32A.obj");
+	casilla33A = Model();
+	casilla33A.LoadModel("Models/casilla33A.obj");
+	casilla34A = Model();
+	casilla34A.LoadModel("Models/casilla34A.obj");
+	casilla35A = Model();
+	casilla35A.LoadModel("Models/casilla35A.obj");
+	casilla36A = Model();
+	casilla36A.LoadModel("Models/casilla36A.obj");
+	casilla37A = Model();
+	casilla37A.LoadModel("Models/casilla37A.obj");
+	casilla38A = Model();
+	casilla38A.LoadModel("Models/casilla38A.obj");
+	casilla39A = Model();
+	casilla39A.LoadModel("Models/casilla39A.obj");
+	casilla40A = Model();
+	casilla40A.LoadModel("Models/casilla40A.obj");*/
+
+
 	
 	// MODELOS DE LAS CASILLAS
 	modeloCasilla01M = Model();
@@ -620,7 +707,7 @@ int main()
 	//Declaración de primer luz puntual
 	pointLights[0] = PointLight(1.0f, 0.0f, 0.0f,
 		0.0f, 1.0f,
-		-200.0f, 4.0f, 100.0f,
+		-200.0f, 4.0f, 80.0f,
 		0.3f, 0.2f, 0.1f);
 	pointLightCount++;
 
@@ -637,7 +724,7 @@ int main()
 	//LUZ textura 
 	spotLights[1] = SpotLight(1.0f, 0.0f, 0.0f,
 		0.8f, 8.0f,
-		-100.0f, 25.0f, 100.0f,
+		-100.0f, 20.0f, 100.0f,
 		0.0f, -1.0f, 0.0f,
 		0.3f, 0.1f, 0.001f,
 		40.0f);
@@ -675,7 +762,7 @@ int main()
 		uniformView = shaderList[0].GetViewLocation();
 		uniformEyePosition = shaderList[0].GetEyePositionLocation();
 		uniformColor = shaderList[0].getColorLocation();
-		
+
 		//información en el shader de intensidad especular y brillo
 		uniformSpecularIntensity = shaderList[0].GetSpecularIntensityLocation();
 		uniformShininess = shaderList[0].GetShininessLocation();
@@ -686,7 +773,7 @@ int main()
 
 		// luz ligada a la cámara de tipo flash
 		//sirve para que en tiempo de ejecución (dentro del while) se cambien propiedades de la luz
-			glm::vec3 lowerLight = camera.getCameraPosition();
+		glm::vec3 lowerLight = camera.getCameraPosition();
 		lowerLight.y -= 0.3f;
 		/*spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());*/
 
@@ -699,7 +786,7 @@ int main()
 
 		glm::mat4 model(1.0);
 		glm::mat4 modelaux(1.0);
-		
+
 		// MATRIZ AUXILIAR PARA LAS CASILLAS
 		glm::mat4 modelauxCasillas(1.0);
 
@@ -730,6 +817,7 @@ int main()
 		model = glm::scale(model, glm::vec3(8.0f, 8.0f, 8.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		dado8CarasM.RenderModel();
+
 
 		// CASILLAS 
 		model = glm::mat4(1.0);
@@ -897,7 +985,7 @@ int main()
 
 		// 15
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		/*model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
 
 		modelauxCasillas = model; // GUARDA
 
@@ -909,7 +997,7 @@ int main()
 		model = modelauxCasillas; // A PARTIR DE 
 
 		// 16
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
 
 		modelauxCasillas = model; // GUARDA
 
@@ -921,7 +1009,7 @@ int main()
 		model = modelauxCasillas; // A PARTIR DE 
 
 		// 17
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
 
 		modelauxCasillas = model; // GUARDA
 
@@ -933,7 +1021,7 @@ int main()
 		model = modelauxCasillas; // A PARTIR DE 
 
 		// 18
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
 
 		modelauxCasillas = model; // GUARDA
 
@@ -945,7 +1033,7 @@ int main()
 		model = modelauxCasillas; // A PARTIR DE 
 
 		// 19
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
 
 		modelauxCasillas = model; // GUARDA
 
@@ -957,7 +1045,7 @@ int main()
 		model = modelauxCasillas; // A PARTIR DE 
 
 		// 20
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
 
 		modelauxCasillas = model; // GUARDA
 
@@ -969,7 +1057,7 @@ int main()
 		model = modelauxCasillas; // A PARTIR DE 
 
 		// 21
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
 
 		modelauxCasillas = model; // GUARDA
 
@@ -981,7 +1069,7 @@ int main()
 		model = modelauxCasillas; // A PARTIR DE 
 
 		// 22
-		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
+		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
 
 		modelauxCasillas = model; // GUARDA
 
@@ -993,7 +1081,7 @@ int main()
 		model = modelauxCasillas; // A PARTIR DE 
 
 		// 23
-		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
+		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
 
 		modelauxCasillas = model; // GUARDA
 
@@ -1005,7 +1093,7 @@ int main()
 		model = modelauxCasillas; // A PARTIR DE 
 
 		// 24
-		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
+		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
 
 		modelauxCasillas = model; // GUARDA
 
@@ -1017,7 +1105,7 @@ int main()
 		model = modelauxCasillas; // A PARTIR DE 
 
 		// 25
-		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
+		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
 
 		modelauxCasillas = model; // GUARDA
 
@@ -1029,7 +1117,7 @@ int main()
 		model = modelauxCasillas; // A PARTIR DE 
 
 		// 26
-		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
+		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
 
 		modelauxCasillas = model; // GUARDA
 
@@ -1041,7 +1129,7 @@ int main()
 		model = modelauxCasillas; // A PARTIR DE 
 
 		// 27
-		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
+		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
 
 		modelauxCasillas = model; // GUARDA
 
@@ -1053,8 +1141,8 @@ int main()
 		model = modelauxCasillas; // A PARTIR DE 
 
 		// 28
-		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
+		/*model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
 		modelauxCasillas = model; // GUARDA
 
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
@@ -1443,7 +1531,7 @@ int main()
 
 		//Ernie - Casilla29
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(120.0f, 9.5f, 60.0));
+		model = glm::translate(model, glm::vec3(124.0f, 9.5f, 60.0));
 		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -1523,7 +1611,7 @@ int main()
 
 		//Flores - Casilla39
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-60.0f, 7.0f, 120.0));
+		model = glm::translate(model, glm::vec3(-60.0f, 7.0f, 140.0));
 		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
