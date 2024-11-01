@@ -64,6 +64,80 @@ int resultado4Caras = 0;
 int resultado8Caras = 0;
 int resultado = 0;
 
+// VARIABLES PARA ANIAMCION DE RECORRIDO
+float mueveAvatar01 = 0.0f;
+float mueveAvatar01Offset = 0.3f;
+float mueveAvatar01Base = 0.0f;
+int resultadoAnterior01 = 0;
+
+float mueveAvatar02 = 0.0f;
+float mueveAvatar02Offset = 0.3f;
+float mueveAvatar02Base = 0.0f;
+int resultadoAnterior02 = 0;
+
+float mueveAvatar03 = 0.0f;
+float mueveAvatar03Offset = 0.3f;
+float mueveAvatar03Base = 0.0f;
+int resultadoAnterior03 = 0;
+
+float mueveAvatar04 = 0.0f;
+float mueveAvatar04Offset = 0.3f;
+float mueveAvatar04Base = 0.0f;
+int resultadoAnterior04 = 0;
+
+float diferencia = 0.0f;
+bool hayDiferencia = true;
+int conta = 0;
+
+float diferencia01 = 0.0f;
+bool hayDiferencia01 = true;
+int conta01 = 0;
+
+float diferencia02 = 0.0f;
+bool hayDiferencia02 = true;
+int conta02 = 0;
+
+// VARIABLES PARA LA ANIMACION DE LA VUELTA 
+float rotaAvatar01 = 0.0f;
+float rotaAvatar01Offset = 1.0;
+float rotaAvatar02 = 0.0f;
+float rotaAvatar02Offset = 1.0;
+float rotaAvatar03 = 0.0f;
+float rotaAvatar03Offset = 1.0;
+float rotaAvatar04 = 0.0f;
+float rotaAvatar04Offset = 1.0;
+
+// VARIABLES PARA ANIMACIÓN DE LOS BRAZOS Y PIERNAS
+float rotaBrazoD = 0.0f;
+float rotaBrazoDOffset = 0.8f;
+float rotaBrazoI = 0.0f;
+float rotaBrazoIOffset = 0.8f;
+float rotaPiernaD = 0.0f;
+float rotaPiernaDOffset = 0.8;
+float rotaPiernaI = 0.0f;
+float rotaPiernaIOffset = 0.8;
+bool subebaja = true;
+
+// ANIMACIONES DE CASILLAS
+// CASILLA 02
+float raidenSubeBaja = -8.0f;
+float raidenSubeBajaOffset = 0.1f;
+float raidenRota = 0.0f;
+float raidenRotaOffset = 2.0;
+int raidenCont01 = 0;
+int raidenCont02 = 0;
+bool raiden = true;
+float raidenTiempo = 0.0f;
+// CASILLA 03
+float scorpionSubeBaja = -8.0f;
+float scorpionSubeBajaOffset = 0.1f;
+float scorpionRota = 0.0f;
+float scorpionRotaOffset = 2.0;
+int scorpionCont01 = 0;
+int scorpionCont02 = 0;
+bool scorpion = true;
+float scorpionTiempo = 0.0f;
+
 Window mainWindow;
 std::vector<Mesh*> meshList;
 std::vector<Shader> shaderList;
@@ -212,6 +286,17 @@ Model ModeloCasilla37;
 Model ModeloCasilla38;
 Model ModeloCasilla39;
 Model ModeloCasilla40;
+
+// MODELO DEL AVATAR PARA EL RECORRIDO (SUBZERO)
+Model torsoSubZero;
+Model cinturaSubZero;
+Model brazoDerechoSubZero;
+Model brazoIzquieroSubZero;
+Model piernaDerechaSubZero;
+Model piernaIzquierdaSubZero;
+
+// MODELOS AUXILIARES
+Model esfera;
 
 Model Kitt_M;
 Model Llanta_M;
@@ -718,6 +803,24 @@ int main()
 	ModeloCasilla39.LoadModel("Models/flowersCasilla39.obj");
 	ModeloCasilla40 = Model();
 	ModeloCasilla40.LoadModel("Models/carterCasilla40.obj");
+
+	// MODELO DEL AVATAR PARA EL RECORRIDO (SUBZERO)
+	torsoSubZero = Model();
+	torsoSubZero.LoadModel("Models/avatarSubZeroCuerpo.obj");
+	cinturaSubZero = Model();
+	cinturaSubZero.LoadModel("Models/avatarSubZeroCintura.obj");
+	brazoDerechoSubZero = Model();
+	brazoDerechoSubZero.LoadModel("Models/avatarSubZeroBrazoDerecho.obj");
+	brazoIzquieroSubZero = Model();
+	brazoIzquieroSubZero.LoadModel("Models/avatarSubZeroBrazoIzquierdo.obj");
+	piernaDerechaSubZero = Model();
+	piernaDerechaSubZero.LoadModel("Models/avatarSubZeroPiernaDerecha.obj");
+	piernaIzquierdaSubZero = Model();
+	piernaIzquierdaSubZero.LoadModel("Models/avatarSubZeroPiernaIzquierda.obj");
+
+	// MODELO AUXILIAR
+	esfera = Model();
+	esfera.LoadModel("Models/esfera.obj");
 
 	std::vector<std::string> skyboxFaces;
 	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_rt.tga");
@@ -1584,9 +1687,596 @@ int main()
 		if (resultado8Caras != 0 && resultado4Caras != 0)
 		{
 			resultado = resultado4Caras + resultado8Caras;
-			printf("RESULTADO = %i", resultado);
+			//printf("RESULTADO = %i", resultado);
 		}
 
+		// VERIFICAR SI 'RESULTADO' HA CAMBIADO
+		if (resultado != resultadoAnterior01) {
+			mueveAvatar01Base = mueveAvatar01; // ALMACENAR LA POSICION ACTUAL COMO BASE
+			resultadoAnterior01 = resultado;     // ACTUALIZA EL VALOR ANTERIOR
+			//printf(" MUEVEAVATAR01BASE = %f y RESULTADOANTERIOR01 = %i             \n", mueveAvatar01Base, resultadoAnterior01);
+		}
+
+		// VERIFICAR SI 'RESULTADO' HA CAMBIADO
+		if (resultado != resultadoAnterior02) {
+			mueveAvatar02Base = mueveAvatar02; // ALMACENAR LA POSICION ACTUAL COMO BASE
+			resultadoAnterior02 = resultado;     // ACTUALIZA EL VALOR ANTERIOR
+			//printf(" EL SEGUNDOOOOOO = %f y RESULTADOANTERIOR01 = %i             \n", mueveAvatar02Base, resultadoAnterior01);
+		}
+
+		// VERIFICAR SI 'RESULTADO' HA CAMBIADO
+		if (resultado != resultadoAnterior03) {
+			mueveAvatar03Base = mueveAvatar03; // ALMACENAR LA POSICION ACTUAL COMO BASE
+			resultadoAnterior03 = resultado;     // ACTUALIZA EL VALOR ANTERIOR
+			//printf(" EL SEGUNDOOOOOO = %f y RESULTADOANTERIOR01 = %i             \n", mueveAvatar02Base, resultadoAnterior01);
+		}
+
+		// VERIFICAR SI 'RESULTADO' HA CAMBIADO
+		if (resultado != resultadoAnterior04) {
+			mueveAvatar04Base = mueveAvatar04; // ALMACENAR LA POSICION ACTUAL COMO BASE
+			resultadoAnterior04 = resultado;     // ACTUALIZA EL VALOR ANTERIOR
+			//printf(" EL SEGUNDOOOOOO = %f y RESULTADOANTERIOR01 = %i             \n", mueveAvatar02Base, resultadoAnterior01);
+		}
+
+		// DIFERENCIA
+		// DUDA SI ES BASE O ASI COMO ESTA EL MUEVEAVATAR01
+		if (((mueveAvatar01 + (resultado * 20)) > 200))
+		{
+			diferencia = (mueveAvatar01Base + (resultado * 20)) - 200;
+			diferencia = abs(diferencia);
+
+			if (diferencia < 1)
+			{
+				conta += 1;
+			}
+		}
+		if (conta > 0)
+		{
+			diferencia = 0.0f;
+		}
+
+		// DIFERENCIA
+		// DUDA SI ES BASE O ASI COMO ESTA EL MUEVEAVATAR01
+		if (((mueveAvatar02 + (resultado * 20)) > 200))
+		{
+			diferencia01 = (mueveAvatar02Base + (resultado * 20)) - 200;
+			diferencia01 = abs(diferencia01);
+
+			if (diferencia01 < 1)
+			{
+				conta01 += 1;
+			}
+		}
+		if (conta01 > 0)
+		{
+			diferencia01 = 0.0f;
+		}
+
+		// DIFERENCIA
+		// DUDA SI ES BASE O ASI COMO ESTA EL MUEVEAVATAR01
+		if (((mueveAvatar03 + (resultado * 20)) > 200))
+		{
+			diferencia02 = (mueveAvatar03Base + (resultado * 20)) - 200;
+			diferencia02 = abs(diferencia02);
+
+			if (diferencia02 < 1)
+			{
+				conta02 += 1;
+			}
+		}
+		if (conta02 > 0)
+		{
+			diferencia02 = 0.0f;
+		}
+
+		// DEBERIA ESTAR OTRA AQUI, PERO MEJOR REINICIO TODO AL FINAL
+
+		// MOVIMIENTO AVATAR
+		if (mueveAvatar01 <= 200)
+		{
+			//printf("AVATAR VALOR: %f", mueveAvatar01);
+			// RECORRIDO DEL AVATAR
+			if (mueveAvatar01 < mueveAvatar01Base + (resultado * 20))
+			{
+
+				mueveAvatar01 += mueveAvatar01Offset * deltaTime;
+
+				// ROTACION DE LOS BRAZOS Y PIERNAS DEL AVATAR
+				if (subebaja)
+				{
+					if (rotaBrazoD < 45.0f && rotaBrazoI > -45.0f && rotaPiernaD > -45.0f && rotaPiernaI < 45.0f)
+					{
+						rotaBrazoD += rotaBrazoDOffset * deltaTime;
+						rotaBrazoI -= rotaBrazoIOffset * deltaTime;
+						rotaPiernaD -= rotaPiernaDOffset * deltaTime;
+						rotaPiernaI += rotaPiernaIOffset * deltaTime;
+					}
+					else
+					{
+						subebaja = !subebaja;
+					}
+
+				}
+				else
+				{
+					if (rotaBrazoD > -45.0f && rotaBrazoI < 45.0f && rotaPiernaD < 45.0f && rotaPiernaI > -45.0f)
+					{
+						rotaBrazoD -= rotaBrazoDOffset * deltaTime;
+						rotaBrazoI += rotaBrazoIOffset * deltaTime;
+						rotaPiernaD += rotaPiernaDOffset * deltaTime;
+						rotaPiernaI -= rotaPiernaIOffset * deltaTime;
+					}
+					else
+					{
+						subebaja = !subebaja;
+					}
+				}
+			}
+		}
+		else if (rotaAvatar01 > -90)
+		{
+			rotaAvatar01 -= rotaAvatar01Offset * deltaTime;
+
+			// ROTACION DE LOS BRAZOS Y PIERNAS DEL AVATAR
+			if (subebaja)
+			{
+				if (rotaBrazoD < 45.0f && rotaBrazoI > -45.0f && rotaPiernaD > -45.0f && rotaPiernaI < 45.0f)
+				{
+					rotaBrazoD += rotaBrazoDOffset * deltaTime;
+					rotaBrazoI -= rotaBrazoIOffset * deltaTime;
+					rotaPiernaD -= rotaPiernaDOffset * deltaTime;
+					rotaPiernaI += rotaPiernaIOffset * deltaTime;
+				}
+				else
+				{
+					subebaja = !subebaja;
+				}
+			}
+			else
+			{
+				if (rotaBrazoD > -45.0f && rotaBrazoI < 45.0f && rotaPiernaD < 45.0f && rotaPiernaI > -45.0f)
+				{
+					rotaBrazoD -= rotaBrazoDOffset * deltaTime;
+					rotaBrazoI += rotaBrazoIOffset * deltaTime;
+					rotaPiernaD += rotaPiernaDOffset * deltaTime;
+					rotaPiernaI -= rotaPiernaIOffset * deltaTime;
+				}
+				else
+				{
+					subebaja = !subebaja;
+				}
+			}
+		}
+		else if (diferencia > 0 && hayDiferencia)
+		{
+			// printf("RESULTADO = %f", diferencia);
+			// RECORRIDO DEL AVATAR
+			if (mueveAvatar02 < diferencia)
+			{
+
+				mueveAvatar02 += mueveAvatar02Offset * deltaTime;
+
+				// ROTACION DE LOS BRAZOS Y PIERNAS DEL AVATAR
+				if (subebaja)
+				{
+					if (rotaBrazoD < 45.0f && rotaBrazoI > -45.0f && rotaPiernaD > -45.0f && rotaPiernaI < 45.0f)
+					{
+						rotaBrazoD += rotaBrazoDOffset * deltaTime;
+						rotaBrazoI -= rotaBrazoIOffset * deltaTime;
+						rotaPiernaD -= rotaPiernaDOffset * deltaTime;
+						rotaPiernaI += rotaPiernaIOffset * deltaTime;
+					}
+					else
+					{
+						subebaja = !subebaja;
+					}
+				}
+				else
+				{
+					if (rotaBrazoD > -45.0f && rotaBrazoI < 45.0f && rotaPiernaD < 45.0f && rotaPiernaI > -45.0f)
+					{
+						rotaBrazoD -= rotaBrazoDOffset * deltaTime;
+						rotaBrazoI += rotaBrazoIOffset * deltaTime;
+						rotaPiernaD += rotaPiernaDOffset * deltaTime;
+						rotaPiernaI -= rotaPiernaIOffset * deltaTime;
+					}
+					else
+					{
+						subebaja = !subebaja;
+					}
+				}
+			}
+			else
+			{
+				hayDiferencia = !hayDiferencia;
+			}
+		}
+		else if (mueveAvatar02 <= 200)
+		{
+			//printf("AVATAR VALOR: %f", mueveAvatar01);
+			// RECORRIDO DEL AVATAR
+			if (mueveAvatar02 < mueveAvatar02Base + (resultado * 20))
+			{
+
+				mueveAvatar02 += mueveAvatar02Offset * deltaTime;
+
+				// ROTACION DE LOS BRAZOS Y PIERNAS DEL AVATAR
+				if (subebaja)
+				{
+					if (rotaBrazoD < 45.0f && rotaBrazoI > -45.0f && rotaPiernaD > -45.0f && rotaPiernaI < 45.0f)
+					{
+						rotaBrazoD += rotaBrazoDOffset * deltaTime;
+						rotaBrazoI -= rotaBrazoIOffset * deltaTime;
+						rotaPiernaD -= rotaPiernaDOffset * deltaTime;
+						rotaPiernaI += rotaPiernaIOffset * deltaTime;
+					}
+					else
+					{
+						subebaja = !subebaja;
+					}
+
+				}
+				else
+				{
+					if (rotaBrazoD > -45.0f && rotaBrazoI < 45.0f && rotaPiernaD < 45.0f && rotaPiernaI > -45.0f)
+					{
+						rotaBrazoD -= rotaBrazoDOffset * deltaTime;
+						rotaBrazoI += rotaBrazoIOffset * deltaTime;
+						rotaPiernaD += rotaPiernaDOffset * deltaTime;
+						rotaPiernaI -= rotaPiernaIOffset * deltaTime;
+					}
+					else
+					{
+						subebaja = !subebaja;
+					}
+				}
+
+			}
+		}
+		else if (rotaAvatar02 > -90)
+		{
+			rotaAvatar02 -= rotaAvatar02Offset * deltaTime;
+
+			// ROTACION DE LOS BRAZOS Y PIERNAS DEL AVATAR
+			if (subebaja)
+			{
+				if (rotaBrazoD < 45.0f && rotaBrazoI > -45.0f && rotaPiernaD > -45.0f && rotaPiernaI < 45.0f)
+				{
+					rotaBrazoD += rotaBrazoDOffset * deltaTime;
+					rotaBrazoI -= rotaBrazoIOffset * deltaTime;
+					rotaPiernaD -= rotaPiernaDOffset * deltaTime;
+					rotaPiernaI += rotaPiernaIOffset * deltaTime;
+				}
+				else
+				{
+					subebaja = !subebaja;
+				}
+			}
+			else
+			{
+				if (rotaBrazoD > -45.0f && rotaBrazoI < 45.0f && rotaPiernaD < 45.0f && rotaPiernaI > -45.0f)
+				{
+					rotaBrazoD -= rotaBrazoDOffset * deltaTime;
+					rotaBrazoI += rotaBrazoIOffset * deltaTime;
+					rotaPiernaD += rotaPiernaDOffset * deltaTime;
+					rotaPiernaI -= rotaPiernaIOffset * deltaTime;
+				}
+				else
+				{
+					subebaja = !subebaja;
+				}
+			}
+			}
+		else if (diferencia01 > 0 && hayDiferencia01)
+		{
+			// printf("RESULTADO = %f", diferencia);
+			// RECORRIDO DEL AVATAR
+			if (mueveAvatar03 < diferencia01)
+			{
+
+				mueveAvatar03 += mueveAvatar03Offset * deltaTime;
+
+				// ROTACION DE LOS BRAZOS Y PIERNAS DEL AVATAR
+				if (subebaja)
+				{
+					if (rotaBrazoD < 45.0f && rotaBrazoI > -45.0f && rotaPiernaD > -45.0f && rotaPiernaI < 45.0f)
+					{
+						rotaBrazoD += rotaBrazoDOffset * deltaTime;
+						rotaBrazoI -= rotaBrazoIOffset * deltaTime;
+						rotaPiernaD -= rotaPiernaDOffset * deltaTime;
+						rotaPiernaI += rotaPiernaIOffset * deltaTime;
+					}
+					else
+					{
+						subebaja = !subebaja;
+					}
+				}
+				else
+				{
+					if (rotaBrazoD > -45.0f && rotaBrazoI < 45.0f && rotaPiernaD < 45.0f && rotaPiernaI > -45.0f)
+					{
+						rotaBrazoD -= rotaBrazoDOffset * deltaTime;
+						rotaBrazoI += rotaBrazoIOffset * deltaTime;
+						rotaPiernaD += rotaPiernaDOffset * deltaTime;
+						rotaPiernaI -= rotaPiernaIOffset * deltaTime;
+					}
+					else
+					{
+						subebaja = !subebaja;
+					}
+				}
+			}
+			else
+			{
+				hayDiferencia01 = !hayDiferencia01;
+			}
+		}
+		else if (mueveAvatar03 <= 200)
+		{
+			//printf("AVATAR VALOR: %f", mueveAvatar01);
+			// RECORRIDO DEL AVATAR
+			if (mueveAvatar03 < mueveAvatar03Base + (resultado * 20))
+			{
+
+				mueveAvatar03 += mueveAvatar03Offset * deltaTime;
+
+				// ROTACION DE LOS BRAZOS Y PIERNAS DEL AVATAR
+				if (subebaja)
+				{
+					if (rotaBrazoD < 45.0f && rotaBrazoI > -45.0f && rotaPiernaD > -45.0f && rotaPiernaI < 45.0f)
+					{
+						rotaBrazoD += rotaBrazoDOffset * deltaTime;
+						rotaBrazoI -= rotaBrazoIOffset * deltaTime;
+						rotaPiernaD -= rotaPiernaDOffset * deltaTime;
+						rotaPiernaI += rotaPiernaIOffset * deltaTime;
+					}
+					else
+					{
+						subebaja = !subebaja;
+					}
+
+				}
+				else
+				{
+					if (rotaBrazoD > -45.0f && rotaBrazoI < 45.0f && rotaPiernaD < 45.0f && rotaPiernaI > -45.0f)
+					{
+						rotaBrazoD -= rotaBrazoDOffset * deltaTime;
+						rotaBrazoI += rotaBrazoIOffset * deltaTime;
+						rotaPiernaD += rotaPiernaDOffset * deltaTime;
+						rotaPiernaI -= rotaPiernaIOffset * deltaTime;
+					}
+					else
+					{
+						subebaja = !subebaja;
+					}
+				}
+
+			}
+		}
+		else if (rotaAvatar03 > -90)
+		{
+			rotaAvatar03 -= rotaAvatar03Offset * deltaTime;
+
+			// ROTACION DE LOS BRAZOS Y PIERNAS DEL AVATAR
+			if (subebaja)
+			{
+				if (rotaBrazoD < 45.0f && rotaBrazoI > -45.0f && rotaPiernaD > -45.0f && rotaPiernaI < 45.0f)
+				{
+					rotaBrazoD += rotaBrazoDOffset * deltaTime;
+					rotaBrazoI -= rotaBrazoIOffset * deltaTime;
+					rotaPiernaD -= rotaPiernaDOffset * deltaTime;
+					rotaPiernaI += rotaPiernaIOffset * deltaTime;
+				}
+				else
+				{
+					subebaja = !subebaja;
+				}
+			}
+			else
+			{
+				if (rotaBrazoD > -45.0f && rotaBrazoI < 45.0f && rotaPiernaD < 45.0f && rotaPiernaI > -45.0f)
+				{
+					rotaBrazoD -= rotaBrazoDOffset * deltaTime;
+					rotaBrazoI += rotaBrazoIOffset * deltaTime;
+					rotaPiernaD += rotaPiernaDOffset * deltaTime;
+					rotaPiernaI -= rotaPiernaIOffset * deltaTime;
+				}
+				else
+				{
+					subebaja = !subebaja;
+				}
+			}
+			}
+		else if (diferencia02 > 0 && hayDiferencia02)
+		{
+			// printf("RESULTADO = %f", diferencia);
+			// RECORRIDO DEL AVATAR
+			if (mueveAvatar04 < diferencia02)
+			{
+
+				mueveAvatar04 += mueveAvatar04Offset * deltaTime;
+
+				// ROTACION DE LOS BRAZOS Y PIERNAS DEL AVATAR
+				if (subebaja)
+				{
+					if (rotaBrazoD < 45.0f && rotaBrazoI > -45.0f && rotaPiernaD > -45.0f && rotaPiernaI < 45.0f)
+					{
+						rotaBrazoD += rotaBrazoDOffset * deltaTime;
+						rotaBrazoI -= rotaBrazoIOffset * deltaTime;
+						rotaPiernaD -= rotaPiernaDOffset * deltaTime;
+						rotaPiernaI += rotaPiernaIOffset * deltaTime;
+					}
+					else
+					{
+						subebaja = !subebaja;
+					}
+				}
+				else
+				{
+					if (rotaBrazoD > -45.0f && rotaBrazoI < 45.0f && rotaPiernaD < 45.0f && rotaPiernaI > -45.0f)
+					{
+						rotaBrazoD -= rotaBrazoDOffset * deltaTime;
+						rotaBrazoI += rotaBrazoIOffset * deltaTime;
+						rotaPiernaD += rotaPiernaDOffset * deltaTime;
+						rotaPiernaI -= rotaPiernaIOffset * deltaTime;
+					}
+					else
+					{
+						subebaja = !subebaja;
+					}
+				}
+			}
+			else
+			{
+				hayDiferencia02 = !hayDiferencia02;
+			}
+			}
+		else if (mueveAvatar04 <= 200)
+		{
+			//printf("AVATAR VALOR: %f", mueveAvatar01);
+			// RECORRIDO DEL AVATAR
+			if (mueveAvatar04 < mueveAvatar04Base + (resultado * 20))
+			{
+
+				mueveAvatar04 += mueveAvatar04Offset * deltaTime;
+
+				// ROTACION DE LOS BRAZOS Y PIERNAS DEL AVATAR
+				if (subebaja)
+				{
+					if (rotaBrazoD < 45.0f && rotaBrazoI > -45.0f && rotaPiernaD > -45.0f && rotaPiernaI < 45.0f)
+					{
+						rotaBrazoD += rotaBrazoDOffset * deltaTime;
+						rotaBrazoI -= rotaBrazoIOffset * deltaTime;
+						rotaPiernaD -= rotaPiernaDOffset * deltaTime;
+						rotaPiernaI += rotaPiernaIOffset * deltaTime;
+					}
+					else
+					{
+						subebaja = !subebaja;
+					}
+
+				}
+				else
+				{
+					if (rotaBrazoD > -45.0f && rotaBrazoI < 45.0f && rotaPiernaD < 45.0f && rotaPiernaI > -45.0f)
+					{
+						rotaBrazoD -= rotaBrazoDOffset * deltaTime;
+						rotaBrazoI += rotaBrazoIOffset * deltaTime;
+						rotaPiernaD += rotaPiernaDOffset * deltaTime;
+						rotaPiernaI -= rotaPiernaIOffset * deltaTime;
+					}
+					else
+					{
+						subebaja = !subebaja;
+					}
+				}
+
+			}
+		}
+		else if (rotaAvatar04 > -90)
+		{
+			rotaAvatar04 -= rotaAvatar04Offset * deltaTime;
+
+			// ROTACION DE LOS BRAZOS Y PIERNAS DEL AVATAR
+			if (subebaja)
+			{
+				if (rotaBrazoD < 45.0f && rotaBrazoI > -45.0f && rotaPiernaD > -45.0f && rotaPiernaI < 45.0f)
+				{
+					rotaBrazoD += rotaBrazoDOffset * deltaTime;
+					rotaBrazoI -= rotaBrazoIOffset * deltaTime;
+					rotaPiernaD -= rotaPiernaDOffset * deltaTime;
+					rotaPiernaI += rotaPiernaIOffset * deltaTime;
+				}
+				else
+				{
+					subebaja = !subebaja;
+				}
+			}
+			else
+			{
+				if (rotaBrazoD > -45.0f && rotaBrazoI < 45.0f && rotaPiernaD < 45.0f && rotaPiernaI > -45.0f)
+				{
+					rotaBrazoD -= rotaBrazoDOffset * deltaTime;
+					rotaBrazoI += rotaBrazoIOffset * deltaTime;
+					rotaPiernaD += rotaPiernaDOffset * deltaTime;
+					rotaPiernaI -= rotaPiernaIOffset * deltaTime;
+				}
+				else
+				{
+					subebaja = !subebaja;
+				}
+			}
+
+		}
+		else
+		{
+			subeBajaDado8 = 35.0f;
+			rotaDadox8 = 0.0f;
+			rotaDadoy8 = 0.0f;
+			rotaDadoz8 = 0.0f;
+
+			subeBajaDado4 = 35.0f;
+			rotaDadox4 = 0.0f;
+			rotaDadoy4 = 0.0f;
+
+			// RRESULTADO DEL DADO
+			resultado4Caras = 0;
+			resultado8Caras = 0;
+			resultado = 0;
+
+			// VARIABLES PARA ANIAMCION DE RECORRIDO
+			mueveAvatar01 = 0.0f;
+			mueveAvatar01Base = 0.0f;
+			resultadoAnterior01 = 0;
+
+			mueveAvatar02 = 0.0f;
+			mueveAvatar02Base = 0.0f;
+			resultadoAnterior02 = 0;
+
+			mueveAvatar03 = 0.0f;
+			mueveAvatar03Base = 0.0f;
+			resultadoAnterior03 = 0;
+
+			mueveAvatar04 = 0.0f;
+			mueveAvatar04Base = 0.0f;
+			resultadoAnterior04 = 0;
+
+			diferencia = 0.0f;
+			hayDiferencia = true;
+			conta = 0;
+
+			diferencia01 = 0.0f;
+			hayDiferencia01 = true;
+			conta01 = 0;
+
+			diferencia02 = 0.0f;
+			hayDiferencia02 = true;
+			conta02 = 0;
+
+			// VARIABLES PARA LA ANIMACION DE LA VUELTA 
+			rotaAvatar01 = 0.0f;
+			rotaAvatar02 = 0.0f;
+			rotaAvatar03 = 0.0f;
+			rotaAvatar04 = 0.0f;
+
+			// VARIABLES PARA ANIMACIÓN DE LOS BRAZOS Y PIERNAS
+			rotaBrazoD = 0.0f;
+			rotaBrazoI = 0.0f;
+			rotaPiernaD = 0.0f;
+			rotaPiernaI = 0.0f;
+			subebaja = true;
+		}
+
+		// ACTIVAR BANDERAS DE ANIMACION ESPECIAL
+		if (mueveAvatar01 >= 20)
+		{
+			raidenCont01 += 1;
+		}
+		if (mueveAvatar01 >= 40)
+		{
+			scorpionCont01 += 1;
+		}
+		
 		// PARA SUBIR
 		// U
 		if (mainWindow.getsubeBajaDado() == false)
@@ -1629,6 +2319,44 @@ int main()
 			}
 		}
 
+		// INTERACCIINES ESPECIALES DE CASILLAS
+		// RAIDEN
+		if (raidenCont01 >= 1 && raidenCont02 < 1)
+		{
+			printf("ENTRO\n");
+			if (raiden)
+			{
+				if (raidenSubeBaja < 9.9f)
+				{
+					raidenSubeBaja += raidenSubeBajaOffset * deltaTime;
+					raidenRota += raidenRotaOffset * deltaTime;
+					raidenTiempo = glfwGetTime();
+
+				}
+				else
+				{
+					if ((glfwGetTime()-raidenTiempo) > 3)
+					{
+						raiden = !raiden;
+					}
+				}
+			}
+			else
+			{
+				if (raidenSubeBaja > -8.0f)
+				{
+					raidenSubeBaja -= raidenSubeBajaOffset * deltaTime;
+					raidenRota -= raidenRotaOffset * deltaTime;
+				}
+				else
+				{
+					printf("YA NO VUELVE A ENTRAR");
+					raidenCont02 += 1;
+				}
+			}
+		}
+		
+
 		//Recibir eventos del usuario
 		glfwPollEvents();
 		camera.keyControl(mainWindow.getsKeys(), deltaTime);
@@ -1669,6 +2397,14 @@ int main()
 
 		// MATRIZ AUXILIAR PARA LAS CASILLAS
 		glm::mat4 modelauxCasillas(1.0);
+
+		// MATRIZ AUXILIAR PARA EL AVATAR DE RECORRIDO (SUBZERO)
+		glm::mat4 modelauxTorso(1.0);
+		glm::mat4 modelauxBrazoDerecho(1.0);
+		glm::mat4 modelauxBrazoIzquierdo(1.0);
+		glm::mat4 modelauxCintura(1.0);
+		glm::mat4 modelauxPiernaDerecha(1.0);
+		glm::mat4 modelauxPiernaIzquierda(1.0);
 
 		glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
 
@@ -2184,8 +2920,9 @@ int main()
 		// RAIDEN - CASILLA 02
 		model = glm::mat4(1.0);
 
-		model = glm::translate(model, glm::vec3(-120.0f, 9.9f, 80.0));
+		model = glm::translate(model, glm::vec3(-120.0f, /*9.9f*/raidenSubeBaja, 80.0));
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -raidenRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(7.0f, 7.0f, 7.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		modeloCasilla01M.RenderModel();
@@ -2517,6 +3254,123 @@ int main()
 		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		casillaM.RenderModel();*/
+
+		// AVATAR SUB ZERO PARA RECORRIDO
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(-100.0f, 19.8f, 100.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+		// RECORRIDO AVATAR
+		// EL PRIMER TRANSLATE (HASTA LLEGAR A UNA PARTE)
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, mueveAvatar01));
+		model = glm::rotate(model, rotaAvatar01 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+		// RECORRIDO AVATAR
+		// EL PRIMER TRANSLATE (HASTA LLEGAR A UNA PARTE)
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, mueveAvatar02));
+		model = glm::rotate(model, rotaAvatar02 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+		// RECORRIDO AVATAR
+		// EL PRIMER TRANSLATE (HASTA LLEGAR A UNA PARTE)
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, mueveAvatar03));
+		model = glm::rotate(model, rotaAvatar03 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+		// RECORRIDO AVATAR
+		// EL PRIMER TRANSLATE (HASTA LLEGAR A UNA PARTE)
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, mueveAvatar04));
+		model = glm::rotate(model, rotaAvatar04 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+
+		modelauxTorso = model; // GUARDA TORSO
+
+		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		torsoSubZero.RenderModel();
+
+		model = modelauxTorso; // A PARTIR DE TORSO
+
+		model = glm::translate(model, glm::vec3(-3.5f, 2.0f, -0.3f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+
+		modelauxBrazoDerecho = model; // GUARDA BRAZO DERECHO
+
+		model = glm::scale(model, glm::vec3(1.2f, 1.2f, 1.2f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		esfera.RenderModel();
+
+		model = modelauxBrazoDerecho; // A PARTIR DE BRAZO DERECHO
+
+		model = glm::translate(model, glm::vec3(-0.3f, 0.0f, 0.1f));
+		model = glm::rotate(model, -rotaBrazoD * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		brazoDerechoSubZero.RenderModel();
+
+		model = modelauxTorso; // A PARTIR DE TORSO
+
+		model = glm::translate(model, glm::vec3(3.5f, 2.0f, -0.3f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+
+		modelauxBrazoIzquierdo = model; // GUARDA BRAZO IZQUIERDO
+
+		model = glm::scale(model, glm::vec3(1.2f, 1.2f, 1.2f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		esfera.RenderModel();
+
+		model = modelauxBrazoIzquierdo; // A PARTIR DE BRAZO IZQUIERDO
+
+		model = glm::translate(model, glm::vec3(0.3f, 0.0f, 0.1f));
+		model = glm::rotate(model, rotaBrazoI * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		brazoIzquieroSubZero.RenderModel();
+
+		model = modelauxTorso; // A PARTIR DE TORSO
+
+		model = glm::translate(model, glm::vec3(0.0f, -5.0f, 0.0f));
+
+		modelauxCintura = model; // GUARDA CINTURA
+
+		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		cinturaSubZero.RenderModel();
+
+		model = modelauxCintura; //  PARTIR DE LA CINTURA
+
+		model = glm::translate(model, glm::vec3(-1.3f, -1.5f, 0.0f));
+
+		modelauxPiernaDerecha = model; // GUARDA PIERNA DERECHA
+
+		model = glm::scale(model, glm::vec3(1.2f, 1.2f, 1.2f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		esfera.RenderModel();
+
+		model = modelauxPiernaDerecha; // A PARTIR DE LA PIERNA DERECHA
+
+		model = glm::translate(model, glm::vec3(0.0f, 0.3f, 0.0f));
+		model = glm::rotate(model, rotaPiernaD * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		piernaDerechaSubZero.RenderModel();
+
+		model = modelauxCintura; //  PARTIR DE LA CINTURA
+
+		model = glm::translate(model, glm::vec3(1.3f, -1.5f, 0.0f));
+
+		modelauxPiernaIzquierda = model; // GUARDA PIERNA IZQUIERDA
+
+		model = glm::scale(model, glm::vec3(1.2f, 1.2f, 1.2f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		esfera.RenderModel();
+
+		model = modelauxPiernaIzquierda; // A PARTIR DE LA PIERNA IZQUIERDA
+
+		model = glm::translate(model, glm::vec3(0.0f, 0.3f, 0.0f));
+		model = glm::rotate(model, rotaPiernaI * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		piernaIzquierdaSubZero.RenderModel();
 
 		glUseProgram(0);
 
