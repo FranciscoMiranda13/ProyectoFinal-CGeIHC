@@ -1,5 +1,5 @@
 # 3ds Max Wavefront OBJ Exporter v0.99 - (c)2007 guruware
-# File Created: 26.10.2024 21:41:50
+# File Created: 01.11.2024 15:36:11
 
 newmtl npc_custom_carterPewterschmidt_mdl_npc_custom_carterPewterschmidt_col
 	Kd 1.0000 1.0000 1.0000
@@ -16,22 +16,6 @@ newmtl npc_custom_carterPewterschmidt_mdl_npc_custom_carterPewterschmidt_col
 	illum 2
 	map_Kd npc_custom_carterPewterschmidt_col.png
 	map_d npc_custom_carterPewterschmidt_col.png
-
-newmtl npc_custom_carterPewterschmidt_mdl_npc_custom_mouth_carterPewterschmidt_col
-	Kd 1.0000 1.0000 1.0000
-	Ks 0.9000 0.9000 0.9000
-	Tr 1.0000
-	d 0.0000
-	Tf 0.0000 0.0000 0.0000
-	Pr 0.0392
-	Pm 0.0000
-	Pc 0.0000
-	Pcr 0.0000
-	Ni 1.5000
-	Ke 0.0000 0.0000 0.0000
-	illum 2
-	map_Kd npc_custom_mouth_carterPewterschmidt_col.png
-	map_d npc_custom_mouth_carterPewterschmidt_col.png
 
 newmtl npc_custom_carterPewterschmidt_mdl_npc_shared_browsCarterPewterschmidt_col
 	Kd 0.8000 0.8000 0.8000
