@@ -1,5 +1,9 @@
 
 // PROYECTO DE LABORATORIO
+// Miranda González José Francisco. Grupo teoría: 04. Grupo laboratorio: 03. 318222327
+// Monter González Luis Enrique. Grupo teoría: 06. Grupo laboratorio: 03. 318276605
+// Vázquez Gómez Carlos Iván. Grupo teoría: 04. Grupo laboratorio: 03. 420055185
+
 
 //para cargar imagen
 #define STB_IMAGE_IMPLEMENTATION
@@ -35,12 +39,16 @@
 #include "SpotLight.h"
 #include "Material.h"
 
-// PARA ELEGIR LOS GRADOS DE MANERA RANDOM
+// PARA ELEGIR LOS GRADOS DE MANERA RANDOM EN LOS DADOS
 #include <iostream>
 #include <cstdlib> // Para rand() y srand()
 #include <ctime>   // Para time()
 
 const float toRadians = 3.14159265f / 180.0f;
+
+									// ##################################### VARIABLES PARA ANIMACION ##################################### \\
+
+// CONTROL DE LUZ DIRECCIONAL
 float totalDia = 30.0f;
 float atardecer = 30.0f;
 float totalnoche = 30.0f;
@@ -51,6 +59,7 @@ float intensidad = 0.0f;
 float FaseDia = 0.0f;
 float oscuridad = 0.0f;
 float adjustedIntensity = 0.0f;
+
 // VARIABLES PARA ANIMACION DEL DADO DE 8 CARAS
 float subeBajaDado8 = 35.0f;
 float subeBajaDadoOffset8 = 0.3f;
@@ -76,22 +85,22 @@ int resultado = 0;
 
 // VARIABLES PARA ANIAMCION DE RECORRIDO
 float mueveAvatar01 = 0.0f;
-float mueveAvatar01Offset = 0.3f;
+float mueveAvatar01Offset = 0.1f;
 float mueveAvatar01Base = 0.0f;
 int resultadoAnterior01 = 0;
 
 float mueveAvatar02 = 0.0f;
-float mueveAvatar02Offset = 0.3f;
+float mueveAvatar02Offset = 0.1f;
 float mueveAvatar02Base = 0.0f;
 int resultadoAnterior02 = 0;
 
 float mueveAvatar03 = 0.0f;
-float mueveAvatar03Offset = 0.3f;
+float mueveAvatar03Offset = 0.1f;
 float mueveAvatar03Base = 0.0f;
 int resultadoAnterior03 = 0;
 
 float mueveAvatar04 = 0.0f;
-float mueveAvatar04Offset = 0.3f;
+float mueveAvatar04Offset = 0.1f;
 float mueveAvatar04Base = 0.0f;
 int resultadoAnterior04 = 0;
 
@@ -105,7 +114,7 @@ int conta01 = 0;
 
 float diferencia02 = 0.0f;
 bool hayDiferencia02 = true;
-int conta02 = 0;
+int conta02 = 0; 
 
 // VARIABLES PARA LA ANIMACION DE LA VUELTA 
 float rotaAvatar01 = 0.0f;
@@ -129,8 +138,9 @@ float rotaPiernaIOffset = 0.8;
 bool subebaja = true;
 
 // ANIMACIONES DE CASILLAS
+
 // CASILLA 02
-float raidenSubeBaja = -8.0f;
+float raidenSubeBaja = -8.0f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
 float raidenSubeBajaOffset = 0.1f;
 float raidenRota = 0.0f;
 float raidenRotaOffset = 2.0;
@@ -139,7 +149,6 @@ int raidenCont02 = 0;
 bool raiden = true;
 float raidenTiempo = 0.0f;
 
-//SE CAMBIA LA VARIABLE A NOMBRE DEL MODELO
 // CASILLA 03
 float scorpionSubeBaja = -9.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
 float scorpionSubeBajaOffset = 0.1f;
@@ -161,7 +170,7 @@ bool shao = true;
 float shaoTiempo = 0.0f;
 
 // CASILLA 05
-float hellSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+float hellSubeBaja = -13.0f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
 float hellSubeBajaOffset = 0.1f;
 float hellRota = 0.0f;
 float hellRotaOffset = 2.0;
@@ -351,7 +360,7 @@ bool  babyt = true;
 float  babytTiempo = 0.0f;
 
 // CASILLA 24
-float akuakuSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+float akuakuSubeBaja = -14.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
 float  akuakuSubeBajaOffset = 0.1f;
 float akuakuRota = 0.0f;
 float  akuakuRotaOffset = 2.0;
@@ -361,7 +370,7 @@ bool  akuaku = true;
 float  akuakuTiempo = 0.0f;
 
 // CASILLA 25
-float palm_treeSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+float palm_treeSubeBaja = -15.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
 float  palm_treeSubeBajaOffset = 0.1f;
 float palm_treeRota = 0.0f;
 float  palm_treeRotaOffset = 2.0;
@@ -391,7 +400,7 @@ bool  basic = true;
 float  basicTiempo = 0.0f;
 
 // CASILLA 28
-float brianSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+float brianSubeBaja = -14.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
 float  brianSubeBajaOffset = 0.1f;
 float brianRota = 0.0f;
 float  brianRotaOffset = 2.0;
@@ -401,7 +410,7 @@ bool  brian = true;
 float  brianTiempo = 0.0f;
 
 // CASILLA 29
-float ernieSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+float ernieSubeBaja = -13.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
 float  ernieSubeBajaOffset = 0.1f;
 float ernieRota = 0.0f;
 float  ernieRotaOffset = 2.0;
@@ -411,7 +420,7 @@ bool  ernie = true;
 float  ernieTiempo = 0.0f;
 
 // CASILLA 30
-float luisaSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+float luisaSubeBaja = -13.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
 float  luisaSubeBajaOffset = 0.1f;
 float luisaRota = 0.0f;
 float  luisaRotaOffset = 2.0;
@@ -451,7 +460,7 @@ bool  joe = true;
 float  joeTiempo = 0.0f;
 
 // CASILLA 34
-float chrisSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+float chrisSubeBaja = -20.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
 float  chrisSubeBajaOffset = 0.1f;
 float chrisRota = 0.0f;
 float  chrisRotaOffset = 2.0;
@@ -471,7 +480,7 @@ bool  casa = true;
 float  casaTiempo = 0.0f;
 
 // CASILLA 36
-float treeSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+float treeSubeBaja = -12.9f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
 float  treeSubeBajaOffset = 0.1f;
 float treeRota = 0.0f;
 float  treeRotaOffset = 2.0;
@@ -481,7 +490,7 @@ bool  tree = true;
 float  treeTiempo = 0.0f;
 
 // CASILLA 37
-float navidadSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+float navidadSubeBaja = -14.0f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
 float  navidadSubeBajaOffset = 0.1f;
 float navidadRota = 0.0f;
 float  navidadRotaOffset = 2.0;
@@ -511,7 +520,7 @@ bool  flowers2 = true;
 float  flowers2Tiempo = 0.0f;
 
 // CASILLA 40
-float carterSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+float carterSubeBaja = -13.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
 float  carterSubeBajaOffset = 0.1f;
 float carterRota = 0.0f;
 float  carterRotaOffset = 2.0;
@@ -520,8 +529,51 @@ int  carterCont02 = 0;
 bool  carter = true;
 float  carterTiempo = 0.0f;
 
+// CAMBIO DE DIA Y NOCHE
+float dianocheTiempo;
 
-//ANIMACION DEL CARRO COCO
+// COCINADO EN LAS CASILLAS
+int cocinado01 = 0;
+int cocinado02 = 0;
+int cocinado03 = 0;
+int cocinado04 = 0;
+int cocinado05 = 0;
+int cocinado06 = 0;
+int cocinado07 = 0;
+int cocinado08 = 0;
+int cocinado09 = 0;
+int cocinado10 = 0;
+int cocinado11 = 0;
+int cocinado12 = 0;
+int cocinado13 = 0;
+int cocinado14 = 0;
+int cocinado15 = 0;
+int cocinado16 = 0;
+int cocinado17 = 0;
+int cocinado18 = 0;
+int cocinado19 = 0;
+int cocinado20 = 0;
+int cocinado21 = 0;
+int cocinado22 = 0;
+int cocinado23 = 0;
+int cocinado24 = 0;
+int cocinado25 = 0;
+int cocinado26 = 0;
+int cocinado27 = 0;
+int cocinado28 = 0;
+int cocinado29 = 0;
+int cocinado30 = 0;
+int cocinado31 = 0;
+int cocinado32 = 0;
+int cocinado33 = 0;
+int cocinado34 = 0;
+int cocinado35 = 0;
+int cocinado36 = 0;
+int cocinado37 = 0;
+int cocinado38 = 0;
+int cocinado39 = 0;
+
+////ANIMACION DEL CARRO COCO
 float mueveCarro = 0.0f;              // Posición inicial del carro en el primer tramo
 float giraCarro = 90.0f;               // Ángulo inicial de rotación (90 grados)
 float mueveCarro2 = 0.0f;              // Posición en el segundo tramo
@@ -535,7 +587,6 @@ bool enCurva = false; // Bandera para saber si estamos en la curva
 bool enMovimientoXNegativo = false; // Nueva bandera para el movimiento en X negativo
 bool enMovimientoZ = false; // Bandera para saber si estamos en movimiento en el eje Z
 bool enMovimientoX = false; // Bandera para saber si estamos en movimiento en el eje Z
-float dianocheTiempo = 0.0f;
 
 //VARIABLES PARA ANIMACION MONOPOLY Y PASTO
 float toffsetletrerou = 0.0f;
@@ -556,6 +607,7 @@ Camera currentCamara;
 bool camaraAereaAc = false;
 float posCamX = 2000.0f;
 float posCamZ = 2000.0f;
+
 Texture brickTexture;
 Texture dirtTexture;
 Texture plainTexture;
@@ -564,11 +616,13 @@ Texture AgaveTexture;
 Texture letrero;
 Texture pasto;
 
+									// ##################################### CREACION DE MODELOS ##################################### \\
+
 // DADOS MODELOS
 Model dado4CarasM;
 Model dado8CarasM;
 
-// CASILLAS MODELOS
+// CASILLAS DE COLOR AZUL (NOCHE)
 Model casillaM;
 Model casilla01M;
 Model casilla02M;
@@ -611,7 +665,7 @@ Model casilla38M;
 Model casilla39M;
 Model casilla40M;
 
-//CASILLA AMARILLA
+//CASILLA DE COLOR AMARILLO (DIA)
 Model casilla01A;
 Model casilla02A;
 Model casilla03A;
@@ -653,8 +707,7 @@ Model casilla38A;
 Model casilla39A;
 Model casilla40A;
 
-
-//CASILLAS "ILUMINADA"
+//CASILLAS "ILUMINADA" (COCINADO AL PASAR POR LA CASILLA)
 Model casilla01AR;
 Model casilla02AR;
 Model casilla03AR;
@@ -695,7 +748,6 @@ Model casilla37AR;
 Model casilla38AR;
 Model casilla39AR;
 Model casilla40AR;
-
 
 // MODELOS DE LAS CASILLAS
 Model modeloCasilla01M;
@@ -757,7 +809,13 @@ Model brazoIzquieroSubZero;
 Model piernaDerechaSubZero;
 Model piernaIzquierdaSubZero;
 
-// MODELO TABLEROS
+// MODELOS PARA ANIMACION 
+Model subZeroAnimacion;
+Model scorpionCabeza;
+Model scorpionCuerpo;
+
+// MODELOS DEL ENTORNO
+Model globo;
 Model casaCynthia;
 Model arboltablero1;
 Model palmeratablero;
@@ -782,6 +840,8 @@ Model kabal;
 // MODELOS AUXILIARES
 Model esfera;
 
+									// ##################################### SKYBOX ##################################### \\
+
 // SKYBOX DIA 
 Skybox skyboxDia;
 // SKYBOX NOCHE
@@ -791,7 +851,6 @@ Skybox skyboxNoche;
 Material Material_brillante;
 Material Material_opaco;
 
-
 //Sphere cabeza = Sphere(0.5, 20, 20);
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
@@ -799,7 +858,6 @@ static double limitFPS = 1.0 / 60.0;
 
 // luz direccional
 DirectionalLight mainLight;
-DirectionalLight mainLight2;
 //para declarar varias luces de tipo pointlight
 PointLight pointLights[MAX_POINT_LIGHTS];
 SpotLight spotLights[MAX_SPOT_LIGHTS];
@@ -809,7 +867,6 @@ static const char* vShader = "shaders/shader_light.vert";
 
 // Fragment Shader
 static const char* fShader = "shaders/shader_light.frag";
-
 
 //función de calculo de normales por promedio de vértices 
 void calcAverageNormals(unsigned int* indices, unsigned int indiceCount, GLfloat* vertices, unsigned int verticeCount,
@@ -843,6 +900,8 @@ void calcAverageNormals(unsigned int* indices, unsigned int indiceCount, GLfloat
 
 void CreateObjects()
 {
+										// ##################################### PASTO ##################################### \\
+	
 	// PISO (PASTO)
 	unsigned int pisoPastoIndices[] = {
 		0, 1, 2,
@@ -968,6 +1027,8 @@ int main()
 	//Camara que solo se mueve de forma ortogonal
 	CamaraAerea = Camera(glm::vec3(posCamX, 150.0f, posCamZ), glm::vec3(0.0f, 1.0f, 0.0f), 75.0f, -90.0f, 0.3f, 0.5f);
 
+	// camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.3f, 0.5f);
+
 	brickTexture = Texture("Textures/brick.png");
 	brickTexture.LoadTextureA();
 	dirtTexture = Texture("Textures/dirt.png");
@@ -983,14 +1044,15 @@ int main()
 	pasto = Texture("Textures/pasto1.png");
 	pasto.LoadTextureA();
 
+										// ##################################### CARGA DE MODELOS ##################################### \\
 
-	// DADOS MODELOS
+	// DADOS 
 	dado4CarasM = Model();
 	dado4CarasM.LoadModel("Models/dado4Caras.obj");
 	dado8CarasM = Model();
 	dado8CarasM.LoadModel("Models/dado8Caras.obj");
 
-	// CASILLAS MODELOS
+	// CASILLAS AZULES 
 	casillaM = Model();
 	casillaM.LoadModel("Models/casilla.obj");
 	casilla01M = Model();
@@ -1074,7 +1136,7 @@ int main()
 	casilla40M = Model();
 	casilla40M.LoadModel("Models/casilla40.obj");
 
-	//CASILLAS COLOR AMARILLO
+	//CASILLAS AMARILLAS
 	casilla01A = Model();
 	casilla01A.LoadModel("Models/casilla01A.obj");
 	casilla02A = Model();
@@ -1156,7 +1218,7 @@ int main()
 	casilla40A = Model();
 	casilla40A.LoadModel("Models/casilla40A.obj");
 
-	//CASILLAS COLOR "ILUMINADAS"
+	//CASILLAS "ILUMINADAS" (COCINADO)
 	casilla01AR = Model();
 	casilla01AR.LoadModel("Models/casilla01AR.obj");
 	casilla02AR = Model();
@@ -1237,9 +1299,7 @@ int main()
 	casilla39AR.LoadModel("Models/casilla39AR.obj");
 	casilla40AR = Model();
 	casilla40AR.LoadModel("Models/casilla40AR.obj");
-
-
-
+	
 	// MODELOS DE LAS CASILLAS
 	modeloCasilla01M = Model();
 	modeloCasilla01M.LoadModel("Models/raidenCasilla01.obj");
@@ -1340,8 +1400,17 @@ int main()
 	piernaIzquierdaSubZero = Model();
 	piernaIzquierdaSubZero.LoadModel("Models/avatarSubZeroPiernaIzquierda.obj");
 
+	// MODELOS PARA ANIMACIONES
+	subZeroAnimacion = Model();
+	subZeroAnimacion.LoadModel("Models/subZeroAnimacion.obj");
+	scorpionCabeza = Model();
+	scorpionCabeza.LoadModel("Models/scorpionCabeza.obj");
+	scorpionCuerpo = Model();
+	scorpionCuerpo.LoadModel("Models/scorpionCuerpo.obj");
 
-	//MODELOS TABLERO
+	// MODELOS DEL ENTORNO
+	globo = Model();
+	globo.LoadModel("Models/globo.obj");
 	casaCynthia = Model();
 	casaCynthia.LoadModel("Models/casaCynthia.obj");
 	arboltablero1 = Model();
@@ -1395,6 +1464,8 @@ int main()
 	carroCoco = Model();
 	carroCoco.LoadModel("Models/carroCoco.obj");
 
+										// ##################################### SKYBOX ##################################### \\
+
 	// SKYBOX DE DIA 
 	std::vector<std::string> skyboxFaces01;
 	skyboxFaces01.push_back("Textures/Skybox/Skybox5Dia.tga");
@@ -1420,17 +1491,12 @@ int main()
 	Material_brillante = Material(4.0f, 256);
 	Material_opaco = Material(0.3f, 4);
 
+	// LUZ DIRECCIONAL
 	DirectionalLight* auxLight = &mainLight;
 	//luz direccional, sólo 1 y siempre debe de existir
 	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
-		0.8f, 0.5f,
+		0.5f, 0.1f,
 		0.0f, -1.0f, 0.0f);
-
-	mainLight2 = DirectionalLight(1.0f, 1.0f, 1.0f,
-		0.1f, 0.1f,
-		0.0f, -1.0f, 0.0f
-		);
-
 	//contador de luces puntuales
 	unsigned int pointLightCount = 0;
 	//Declaración de primer luz puntual
@@ -1439,7 +1505,6 @@ int main()
 		-200.0f, 4.0f, 80.0f,
 		0.3f, 0.2f, 0.1f);
 	pointLightCount++;
-
 	unsigned int spotLightCount = 0;
 	//linterna
 	spotLights[0] = SpotLight(1.0f, 1.0f, 1.0f,
@@ -1449,7 +1514,6 @@ int main()
 		1.0f, 0.0f, 0.0f,
 		5.0f);
 	spotLightCount++;
-
 	//LUZ textura 
 	spotLights[1] = SpotLight(1.0f, 0.0f, 0.0f,
 		0.8f, 8.0f,
@@ -1459,20 +1523,21 @@ int main()
 		40.0f);
 	spotLightCount++;
 	
-
-
-	
 	//se crean mas luces puntuales y spotlight 
 
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0,
 		uniformSpecularIntensity = 0, uniformShininess = 0, uniformTextureOffset=0;
 	GLuint uniformColor = 0;
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
-	// PARA CONTROLAR EL TIEMPO, AUN NO LO ESTOY OCUPANDO
+
+										// ##################################### TIEMPO ##################################### \\
+
+	// PARA CONTROLAR EL TIEMPO
 	glfwSetTime(0);
 
-	// GRADOS ALEATORIOS 
-	// Inicializar la semilla solo una vez
+										// ##################################### GRADOS ALEATORIOS ##################################### \\
+
+	// INICIALIZAR LA SEMILLA SOLO UNA VEZ
 	std::srand(static_cast<unsigned>(std::time(0)));
 
 	// PARA GRADOS DE X DADO 8 CARAS
@@ -1506,32 +1571,8 @@ int main()
 		deltaTime = now - lastTime;
 		deltaTime += (now - lastTime) / limitFPS;
 		lastTime = now;
-		//if (mainWindow.getsKeys()[GLFW_KEY_C]) {
-		//	camaraAereaAc = true;
-		//	printf("estoy entrando putos");
-		//}
-		////IMPLEMENTACION CAMARA
-		//if (camaraAereaAc) {
-		//	currentCamera = &CamaraAerea;
-		//	if (mainWindow.getsKeys()[GLFW_KEY_W]) {
-		//		posCamX += 15.0f;
-		//	}
-		//	if (mainWindow.getsKeys()[GLFW_KEY_S]) {
-		//		posCamX -= 15.0f;
-		//	}
-		//	if (mainWindow.getsKeys()[GLFW_KEY_A]) {
-		//		posCamZ -= 15.0f;
-		//	}
-		//	if (mainWindow.getsKeys()[GLFW_KEY_D]) {
-		//		posCamZ += 15.0f;
-		//	}
-		//}
-		//else {
-		//	currentCamera = &camera;
-		//	
-		//}
 
-
+											// ##################################### BAJAR AMBOS DADOS (Y) ##################################### \\
 
 		// PARA BAJAR
 		// TECLA Y
@@ -2305,12 +2346,16 @@ int main()
 			}
 		}
 
+											// ##################################### SUMA DE AMBOS DADOS ##################################### \\
+
 		// RESULTADO DE LOS DADOS
 		if (resultado8Caras != 0 && resultado4Caras != 0)
 		{
 			resultado = resultado4Caras + resultado8Caras;
 			//printf("RESULTADO = %i", resultado);
 		}
+
+							// ##################################### RESULTADO DIFERENTE AL ANTERIOR PARA ACTUALIZAR POSICION ##################################### \\
 
 		// VERIFICAR SI 'RESULTADO' HA CAMBIADO
 		if (resultado != resultadoAnterior01) {
@@ -2340,8 +2385,9 @@ int main()
 			//printf(" EL SEGUNDOOOOOO = %f y RESULTADOANTERIOR01 = %i             \n", mueveAvatar02Base, resultadoAnterior01);
 		}
 
+											// ##################################### LO QUE RESTA DE AVANZAR ##################################### \\
+
 		// DIFERENCIA
-		// DUDA SI ES BASE O ASI COMO ESTA EL MUEVEAVATAR01
 		if (((mueveAvatar01 + (resultado * 20)) > 200))
 		{
 			diferencia = (mueveAvatar01Base + (resultado * 20)) - 200;
@@ -2358,7 +2404,6 @@ int main()
 		}
 
 		// DIFERENCIA
-		// DUDA SI ES BASE O ASI COMO ESTA EL MUEVEAVATAR01
 		if (((mueveAvatar02 + (resultado * 20)) > 200))
 		{
 			diferencia01 = (mueveAvatar02Base + (resultado * 20)) - 200;
@@ -2375,7 +2420,6 @@ int main()
 		}
 
 		// DIFERENCIA
-		// DUDA SI ES BASE O ASI COMO ESTA EL MUEVEAVATAR01
 		if (((mueveAvatar03 + (resultado * 20)) > 200))
 		{
 			diferencia02 = (mueveAvatar03Base + (resultado * 20)) - 200;
@@ -2391,7 +2435,7 @@ int main()
 			diferencia02 = 0.0f;
 		}
 
-		// DEBERIA ESTAR OTRA AQUI, PERO MEJOR REINICIO TODO AL FINAL
+											// ##################################### AVANZAR CON EL RESULTADO ##################################### \\
 
 		// MOVIMIENTO AVATAR
 		if (mueveAvatar01 <= 200)
@@ -2513,7 +2557,6 @@ int main()
 				hayDiferencia = !hayDiferencia;
 			}
 		}
-
 		else if (mueveAvatar02 <= 200)
 		{
 			//printf("AVATAR VALOR: %f", mueveAvatar01);
@@ -2833,11 +2876,15 @@ int main()
 		}
 		else
 		{
+												// REINICAR TODOS LOS VALORES AL COMPLETAR UNA VUELTA
+												
+			// VARIABLES PARA ANIMACION DEL DADO DE 8 CARAS
 			subeBajaDado8 = 35.0f;
 			rotaDadox8 = 0.0f;
 			rotaDadoy8 = 0.0f;
 			rotaDadoz8 = 0.0f;
 
+			// VARIABLES PARA ANIMACION DEL DADO DE 4 CARAS
 			subeBajaDado4 = 35.0f;
 			rotaDadox4 = 0.0f;
 			rotaDadoy4 = 0.0f;
@@ -2851,25 +2898,21 @@ int main()
 			mueveAvatar01 = 0.0f;
 			mueveAvatar01Base = 0.0f;
 			resultadoAnterior01 = 0;
-
 			mueveAvatar02 = 0.0f;
 			mueveAvatar02Base = 0.0f;
 			resultadoAnterior02 = 0;
-
 			mueveAvatar03 = 0.0f;
 			mueveAvatar03Base = 0.0f;
 			resultadoAnterior03 = 0;
-
 			mueveAvatar04 = 0.0f;
 			mueveAvatar04Base = 0.0f;
 			resultadoAnterior04 = 0;
+			diferencia = 0.0f;
 			hayDiferencia = true;
 			conta = 0;
-
 			diferencia01 = 0.0f;
 			hayDiferencia01 = true;
 			conta01 = 0;
-
 			diferencia02 = 0.0f;
 			hayDiferencia02 = true;
 			conta02 = 0;
@@ -2886,10 +2929,366 @@ int main()
 			rotaPiernaD = 0.0f;
 			rotaPiernaI = 0.0f;
 			subebaja = true;
+
+			// ANIMACIONES DE CASILLAS
+			// CASILLA 02
+			raidenSubeBaja = -8.0f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			raidenRota = 0.0f;
+			raidenCont01 = 0;
+			raidenCont02 = 0;
+			raiden = true;
+			raidenTiempo = 0.0f;
+
+			// CASILLA 03
+			scorpionSubeBaja = -9.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			scorpionRota = 0.0f;
+			scorpionCont01 = 0;
+			scorpionCont02 = 0;
+			scorpion = true;
+			scorpionTiempo = 0.0f;
+
+			// CASILLA 04
+			shaoSubeBaja = -9.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			shaoRota = 0.0f;
+			shaoCont01 = 0;
+			shaoCont02 = 0;
+			shao = true;
+			shaoTiempo = 0.0f;
+
+			// CASILLA 05
+			hellSubeBaja = -13.0f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			hellRota = 0.0f;
+			hellCont01 = 0;
+			hellCont02 = 0;
+			hell = true;
+			hellTiempo = 0.0f;
+
+			// CASILLA 06
+			viewerSubeBaja = -11.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			viewerRota = 0.0f;
+			viewerCont01 = 0;
+			viewerCont02 = 0;
+			viewer = true;
+			viewerTiempo = 0.0f;
+
+			// CASILLA 07
+			tree_stumpSubeBaja = -9.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			tree_stumpRota = 0.0f;
+			tree_stumpCont01 = 0;
+			tree_stumpCont02 = 0;
+			tree_stump = true;
+			tree_stumpTiempo = 0.0f;
+
+			// CASILLA 08
+			pine_treeSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			pine_treeRota = 0.0f;
+			pine_treeCont01 = 0;
+			pine_treeCont02 = 0;
+			pine_tree = true;
+			pine_treeTiempo = 0.0f;
+
+			// CASILLA 09
+			fire_dragonSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			fire_dragonRota = 0.0f;
+			fire_dragonCont01 = 0;
+			fire_dragonCont02 = 0;
+			fire_dragon = true;
+			fire_dragonTiempo = 0.0f;
+
+			// CASILLA 10
+			scorpion2SubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			scorpion2Rota = 0.0f;
+			scorpion2Cont01 = 0;
+			scorpion2Cont02 = 0;
+			scorpion2 = true;
+			scorpion2Tiempo = 0.0f;
+
+			// CASILLA 11
+			wolfSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			wolfRota = 0.0f;
+			wolfCont01 = 0;
+			wolfCont02 = 0;
+			wolf = true;
+			wolfTiempo = 0.0f;
+
+			// CASILLA 12
+			BarakaSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			BarakaRota = 0.0f;
+			BarakaCont01 = 0;
+			BarakaCont02 = 0;
+			Baraka = true;
+			BarakaTiempo = 0.0f;
+
+			// CASILLA 13
+			boSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			boRota = 0.0f;
+			boCont01 = 0;
+			boCont02 = 0;
+			bo = true;
+			boTiempo = 0.0f;
+
+			// CASILLA 14
+			cassieSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			cassieRota = 0.0f;
+			cassieCont01 = 0;
+			cassieCont02 = 0;
+			cassie = true;
+			cassieTiempo = 0.0f;
+
+			// CASILLA 15
+			skullSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			skullRota = 0.0f;
+			skullCont01 = 0;
+			skullCont02 = 0;
+			skull = true;
+			skullTiempo = 0.0f;
+
+			// CASILLA 16
+			rockySubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			rockyRota = 0.0f;
+			rockyCont01 = 0;
+			rockyCont02 = 0;
+			rocky = true;
+			rockyTiempo = 0.0f;
+
+			// CASILLA 17
+			drneoSubeBaja = -15.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			drneoRota = 0.0f;
+			drneoCont01 = 0;
+			drneoCont02 = 0;
+			drneo = true;
+			drneoTiempo = 0.0f;
+
+			// CASILLA 18
+			frogSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			frogRota = 0.0f;
+			frogCont01 = 0;
+			frogCont02 = 0;
+			frog = true;
+			frogTiempo = 0.0f;
+
+			// CASILLA 19
+			polarSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			polarRota = 0.0f;
+			polarCont01 = 0;
+			polarCont02 = 0;
+			polar = true;
+			polarTiempo = 0.0f;
+
+			// CASILLA 20
+			wizardSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			wizardRota = 0.0f;
+			wizardCont01 = 0;
+			wizardCont02 = 0;
+			wizard = true;
+			wizardTiempo = 0.0f;
+
+			// CASILLA 21
+			pinstripeSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			pinstripeRota = 0.0f;
+			pinstripeCont01 = 0;
+			pinstripeCont02 = 0;
+			pinstripe = true;
+			pinstripeTiempo = 0.0f;
+
+			// CASILLA 22
+			 lionSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			 lionRota = 0.0f;
+			 lionCont01 = 0;
+			 lionCont02 = 0;
+			 lion = true;
+			 lionTiempo = 0.0f;
+
+			// CASILLA 23
+			babytSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			babytRota = 0.0f;
+			babytCont01 = 0;
+			babytCont02 = 0;
+			babyt = true;
+			babytTiempo = 0.0f;
+
+			// CASILLA 24
+			akuakuSubeBaja = -14.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			akuakuRota = 0.0f;
+			akuakuCont01 = 0;
+			akuakuCont02 = 0;
+			akuaku = true;
+			akuakuTiempo = 0.0f;
+
+			// CASILLA 25
+			palm_treeSubeBaja = -15.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			palm_treeRota = 0.0f;
+			palm_treeCont01 = 0;
+			palm_treeCont02 = 0;
+			palm_tree = true;
+			palm_treeTiempo = 0.0f;
+
+			// CASILLA 26
+			flowersSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			flowersRota = 0.0f;
+			flowersCont01 = 0;
+			flowersCont02 = 0;
+			flowers = true;
+			flowersTiempo = 0.0f;
+
+			// CASILLA 27
+			basicSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			basicRota = 0.0f;
+			basicCont01 = 0;
+			basicCont02 = 0;
+			basic = true;
+			basicTiempo = 0.0f;
+
+			// CASILLA 28
+			 brianSubeBaja = -14.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			 brianRota = 0.0f;
+			  brianCont01 = 0;
+			  brianCont02 = 0;
+			  brian = true;
+			  brianTiempo = 0.0f;
+
+			// CASILLA 29
+			ernieSubeBaja = -13.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			ernieRota = 0.0f;
+			ernieCont01 = 0;
+			ernieCont02 = 0;
+			ernie = true;
+			ernieTiempo = 0.0f;
+
+			// CASILLA 30
+			luisaSubeBaja = -13.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			luisaRota = 0.0f;
+			luisaCont01 = 0;
+			luisaCont02 = 0;
+			luisa = true;
+			luisaTiempo = 0.0f;
+
+			// CASILLA 31
+			megSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			megRota = 0.0f;
+			megCont01 = 0;
+			megCont02 = 0;
+			meg = true;
+			megTiempo = 0.0f;
+
+			// CASILLA 32
+			peterSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			peterRota = 0.0f;
+			peterCont01 = 0;
+			peterCont02 = 0;
+			peter = true;
+			peterTiempo = 0.0f;
+
+			// CASILLA 33
+			joeSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			joeRota = 0.0f;
+			joeCont01 = 0;
+			joeCont02 = 0;
+			joe = true;
+			joeTiempo = 0.0f;
+
+			// CASILLA 34
+			chrisSubeBaja = -20.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			chrisRota = 0.0f;
+			chrisCont01 = 0;
+			chrisCont02 = 0;
+			chris = true;
+			chrisTiempo = 0.0f;
+
+			// CASILLA 35
+			casaSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			casaRota = 0.0f;
+			casaCont01 = 0;
+			casaCont02 = 0;
+			casa = true;
+			casaTiempo = 0.0f;
+
+			// CASILLA 36
+			treeSubeBaja = -12.9f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			treeRota = 0.0f;
+			treeCont01 = 0;
+			treeCont02 = 0;
+			tree = true;
+			treeTiempo = 0.0f;
+
+			// CASILLA 37
+			navidadSubeBaja = -14.0f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			navidadRota = 0.0f;
+			navidadCont01 = 0;
+			navidadCont02 = 0;
+			navidad = true;
+			navidadTiempo = 0.0f;
+
+			// CASILLA 38
+			vinnySubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			vinnyRota = 0.0f;
+			vinnyCont01 = 0;
+			vinnyCont02 = 0;
+			vinny = true;
+			vinnyTiempo = 0.0f;
+
+			// CASILLA 39
+			flowers2SubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			flowers2Rota = 0.0f;
+			flowers2Cont01 = 0;
+			flowers2Cont02 = 0;
+			flowers2 = true;
+			flowers2Tiempo = 0.0f;
+
+			// CASILLA 40
+			carterSubeBaja = -13.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			carterRota = 0.0f;
+			carterCont01 = 0;
+			carterCont02 = 0;
+			carter = true;
+			carterTiempo = 0.0f;
+
+			// COCINADO EN LAS CASILLAS
+			cocinado01 = 0;
+			cocinado02 = 0;
+			cocinado03 = 0;
+			cocinado04 = 0;
+			cocinado05 = 0;
+			cocinado06 = 0;
+			cocinado07 = 0;
+			cocinado08 = 0;
+			cocinado09 = 0;
+			cocinado10 = 0;
+			cocinado11 = 0;
+			cocinado12 = 0;
+			cocinado13 = 0;
+			cocinado14 = 0;
+			cocinado15 = 0;
+			cocinado16 = 0;
+			cocinado17 = 0;
+			cocinado18 = 0;
+			cocinado19 = 0;
+			cocinado20 = 0;
+			cocinado21 = 0;
+			cocinado22 = 0;
+			cocinado23 = 0;
+			cocinado24 = 0;
+			cocinado25 = 0;
+			cocinado26 = 0;
+			cocinado27 = 0;
+			cocinado28 = 0;
+			cocinado29 = 0;
+			cocinado30 = 0;
+			cocinado31 = 0;
+			cocinado32 = 0;
+			cocinado33 = 0;
+			cocinado34 = 0;
+			cocinado35 = 0;
+			cocinado36 = 0;
+			cocinado37 = 0;
+			cocinado38 = 0;
+			cocinado39 = 0;
 		}
 
+									// ##################################### ACTIVAR ANIMACION DE LOS MODELOS DE CASILLAS ##################################### \\
+
 		// ACTIVAR BANDERAS DE ANIMACION ESPECIAL
-		
+		// CASILLA 2 - 10
 		if (mueveAvatar01 >= 20)
 		{
 			raidenCont01 += 1;
@@ -2925,128 +3324,134 @@ int main()
 		if (mueveAvatar01 >= 180)
 		{
 			scorpion2Cont01 += 1; //SE CAMBIA AL MODELO NUEVO
-			
+
 		}
-		if (mueveAvatar02 >= 20)
+		if (mueveAvatar01 >= 200)
 		{
 			wolfCont01 += 1; //SE CAMBIA AL MODELO NUEVO
 		}
-		if (mueveAvatar02 >= 40)
+		// CASILLA 11 - 20
+		if (mueveAvatar02 >= 20)
 		{
 			BarakaCont01 += 1; //SE CAMBIA AL MODELO NUEVO
 		}
-		if (mueveAvatar02 >= 60)
+		if (mueveAvatar02 >= 40)
 		{
 			boCont01 += 1; //SE CAMBIA AL MODELO NUEVO
 		}
-		if (mueveAvatar02 >= 80)
+		if (mueveAvatar02 >= 60)
 		{
 			cassieCont01 += 1; //SE CAMBIA AL MODELO NUEVO
 		}
-		if (mueveAvatar02 >= 100)
+		if (mueveAvatar02 >= 80)
 		{
 			skullCont01 += 1; //SE CAMBIA AL MODELO NUEVO
 		}
-		if (mueveAvatar02 >= 120)
+		if (mueveAvatar02 >= 100)
 		{
 			rockyCont01 += 1; //SE CAMBIA AL MODELO NUEVO
 		}
-		if (mueveAvatar02 >= 140)
+		if (mueveAvatar02 >= 120)
 		{
 			drneoCont01 += 1; //SE CAMBIA AL MODELO NUEVO
 		}
-		if (mueveAvatar02 >= 160)
+		if (mueveAvatar02 >= 140)
 		{
 			frogCont01 += 1; //SE CAMBIA AL MODELO NUEVO
 		}
-		if (mueveAvatar02 >= 180)
+		if (mueveAvatar02 >= 160)
 		{
 			polarCont01 += 1; //SE CAMBIA AL MODELO NUEVO
 		}
-		if (mueveAvatar02 >= 200)
+		if (mueveAvatar02 >= 180)
 		{
 			wizardCont01 += 1; //SE CAMBIA AL MODELO NUEVO
 		}
-		if (mueveAvatar03 >= 20)
+		if (mueveAvatar02 >= 200)
 		{
 			pinstripeCont01 += 1; //SE CAMBIA AL MODELO NUEVO
 		}
-		if (mueveAvatar03 >= 40)
+		// CASILLA 21 - 30
+		if (mueveAvatar03 >= 20)
 		{
 			lionCont01 += 1; //SE CAMBIA AL MODELO NUEVO
 		}
-		if (mueveAvatar03 >= 60)
+		if (mueveAvatar03 >= 40)
 		{
 			babytCont01 += 1; //SE CAMBIA AL MODELO NUEVO
 		}
-		if (mueveAvatar03 >= 80)
+		if (mueveAvatar03 >= 60)
 		{
 			akuakuCont01 += 1; //SE CAMBIA AL MODELO NUEVO
 		}
-		if (mueveAvatar03 >= 100)
+		if (mueveAvatar03 >= 80)
 		{
 			palm_treeCont01 += 1; //SE CAMBIA AL MODELO NUEVO
 		}
-		if (mueveAvatar03 >= 120)
+		if (mueveAvatar03 >= 100)
 		{
 			flowersCont01 += 1; //SE CAMBIA AL MODELO NUEVO
 		}
-		if (mueveAvatar03 >= 140)
+		if (mueveAvatar03 >= 120)
 		{
 			basicCont01 += 1; //SE CAMBIA AL MODELO NUEVO
 		}
-		if (mueveAvatar03 >= 160)
+		if (mueveAvatar03 >= 140)
 		{
 			brianCont01 += 1; //SE CAMBIA AL MODELO NUEVO
 		}
-		if (mueveAvatar03 >= 180)
+		if (mueveAvatar03 >= 160)
 		{
 			ernieCont01 += 1; //SE CAMBIA AL MODELO NUEVO
 		}
-		if (mueveAvatar03 >= 200)
+		if (mueveAvatar03 >= 180)
 		{
 			luisaCont01 += 1; //SE CAMBIA AL MODELO NUEVO
 		}
-		if (mueveAvatar04 >= 20)
+		if (mueveAvatar03 >= 200)
 		{
 			megCont01 += 1; //SE CAMBIA AL MODELO NUEVO
 		}
-		if (mueveAvatar04 >= 40)
+		// CASILLA 31 - 39
+		if (mueveAvatar04 >= 20)
 		{
 			peterCont01 += 1; //SE CAMBIA AL MODELO NUEVO
 		}
-		if (mueveAvatar04 >= 60)
+		if (mueveAvatar04 >= 40)
 		{
 			joeCont01 += 1; //SE CAMBIA AL MODELO NUEVO
 		}
-		if (mueveAvatar04 >= 80)
+		if (mueveAvatar04 >= 60)
 		{
 			chrisCont01 += 1; //SE CAMBIA AL MODELO NUEVO
 		}
-		if (mueveAvatar04 >= 100)
+		if (mueveAvatar04 >= 80)
 		{
 			casaCont01 += 1; //SE CAMBIA AL MODELO NUEVO
 		}
-		if (mueveAvatar04 >= 120)
+		if (mueveAvatar04 >= 100)
 		{
 			treeCont01 += 1; //SE CAMBIA AL MODELO NUEVO
 		}
-		if (mueveAvatar04 >= 140)
+		if (mueveAvatar04 >= 120)
 		{
 			navidadCont01 += 1; //SE CAMBIA AL MODELO NUEVO
 		}
-		if (mueveAvatar04 >= 160)
+		if (mueveAvatar04 >= 140)
 		{
 			vinnyCont01 += 1; //SE CAMBIA AL MODELO NUEVO
 		}
-		if (mueveAvatar04 >= 180)
+		if (mueveAvatar04 >= 160)
 		{
-			flowersCont01 += 1; //SE CAMBIA AL MODELO NUEVO
+			flowers2Cont01 += 1; //SE CAMBIA AL MODELO NUEVO
 		}
-		if (mueveAvatar04 >= 200)
+		if (mueveAvatar04 >= 180)
 		{
 			carterCont01 += 1; //SE CAMBIA AL MODELO NUEVO
 		}
+
+										// ##################################### SUBIR AMBOS DADOS (U) ##################################### \\
+
 		// PARA SUBIR
 		// U
 		if (mainWindow.getsubeBajaDado() == false)
@@ -3089,15 +3494,17 @@ int main()
 			}
 		}
 
+									// ##################################### ANIMACION DE LOS MODELOS DE LAS CASILLAS ##################################### \\
+
 		// INTERACCIINES ESPECIALES DE CASILLAS
-		
 		// RAIDEN
 		if (raidenCont01 >= 1 && raidenCont02 < 1)
 		{
-			
+			cocinado01 += 1;
+			//printf("ENTRO\n");
 			if (raiden)
 			{
-				if (raidenSubeBaja < 9.9f)
+				if (raidenSubeBaja < 10.9f)
 				{
 					raidenSubeBaja += raidenSubeBajaOffset * deltaTime;
 					raidenRota += raidenRotaOffset * deltaTime;
@@ -3108,6 +3515,7 @@ int main()
 				{
 					if ((glfwGetTime() - raidenTiempo) > 3)
 					{
+						//printf("02 = %f",raidenRota);
 						raiden = !raiden;
 					}
 				}
@@ -3121,23 +3529,25 @@ int main()
 				}
 				else
 				{
-					/*printf("YA NO VUELVE A ENTRAR");*/
+					//printf("YA NO VUELVE A ENTRAR");
 					raidenCont02 += 1;
+					cocinado01 = 0;
 				}
 			}
 		}
-
-		// INTERACCIINES ESPECIALES DE CASILLAS
-		// SCORPION CAMBIAR VARIABLES 
+		// SCORPION
 		if (scorpionCont01 >= 1 && scorpionCont02 < 1)
 		{
-			/*printf("ENTRO\n");*/
+			cocinado02 += 1;
+			//printf("ENTRO\n");
 			if (scorpion)
 			{
-				if (scorpionSubeBaja < 10.1f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (scorpionSubeBaja < 11.1f)
 				{
 					scorpionSubeBaja += scorpionSubeBajaOffset * deltaTime;
-					scorpionRota += raidenRotaOffset * deltaTime;
+					if (scorpionRota <= 360) {
+						scorpionRota += scorpionRotaOffset * deltaTime;
+					}
 					scorpionTiempo = glfwGetTime();
 
 				}
@@ -3151,26 +3561,27 @@ int main()
 			}
 			else
 			{
-				if (scorpionSubeBaja > -9.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
+				if (scorpionSubeBaja > -10.0f)
 				{
 					scorpionSubeBaja -= scorpionSubeBajaOffset * deltaTime;
 					scorpionRota -= scorpionRotaOffset * deltaTime;
 				}
 				else
 				{
-					/*printf("YA NO VUELVE A ENTRAR");*/
+					//printf("YA NO VUELVE A ENTRAR");
 					scorpionCont02 += 1;
+					cocinado02 = 0;
 				}
 			}
 		}
-
-		// shao CAMBIAR VARIABLES 
+		// SHAO
 		if (shaoCont01 >= 1 && shaoCont02 < 1)
 		{
+			cocinado03 += 1;
 			/*printf("ENTRO\n");*/
 			if (shao)
 			{
-				if (shaoSubeBaja < 9.9f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (shaoSubeBaja < 10.9f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					shaoSubeBaja += shaoSubeBajaOffset * deltaTime;
 					if (shaoRota <= 360) {
@@ -3198,12 +3609,14 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					shaoCont02 += 1;
+					cocinado03 = 0;
 				}
 			}
 		}
-		// hell CAMBIAR VARIABLES 
+		// HELL
 		if (hellCont01 >= 1 && hellCont02 < 1)
 		{
+			cocinado04 += 1;
 			/*printf("ENTRO\n");*/
 			if (hell)
 			{
@@ -3236,30 +3649,32 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					hellCont02 += 1;
+					cocinado04 = 0;
 				}
 			}
 		}
-		//viewer CAMBIAR VARIABLES
+		// VIEWER
 		if (viewerCont01 >= 1 && viewerCont02 < 1)
 		{
+			cocinado05 += 1;
 			/*printf("ENTRO\n");*/
 			if (viewer)
 			{
-				if (viewerSubeBaja < 5.5f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (viewerSubeBaja < 7.5f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					viewerSubeBaja += viewerSubeBajaOffset * deltaTime;
 					if (viewerRota <= 360) {
 						viewerRota += viewerRotaOffset * deltaTime;
 					}
-					
-					
+
+
 
 					viewerTiempo = glfwGetTime();
 
 				}
 				else
 				{
-					printf("variable rota %f", viewerRota);
+					//printf("variable rota %f", viewerRota);
 					if ((glfwGetTime() - viewerTiempo) > 3)
 					{
 						viewer = !viewer;
@@ -3277,16 +3692,18 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					viewerCont02 += 1;
+					cocinado05 = 0;
 				}
 			}
 		}
-		//tree_stump CAMBIAR VARIABLES
+		// TREE_STUMP 
 		if (tree_stumpCont01 >= 1 && tree_stumpCont02 < 1)
 		{
+			cocinado06 += 1;
 			/*printf("ENTRO\n");*/
 			if (tree_stump)
 			{
-				if (tree_stumpSubeBaja < 8.55f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (tree_stumpSubeBaja < 9.55f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					tree_stumpSubeBaja += tree_stumpSubeBajaOffset * deltaTime;
 					if (tree_stumpRota <= 360) {
@@ -3318,18 +3735,18 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					tree_stumpCont02 += 1;
+					cocinado06 = 0;
 				}
 			}
 		}
-
-
-		//pine_tree CAMBIAR VARIABLES
+		// PINE_TREE
 		if (pine_treeCont01 >= 1 && pine_treeCont02 < 1)
 		{
+			cocinado07 += 1;
 			/*printf("ENTRO\n");*/
 			if (pine_tree)
 			{
-				if (pine_treeSubeBaja < 9.7f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (pine_treeSubeBaja < 10.7f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					pine_treeSubeBaja += pine_treeSubeBajaOffset * deltaTime;
 					if (pine_treeRota <= 360) {
@@ -3361,17 +3778,18 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					pine_treeCont02 += 1;
+					cocinado07 = 0;
 				}
 			}
 		}
-
-		//fire_dragon CAMBIAR VARIABLES
+		// FIRE_DRAGON
 		if (fire_dragonCont01 >= 1 && fire_dragonCont02 < 1)
 		{
+			cocinado08 += 1;
 			/*printf("ENTRO\n");*/
 			if (fire_dragon)
 			{
-				if (fire_dragonSubeBaja < 6.0f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (fire_dragonSubeBaja < 7.0f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					fire_dragonSubeBaja += fire_dragonSubeBajaOffset * deltaTime;
 					if (fire_dragonRota <= 360) {
@@ -3403,17 +3821,18 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					fire_dragonCont02 += 1;
+					cocinado08 = 0;
 				}
 			}
 		}
-
-		//scorpion animal
+		// SCORPION ANIMAL
 		if (scorpion2Cont01 >= 1 && scorpion2Cont02 < 1)
 		{
+			cocinado09 += 1;
 			/*printf("ENTRO\n");*/
 			if (scorpion2)
 			{
-				if (scorpion2SubeBaja < 5.9f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (scorpion2SubeBaja < 6.9f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					scorpion2SubeBaja += scorpion2SubeBajaOffset * deltaTime;
 					if (scorpion2Rota <= 360) {
@@ -3445,17 +3864,18 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					scorpion2Cont02 += 1;
+					cocinado09 = 0;
 				}
 			}
 		}
-
-		//wolf
+		// WOLF
 		if (wolfCont01 >= 1 && wolfCont02 < 1)
 		{
+			cocinado10 += 1;
 			/*printf("ENTRO\n");*/
 			if (wolf)
 			{
-				if (wolfSubeBaja < 6.0f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (wolfSubeBaja < 7.0f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					wolfSubeBaja += wolfSubeBajaOffset * deltaTime;
 					if (wolfRota <= 360) {
@@ -3487,16 +3907,18 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					wolfCont02 += 1;
+					cocinado10 = 0;
 				}
 			}
 		}
-		//baraka
+		// BARAKA
 		if (BarakaCont01 >= 1 && BarakaCont02 < 1)
 		{
+			cocinado11 += 1;
 			/*printf("ENTRO\n");*/
 			if (Baraka)
 			{
-				if (BarakaSubeBaja < 10.0f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (BarakaSubeBaja < 11.0f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					BarakaSubeBaja += BarakaSubeBajaOffset * deltaTime;
 					if (BarakaRota <= 360) {
@@ -3528,16 +3950,18 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					BarakaCont02 += 1;
+					cocinado11 = 0;
 				}
 			}
 		}
-		//bo
+		// BO
 		if (boCont01 >= 1 && boCont02 < 1)
 		{
+			cocinado12 += 1;
 			/*printf("ENTRO\n");*/
 			if (bo)
 			{
-				if (boSubeBaja < 8.5f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (boSubeBaja < 9.5f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					boSubeBaja += boSubeBajaOffset * deltaTime;
 					if (boRota <= 360) {
@@ -3569,16 +3993,18 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					boCont02 += 1;
+					cocinado12 = 0;
 				}
 			}
 		}
-		//cassie
+		// CASSIE
 		if (cassieCont01 >= 1 && cassieCont02 < 1)
 		{
+			cocinado13 += 1;
 			/*printf("ENTRO\n");*/
 			if (cassie)
 			{
-				if (cassieSubeBaja < 10.0f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (cassieSubeBaja < 11.0f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					cassieSubeBaja += cassieSubeBajaOffset * deltaTime;
 					if (cassieRota <= 360) {
@@ -3610,16 +4036,18 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					cassieCont02 += 1;
+					cocinado13 = 0;
 				}
 			}
 		}
-		//skull
+		// SKULL
 		if (skullCont01 >= 1 && skullCont02 < 1)
 		{
+			cocinado14 += 1;
 			/*printf("ENTRO\n");*/
 			if (skull)
 			{
-				if (skullSubeBaja < 2.0f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (skullSubeBaja < 8.0f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					skullSubeBaja += skullSubeBajaOffset * deltaTime;
 					if (skullRota <= 360) {
@@ -3651,23 +4079,23 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					skullCont02 += 1;
+					cocinado14 = 0;
 				}
 			}
 		}
-		//rocky
+		// ROCKY
 		if (rockyCont01 >= 1 && rockyCont02 < 1)
 		{
+			cocinado15 += 1;
 			/*printf("ENTRO\n");*/
 			if (rocky)
 			{
-				if (rockySubeBaja < 2.0f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (rockySubeBaja < 8.0f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					rockySubeBaja += rockySubeBajaOffset * deltaTime;
 					if (rockyRota <= 360) {
 						rockyRota += rockyRotaOffset * deltaTime;
 					}
-
-
 
 					rockyTiempo = glfwGetTime();
 
@@ -3692,16 +4120,18 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					rockyCont02 += 1;
+					cocinado15 = 0;
 				}
 			}
 		}
-		//drneo
+		// DRNERO
 		if (drneoCont01 >= 1 && drneoCont02 < 1)
 		{
+			cocinado16 += 1;
 			/*printf("ENTRO\n");*/
 			if (drneo)
 			{
-				if (drneoSubeBaja < 4.0f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (drneoSubeBaja < 6.0f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					drneoSubeBaja += drneoSubeBajaOffset * deltaTime;
 					if (drneoRota <= 360) {
@@ -3733,16 +4163,18 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					drneoCont02 += 1;
+					cocinado16 = 0;
 				}
 			}
 		}
-		//frog
+		// FROG
 		if (frogCont01 >= 1 && frogCont02 < 1)
 		{
+			cocinado17 += 1;
 			/*printf("ENTRO\n");*/
 			if (frog)
 			{
-				if (frogSubeBaja < 2.0f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (frogSubeBaja < 8.0f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					frogSubeBaja += frogSubeBajaOffset * deltaTime;
 					if (frogRota <= 360) {
@@ -3774,16 +4206,18 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					frogCont02 += 1;
+					cocinado17 = 0;
 				}
 			}
 		}
-		//polar
+		// POLAR
 		if (polarCont01 >= 1 && polarCont02 < 1)
 		{
+			cocinado18 += 1;
 			/*printf("ENTRO\n");*/
 			if (polar)
 			{
-				if (polarSubeBaja < 5.0f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (polarSubeBaja < 8.0f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					polarSubeBaja += polarSubeBajaOffset * deltaTime;
 					if (polarRota <= 360) {
@@ -3815,16 +4249,18 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					polarCont02 += 1;
+					cocinado18 = 0;
 				}
 			}
 		}
-		//wizard
+		// WIZARD
 		if (wizardCont01 >= 1 && wizardCont02 < 1)
 		{
+			cocinado19 += 1;
 			/*printf("ENTRO\n");*/
 			if (wizard)
 			{
-				if (wizardSubeBaja < 6.8f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (wizardSubeBaja < 8.8f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					wizardSubeBaja += wizardSubeBajaOffset * deltaTime;
 					if (wizardRota <= 360) {
@@ -3847,7 +4283,7 @@ int main()
 			}
 			else
 			{
-				if (wizardSubeBaja > -9.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
+				if (wizardSubeBaja > -11.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
 				{
 					wizardSubeBaja -= wizardSubeBajaOffset * deltaTime;
 					wizardRota -= wizardRotaOffset * deltaTime;
@@ -3856,16 +4292,18 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					wizardCont02 += 1;
+					cocinado19 = 0;
 				}
 			}
 		}
-		//FALTA MODIFICAR
+		// PINSTRIPE
 		if (pinstripeCont01 >= 1 && pinstripeCont02 < 1)
 		{
+			cocinado20 += 1;
 			/*printf("ENTRO\n");*/
 			if (pinstripe)
 			{
-				if (pinstripeSubeBaja < 9.5f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (pinstripeSubeBaja < 10.5f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					pinstripeSubeBaja += pinstripeSubeBajaOffset * deltaTime;
 					if (pinstripeRota <= 360) {
@@ -3897,16 +4335,18 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					pinstripeCont02 += 1;
+					cocinado20 = 0;
 				}
 			}
 		}
-
+		// LION
 		if (lionCont01 >= 1 && lionCont02 < 1)
 		{
+			cocinado21 += 1;
 			/*printf("ENTRO\n");*/
 			if (lion)
 			{
-				if (lionSubeBaja < 6.0f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (lionSubeBaja < 7.0f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					lionSubeBaja += lionSubeBajaOffset * deltaTime;
 					if (lionRota <= 360) {
@@ -3929,7 +4369,7 @@ int main()
 			}
 			else
 			{
-				if (lionSubeBaja > -9.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
+				if (lionSubeBaja > -10.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
 				{
 					lionSubeBaja -= lionSubeBajaOffset * deltaTime;
 					lionRota -= lionRotaOffset * deltaTime;
@@ -3938,15 +4378,18 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					lionCont02 += 1;
+					cocinado21 = 0;
 				}
 			}
 		}
+		// BABYT
 		if (babytCont01 >= 1 && babytCont02 < 1)
 		{
+			cocinado22 += 1;
 			/*printf("ENTRO\n");*/
 			if (babyt)
 			{
-				if (babytSubeBaja < 5.2f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (babytSubeBaja < 6.2f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					babytSubeBaja += babytSubeBajaOffset * deltaTime;
 					if (babytRota <= 360) {
@@ -3969,7 +4412,7 @@ int main()
 			}
 			else
 			{
-				if (babytSubeBaja > -9.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
+				if (babytSubeBaja > -10.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
 				{
 					babytSubeBaja -= babytSubeBajaOffset * deltaTime;
 					babytRota -= babytRotaOffset * deltaTime;
@@ -3978,15 +4421,18 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					babytCont02 += 1;
+					cocinado22 = 0;
 				}
 			}
 		}
+		// AKUAKU
 		if (akuakuCont01 >= 1 && akuakuCont02 < 1)
 		{
+			cocinado23 += 1;
 			/*printf("ENTRO\n");*/
 			if (akuaku)
 			{
-				if (akuakuSubeBaja < 4.0f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (akuakuSubeBaja < 5.0f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					akuakuSubeBaja += akuakuSubeBajaOffset * deltaTime;
 					if (akuakuRota <= 360) {
@@ -4009,7 +4455,7 @@ int main()
 			}
 			else
 			{
-				if (akuakuSubeBaja > -8.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
+				if (akuakuSubeBaja > -15.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
 				{
 					akuakuSubeBaja -= akuakuSubeBajaOffset * deltaTime;
 					akuakuRota -= akuakuRotaOffset * deltaTime;
@@ -4018,15 +4464,17 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					akuakuCont02 += 1;
+					cocinado23 = 0;
 				}
 			}
 		}
 		if (palm_treeCont01 >= 1 && palm_treeCont02 < 1)
 		{
+			cocinado24 += 1;
 			/*printf("ENTRO\n");*/
 			if (palm_tree)
 			{
-				if (palm_treeSubeBaja < 6.0f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (palm_treeSubeBaja < 8.0f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					palm_treeSubeBaja += palm_treeSubeBajaOffset * deltaTime;
 					if (palm_treeRota <= 360) {
@@ -4049,7 +4497,7 @@ int main()
 			}
 			else
 			{
-				if (palm_treeSubeBaja > -9.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
+				if (palm_treeSubeBaja > -15.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
 				{
 					palm_treeSubeBaja -= palm_treeSubeBajaOffset * deltaTime;
 					palm_treeRota -= palm_treeRotaOffset * deltaTime;
@@ -4058,15 +4506,18 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					palm_treeCont02 += 1;
+					cocinado24 = 0;
 				}
 			}
 		}
+		// FLOWERS
 		if (flowersCont01 >= 1 && flowersCont02 < 1)
 		{
+			cocinado25 += 1;
 			/*printf("ENTRO\n");*/
 			if (flowers)
 			{
-				if (flowersSubeBaja < 4.2f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (flowersSubeBaja < 7.2f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					flowersSubeBaja += flowersSubeBajaOffset * deltaTime;
 					if (flowersRota <= 360) {
@@ -4089,7 +4540,7 @@ int main()
 			}
 			else
 			{
-				if (flowersSubeBaja > -8.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
+				if (flowersSubeBaja > -12.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
 				{
 					flowersSubeBaja -= flowersSubeBajaOffset * deltaTime;
 					flowersRota -= flowersRotaOffset * deltaTime;
@@ -4098,15 +4549,17 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					flowersCont02 += 1;
+					cocinado25 = 0;
 				}
 			}
 		}
 		if (basicCont01 >= 1 && basicCont02 < 1)
 		{
+			cocinado26 += 1;
 			/*printf("ENTRO\n");*/
 			if (basic)
 			{
-				if (basicSubeBaja < 5.2f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (basicSubeBaja < 6.2f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					basicSubeBaja += basicSubeBajaOffset * deltaTime;
 					if (basicRota <= 360) {
@@ -4129,7 +4582,7 @@ int main()
 			}
 			else
 			{
-				if (basicSubeBaja > -8.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
+				if (basicSubeBaja > -10.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
 				{
 					basicSubeBaja -= basicSubeBajaOffset * deltaTime;
 					basicRota -= basicRotaOffset * deltaTime;
@@ -4138,15 +4591,18 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					basicCont02 += 1;
+					cocinado26 = 0;
 				}
 			}
 		}
+		// BRIAN
 		if (brianCont01 >= 1 && brianCont02 < 1)
 		{
+			cocinado27 += 1;
 			/*printf("ENTRO\n");*/
 			if (brian)
 			{
-				if (brianSubeBaja < 7.5f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (brianSubeBaja < 8.5f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					brianSubeBaja += brianSubeBajaOffset * deltaTime;
 					if (brianRota <= 360) {
@@ -4169,7 +4625,7 @@ int main()
 			}
 			else
 			{
-				if (brianSubeBaja > -9.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
+				if (brianSubeBaja > -15.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
 				{
 					brianSubeBaja -= brianSubeBajaOffset * deltaTime;
 					brianRota -= brianRotaOffset * deltaTime;
@@ -4178,15 +4634,18 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					brianCont02 += 1;
+					cocinado27 = 0;
 				}
 			}
 		}
+		// ERNIE
 		if (ernieCont01 >= 1 && ernieCont02 < 1)
 		{
+			cocinado28 += 1;
 			/*printf("ENTRO\n");*/
 			if (ernie)
 			{
-				if (ernieSubeBaja < 9.5f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (ernieSubeBaja < 10.5f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					ernieSubeBaja += ernieSubeBajaOffset * deltaTime;
 					if (ernieRota <= 360) {
@@ -4209,7 +4668,7 @@ int main()
 			}
 			else
 			{
-				if (ernieSubeBaja > -12.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
+				if (ernieSubeBaja > -15.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
 				{
 					ernieSubeBaja -= ernieSubeBajaOffset * deltaTime;
 					ernieRota -= ernieRotaOffset * deltaTime;
@@ -4218,15 +4677,18 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					ernieCont02 += 1;
+					cocinado28 = 0;
 				}
 			}
 		}
+		// LUISA
 		if (luisaCont01 >= 1 && luisaCont02 < 1)
 		{
+			cocinado29 += 1;
 			/*printf("ENTRO\n");*/
 			if (luisa)
 			{
-				if (luisaSubeBaja < 9.5f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (luisaSubeBaja < 10.5f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					luisaSubeBaja += luisaSubeBajaOffset * deltaTime;
 					if (luisaRota <= 360) {
@@ -4249,7 +4711,7 @@ int main()
 			}
 			else
 			{
-				if (luisaSubeBaja > -12.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
+				if (luisaSubeBaja > -15.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
 				{
 					luisaSubeBaja -= luisaSubeBajaOffset * deltaTime;
 					luisaRota -= luisaRotaOffset * deltaTime;
@@ -4258,15 +4720,18 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					luisaCont02 += 1;
+					cocinado29 = 0;
 				}
 			}
 		}
+		// MEG
 		if (megCont01 >= 1 && megCont02 < 1)
 		{
+			cocinado30 += 1;
 			/*printf("ENTRO\n");*/
 			if (meg)
 			{
-				if (megSubeBaja < 9.0f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (megSubeBaja < 10.0f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					megSubeBaja += megSubeBajaOffset * deltaTime;
 					if (megRota <= 360) {
@@ -4289,7 +4754,7 @@ int main()
 			}
 			else
 			{
-				if (megSubeBaja > -12.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
+				if (megSubeBaja > -15.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
 				{
 					megSubeBaja -= megSubeBajaOffset * deltaTime;
 					megRota -= megRotaOffset * deltaTime;
@@ -4298,15 +4763,18 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					megCont02 += 1;
+					cocinado30 = 0;
 				}
 			}
 		}
+		// PETER
 		if (peterCont01 >= 1 && peterCont02 < 1)
 		{
+			cocinado31 += 1;
 			/*printf("ENTRO\n");*/
 			if (peter)
 			{
-				if (peterSubeBaja < 9.0f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (peterSubeBaja < 10.0f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					peterSubeBaja += peterSubeBajaOffset * deltaTime;
 					if (peterRota <= 360) {
@@ -4329,7 +4797,7 @@ int main()
 			}
 			else
 			{
-				if (peterSubeBaja > -12.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
+				if (peterSubeBaja > -15.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
 				{
 					peterSubeBaja -= peterSubeBajaOffset * deltaTime;
 					peterRota -= peterRotaOffset * deltaTime;
@@ -4338,15 +4806,18 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					peterCont02 += 1;
+					cocinado31 = 0;
 				}
 			}
 		}
+		// JOE
 		if (joeCont01 >= 1 && joeCont02 < 1)
 		{
+			cocinado32 += 1;
 			/*printf("ENTRO\n");*/
 			if (joe)
 			{
-				if (joeSubeBaja < 9.0f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (joeSubeBaja < 10.0f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					joeSubeBaja += joeSubeBajaOffset * deltaTime;
 					if (joeRota <= 360) {
@@ -4369,7 +4840,7 @@ int main()
 			}
 			else
 			{
-				if (joeSubeBaja > -12.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
+				if (joeSubeBaja > -15.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
 				{
 					joeSubeBaja -= joeSubeBajaOffset * deltaTime;
 					joeRota -= joeRotaOffset * deltaTime;
@@ -4378,11 +4849,14 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					joeCont02 += 1;
+					cocinado32 = 0;
 				}
 			}
 		}
+		// CHRIS
 		if (chrisCont01 >= 1 && chrisCont02 < 1)
 		{
+			cocinado33 += 1;
 			/*printf("ENTRO\n");*/
 			if (chris)
 			{
@@ -4409,7 +4883,7 @@ int main()
 			}
 			else
 			{
-				if (chrisSubeBaja > -9.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
+				if (chrisSubeBaja > -20.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
 				{
 					chrisSubeBaja -= chrisSubeBajaOffset * deltaTime;
 					chrisRota -= chrisRotaOffset * deltaTime;
@@ -4418,15 +4892,18 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					chrisCont02 += 1;
+					cocinado33 = 0;
 				}
 			}
 		}
+		// CASA
 		if (casaCont01 >= 1 && casaCont02 < 1)
 		{
+			cocinado34 += 1;
 			/*printf("ENTRO\n");*/
 			if (casa)
 			{
-				if (casaSubeBaja < 4.5f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (casaSubeBaja < 10.5f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					casaSubeBaja += casaSubeBajaOffset * deltaTime;
 					if (casaRota <= 360) {
@@ -4449,7 +4926,7 @@ int main()
 			}
 			else
 			{
-				if (casaSubeBaja > -9.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
+				if (casaSubeBaja > -20.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
 				{
 					casaSubeBaja -= casaSubeBajaOffset * deltaTime;
 					casaRota -= casaRotaOffset * deltaTime;
@@ -4458,15 +4935,18 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					casaCont02 += 1;
+					cocinado34 = 0;
 				}
 			}
 		}
+		// TREE
 		if (treeCont01 >= 1 && treeCont02 < 1)
 		{
+			cocinado35 += 1;
 			/*printf("ENTRO\n");*/
 			if (tree)
 			{
-				if (treeSubeBaja < 9.5f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (treeSubeBaja < 10.5f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					treeSubeBaja += treeSubeBajaOffset * deltaTime;
 					if (treeRota <= 360) {
@@ -4489,7 +4969,7 @@ int main()
 			}
 			else
 			{
-				if (treeSubeBaja > -12.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
+				if (treeSubeBaja > -15.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
 				{
 					treeSubeBaja -= treeSubeBajaOffset * deltaTime;
 					treeRota -= treeRotaOffset * deltaTime;
@@ -4498,15 +4978,18 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					treeCont02 += 1;
+					cocinado35 = 0;
 				}
 			}
 		}
+		// NAVIDAD
 		if (navidadCont01 >= 1 && navidadCont02 < 1)
 		{
+			cocinado36 += 1;
 			/*printf("ENTRO\n");*/
 			if (navidad)
 			{
-				if (navidadSubeBaja < 7.0f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (navidadSubeBaja < 8.0f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					navidadSubeBaja += navidadSubeBajaOffset * deltaTime;
 					if (navidadRota <= 360) {
@@ -4529,7 +5012,7 @@ int main()
 			}
 			else
 			{
-				if (navidadSubeBaja > -9.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
+				if (navidadSubeBaja > -15.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
 				{
 					navidadSubeBaja -= navidadSubeBajaOffset * deltaTime;
 					navidadRota -= navidadRotaOffset * deltaTime;
@@ -4538,15 +5021,18 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					navidadCont02 += 1;
+					cocinado36 = 0;
 				}
 			}
 		}
+		// VINNY
 		if (vinnyCont01 >= 1 && vinnyCont02 < 1)
 		{
+			cocinado37 += 1;
 			/*printf("ENTRO\n");*/
 			if (vinny)
 			{
-				if (vinnySubeBaja < 7.5f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (vinnySubeBaja < 8.5f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					vinnySubeBaja += vinnySubeBajaOffset * deltaTime;
 					if (vinnyRota <= 360) {
@@ -4569,7 +5055,7 @@ int main()
 			}
 			else
 			{
-				if (vinnySubeBaja > -12.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
+				if (vinnySubeBaja > -15.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
 				{
 					vinnySubeBaja -= vinnySubeBajaOffset * deltaTime;
 					vinnyRota -= vinnyRotaOffset * deltaTime;
@@ -4578,15 +5064,18 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					vinnyCont02 += 1;
+					cocinado37 = 0;
 				}
 			}
 		}
+		// FLOWERS2
 		if (flowers2Cont01 >= 1 && flowers2Cont02 < 1)
 		{
+			cocinado38 += 1;
 			/*printf("ENTRO\n");*/
 			if (flowers2)
 			{
-				if (flowers2SubeBaja < 7.0f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (flowers2SubeBaja < 10.0f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					flowers2SubeBaja += flowers2SubeBajaOffset * deltaTime;
 					if (flowers2Rota <= 360) {
@@ -4609,7 +5098,7 @@ int main()
 			}
 			else
 			{
-				if (flowers2SubeBaja > -9.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
+				if (flowers2SubeBaja > -15.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
 				{
 					flowers2SubeBaja -= flowers2SubeBajaOffset * deltaTime;
 					flowers2Rota -= flowers2RotaOffset * deltaTime;
@@ -4618,15 +5107,18 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					flowers2Cont02 += 1;
+					cocinado38 = 0;
 				}
 			}
 		}
+		// CARTER
 		if (carterCont01 >= 1 && carterCont02 < 1)
 		{
+			cocinado39 += 1;
 			/*printf("ENTRO\n");*/
 			if (carter)
 			{
-				if (carterSubeBaja < 9.6f) //VARIABLE EN LA QUE TIENE QUE SUBIR
+				if (carterSubeBaja < 10.6f) //VARIABLE EN LA QUE TIENE QUE SUBIR
 				{
 					carterSubeBaja += carterSubeBajaOffset * deltaTime;
 					if (carterRota <= 360) {
@@ -4649,7 +5141,7 @@ int main()
 			}
 			else
 			{
-				if (carterSubeBaja > -12.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
+				if (carterSubeBaja > -15.5f) //ES LA VARIABLE QUE SE MODIFICO PARA BAJAR EL MODELO
 				{
 					carterSubeBaja -= carterSubeBajaOffset * deltaTime;
 					carterRota -= carterRotaOffset * deltaTime;
@@ -4658,9 +5150,11 @@ int main()
 				{
 					/*printf("YA NO VUELVE A ENTRAR");*/
 					carterCont02 += 1;
+					cocinado39 = 0;
 				}
 			}
 		}
+
 		//Recibir eventos del usuario
 		glfwPollEvents();
 		camera.keyControl(mainWindow.getsKeys(), deltaTime);
@@ -4669,63 +5163,63 @@ int main()
 		// Clear the window
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		
-		glm::vec3 sunDirection; 
+
+								// ##################################### CONTROL LUZ DIRECCIONAL ##################################### 
+		glm::vec3 sunDirection;
 		FaseDia = now - dianocheTiempo;
 
-		auxLight = &mainLight;
-		skyboxDia.DrawSkybox(currentCamera->calculateViewMatrix(), projection);
-		//if (FaseDia < totalDia) {
-		//	auxLight = &mainLight;
-		//	skyboxDia.DrawSkybox(currentCamera->calculateViewMatrix(), projection);
+		if (FaseDia < totalDia) {
+			auxLight = &mainLight;
+			skyboxDia.DrawSkybox(currentCamera->calculateViewMatrix(), projection);
 
-		//	//Simulando el sol de este a oeste
-		//	angle = (FaseDia / totalDia) *2.0f * pi;
-		//	sunDirection = glm::vec3(cos(angle), -sin(angle), 0.0f);
-		//	intensidad = 0.8f; //Maxima intensidad durante el día
-		//	mainLight.SetDirection(sunDirection);
-		//	mainLight.SetIntensity(0.5f);
-		//	mainLight.SetAmbientIntensity(0.5f);
-		//	
-		//}
-		//else if (FaseDia < (totalDia + atardecer)) {
-		//	auxLight = &mainLight;
-		//	skyboxDia.DrawSkybox(currentCamera->calculateViewMatrix(), projection);
-
-		//	// Disminuimos la intensidad gradualmente
-		//	float atardecerProgress = (FaseDia - totalDia) / atardecer; // Progreso de 0 a 1 durante el atardecer
-		//	// Asegúrate de que la intensidad no baje de 0.1f
-		//	float minIntensity = 0.1f; // Intensidad mínima
-		//	float maxIntensity = 0.5f; // Intensidad máxima
-		//	   // Ajusta la intensidad
-
-		//	// Actualiza la dirección del sol
-		//	sunDirection = glm::vec3(cos(pi) * (1.0f - atardecerProgress), -sin(pi) * (1.0f - atardecerProgress), 0.0f);
-		//	adjustedIntensity = maxIntensity - (maxIntensity - minIntensity) * atardecerProgress;
-		//	if (adjustedIntensity < 0.2f)
-		//	{
-		//		adjustedIntensity = 0.2f;
-		//	}
-		//	mainLight.SetDirection(sunDirection);
-		//	mainLight.SetIntensity(adjustedIntensity);
-		//	mainLight.SetAmbientIntensity(adjustedIntensity); // También ajustamos la intensidad ambiental
-		//}
-		//else if(FaseDia<ciclototal){
-		//	
-		//	printf("Estoy entrando");
-		//	/*auxLight = &mainLight2;*/
-		//	skyboxNoche.DrawSkybox(currentCamera->calculateViewMatrix(), projection);
-		//	mainLight.SetIntensity(0.2f);
-		//	mainLight.SetAmbientIntensity(0.2f); // También ajustamos la intensidad ambiental
-		//	
-		//}
-		//else {
-		//	dianocheTiempo = glfwGetTime();
-		//}
-		
-	/*	if ((glfwGetTime() - dianocheTiempo) < 120)
-		{
+			//Simulando el sol de este a oeste
+			angle = (FaseDia / totalDia) *2.0f * pi;
+			sunDirection = glm::vec3(cos(angle), -sin(angle), 0.0f);
+			intensidad = 0.8f; //Maxima intensidad durante el día
+			mainLight.SetDirection(sunDirection);
+			mainLight.SetIntensity(0.5f);
+			mainLight.SetAmbientIntensity(0.5f);
 			
+		}
+		else if (FaseDia < (totalDia + atardecer)) {
+			auxLight = &mainLight;
+			skyboxDia.DrawSkybox(currentCamera->calculateViewMatrix(), projection);
+
+			// Disminuimos la intensidad gradualmente
+			float atardecerProgress = (FaseDia - totalDia) / atardecer; // Progreso de 0 a 1 durante el atardecer
+			// Asegúrate de que la intensidad no baje de 0.1f
+			float minIntensity = 0.1f; // Intensidad mínima
+			float maxIntensity = 0.5f; // Intensidad máxima
+			   // Ajusta la intensidad
+
+			// Actualiza la dirección del sol
+			sunDirection = glm::vec3(cos(pi) * (1.0f - atardecerProgress), -sin(pi) * (1.0f - atardecerProgress), 0.0f);
+			adjustedIntensity = maxIntensity - (maxIntensity - minIntensity) * atardecerProgress;
+			if (adjustedIntensity < 0.2f)
+			{
+				adjustedIntensity = 0.2f;
+				skyboxNoche.DrawSkybox(currentCamera->calculateViewMatrix(), projection);
+			}
+			mainLight.SetDirection(sunDirection);
+			mainLight.SetIntensity(adjustedIntensity);
+			mainLight.SetAmbientIntensity(adjustedIntensity); // También ajustamos la intensidad ambiental
+		}
+		else if(FaseDia<ciclototal){
+			
+			//printf("Estoy entrando");
+			/*auxLight = &mainLight2;*/
+			skyboxNoche.DrawSkybox(currentCamera->calculateViewMatrix(), projection);
+			mainLight.SetIntensity(0.2f);
+			mainLight.SetAmbientIntensity(0.2f); // También ajustamos la intensidad ambiental
+			
+		}
+		else {
+			dianocheTiempo = glfwGetTime();
+		}
+
+		/*	if ((glfwGetTime() - dianocheTiempo) < 120)
+		{
+
 			skyboxDia.DrawSkybox(camera.calculateViewMatrix(), projection);
 			mainLight.SetDirection(sunDirection);
 		}
@@ -4738,6 +5232,7 @@ int main()
 		{
 			dianocheTiempo = glfwGetTime();
 		}*/
+
 		shaderList[0].UseShader();
 		uniformModel = shaderList[0].GetModelLocation();
 		uniformProjection = shaderList[0].GetProjectionLocation();
@@ -4745,6 +5240,7 @@ int main()
 		uniformEyePosition = shaderList[0].GetEyePositionLocation();
 		uniformColor = shaderList[0].getColorLocation();
 		uniformTextureOffset = shaderList[0].getOffsetLocation();
+
 		//información en el shader de intensidad especular y brillo
 		uniformSpecularIntensity = shaderList[0].GetSpecularIntensityLocation();
 		uniformShininess = shaderList[0].GetShininessLocation();
@@ -4760,7 +5256,7 @@ int main()
 		/*spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());*/
 
 		//información al shader de fuentes de iluminación
-		shaderList[0].SetDirectionalLight(auxLight);
+		shaderList[0].SetDirectionalLight(&mainLight);
 		shaderList[0].SetPointLights(pointLights, pointLightCount);
 		shaderList[0].SetSpotLights(spotLights, spotLightCount);
 
@@ -4769,6 +5265,8 @@ int main()
 		glm::mat4 model(1.0);
 		glm::mat4 modelaux(1.0);
 		glm::vec2 toffset = glm::vec2(0.0f, 0.0f);
+
+											// ##################################### MATRICES AUXILIAR ##################################### \\
 
 		// MATRIZ AUXILIAR PARA LAS CASILLAS
 		glm::mat4 modelauxCasillas(1.0);
@@ -4787,7 +5285,7 @@ int main()
 		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, -2.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(22.5f, 1.0f, 22.5f));
+		model = glm::scale(model, glm::vec3(30.0f, 1.0f, 30.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
@@ -4796,6 +5294,8 @@ int main()
 
 		meshList[2]->RenderMesh();
 		
+											// ##################################### DADOS ##################################### \\
+
 		// DADO DE 4 CARAS
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, subeBajaDado4, 20.0));
@@ -4817,6 +5317,1983 @@ int main()
 		model = glm::rotate(model, rotaDadoy8 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		dado8CarasM.RenderModel();
+
+											// ##################################### CASILLAS ##################################### \\
+
+		// CASILLAS 
+		model = glm::mat4(1.0);
+
+		// 1
+		model = glm::translate(model, glm::vec3(-100.0f, 0.3f, 100.0));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+		modelauxCasillas = model; // GUARDA
+
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (/*(glfwGetTime() - dianocheTiempo) < 60*/FaseDia < totalDia)
+		{
+			casilla01A.RenderModel();
+		}
+		else if (/*(glfwGetTime() - dianocheTiempo) <*/ FaseDia < (totalDia + atardecer))
+		{
+			casilla01M.RenderModel();
+		}
+		/*else
+		{
+			dianocheTiempo = glfwGetTime();
+		}*/
+
+		//casilla01A.RenderModel(); // Amarillo
+		//casilla01M.RenderModel(); // Azul
+		//casilla01AR.RenderModel(); // Cocinadas
+
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 2
+		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado01 >= 1)
+		{
+			casilla02AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla02A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla02M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla02M.RenderModel();
+		//casilla02A.RenderModel();
+		//casilla02AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 3
+		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado02 >= 1)
+		{
+			casilla03AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla03A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla03M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla03M.RenderModel();
+		//casilla03A.RenderModel();
+		//casilla03AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 4
+		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado03 >= 1)
+		{
+			casilla04AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla04A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla04M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla04M.RenderModel();
+		//casilla04A.RenderModel();
+		//casilla04AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 5
+		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado04 >= 1)
+		{
+			casilla05AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla05A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla05M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla05M.RenderModel();
+		//casilla05A.RenderModel();
+		//casilla05AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 6
+		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado05 >= 1)
+		{
+			casilla06AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla06A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla06M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla06M.RenderModel();
+		//casilla06A.RenderModel();
+		//casilla06AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 7
+		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado06 >= 1)
+		{
+			casilla07AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla07A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla07M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla07M.RenderModel();
+		//casilla07A.RenderModel();
+		//casilla07AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 8
+		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado07 >= 1)
+		{
+			casilla08AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla08A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla08M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla08M.RenderModel();
+		//casilla08A.RenderModel();
+		//casilla08AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 9
+		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado08 >= 1)
+		{
+			casilla09AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla09A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla09M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla09M.RenderModel();
+		//casilla09A.RenderModel();
+		//casilla09AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 10
+		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado09 >= 1)
+		{
+			casilla10AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla10A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla10M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla10M.RenderModel();
+		//casilla10A.RenderModel();
+		//casilla10AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 11
+		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado10 >= 1)
+		{
+			casilla11AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla11A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla11M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla11M.RenderModel();
+		//casilla11A.RenderModel();
+		//casilla11AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 12
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado11 >= 1)
+		{
+			casilla12AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla12A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla12M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla12M.RenderModel();
+		//casilla12A.RenderModel();
+		//casilla12AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 13
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado12 >= 1)
+		{
+			casilla13AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla13A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla13M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla13M.RenderModel();
+		//casilla13A.RenderModel();
+		//casilla13AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 14
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado13 >= 1)
+		{
+			casilla14AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla14A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla14M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla14M.RenderModel();
+		//casilla14A.RenderModel();
+		//casilla14AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 15
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
+		/*model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado14 >= 1)
+		{
+			casilla15AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla15A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla15M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla15M.RenderModel();
+		//casilla15A.RenderModel();
+		//casilla15AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 16
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado15 >= 1)
+		{
+			casilla16AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla16A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla16M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla16M.RenderModel();
+		//casilla16A.RenderModel();
+		//casilla16AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 17
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado16 >= 1)
+		{
+			casilla17AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla17A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla17M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla17M.RenderModel();
+		//casilla17A.RenderModel();
+		//casilla17AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 18
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado17 >= 1)
+		{
+			casilla18AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla18A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla18M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla18M.RenderModel();
+		//casilla18A.RenderModel();
+		//casilla18AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 19
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado18 >= 1)
+		{
+			casilla19AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla19A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla19M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla19M.RenderModel();
+		//casilla19A.RenderModel();
+		//casilla19AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 20
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado19 >= 1)
+		{
+			casilla20AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla20A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla20M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla20M.RenderModel();
+		//casilla20A.RenderModel();
+		//casilla20AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 21
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
+
+		modelauxCasillas = model; // GUARDA
+
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado20 >= 1)
+		{
+			casilla21AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla21A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla21M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla21M.RenderModel();
+		//casilla21A.RenderModel();
+		//casilla21AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 22
+		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado21 >= 1)
+		{
+			casilla22AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla22A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla22M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla22M.RenderModel();
+		//casilla22A.RenderModel();
+		//casilla22AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 23
+		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado22 >= 1)
+		{
+			casilla23AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla23A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla23M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla23M.RenderModel();
+		//casilla23A.RenderModel();
+		//casilla23AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 24
+		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado23 >= 1)
+		{
+			casilla24AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla24A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla24M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla24M.RenderModel();
+		//casilla24A.RenderModel();
+		//casilla24AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 25
+		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado24 >= 1)
+		{
+			casilla25AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla25A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla25M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla25M.RenderModel();
+		//casilla25A.RenderModel();
+		//casilla25AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 26
+		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado25 >= 1)
+		{
+			casilla26AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla26A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla26M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla26M.RenderModel();
+		//casilla26A.RenderModel();
+		//casilla26AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 27
+		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado26 >= 1)
+		{
+			casilla27AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla27A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla27M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla27M.RenderModel();
+		//casilla27A.RenderModel();
+		//casilla27AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 28
+		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
+		/*model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		modelauxCasillas = model; // GUARDA
+
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado27 >= 1)
+		{
+			casilla28AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla28A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla28M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla28M.RenderModel();
+		//casilla28A.RenderModel();
+		//casilla28AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 29
+		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado28 >= 1)
+		{
+			casilla29AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla29A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla29M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla29M.RenderModel();
+		//casilla29A.RenderModel();
+		//casilla29AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 30
+		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado29 >= 1)
+		{
+			casilla30AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla30A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla30M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla30M.RenderModel();
+		//casilla30A.RenderModel();
+		//casilla30AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 31
+		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado30 >= 1)
+		{
+			casilla31AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla31A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla31M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla31M.RenderModel();
+		//casilla31A.RenderModel();
+		//casilla31AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 32
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado31 >= 1)
+		{
+			casilla32AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla32A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla32M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla32M.RenderModel();
+		//casilla32A.RenderModel();
+		//casilla32AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 33
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f,-20.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado32 >= 1)
+		{
+			casilla33AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla33A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla33M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla33M.RenderModel();
+		//casilla33A.RenderModel();
+		//casilla33AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 34
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado33 >= 1)
+		{
+			casilla34AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla34A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla34M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla34M.RenderModel();
+		//casilla34A.RenderModel();
+		//casilla34AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 35
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado34 >= 1)
+		{
+			casilla35AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla35A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla35M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla35M.RenderModel();
+		//casilla35A.RenderModel();
+		//casilla35AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 36
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado35 >= 1)
+		{
+			casilla36AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla36A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla36M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla36M.RenderModel();
+		//casilla36A.RenderModel();
+		//casilla36AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 37
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado36 >= 1)
+		{
+			casilla37AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla37A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla37M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla37M.RenderModel();
+		//casilla37A.RenderModel();
+		//casilla37AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 38
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado37 >= 1)
+		{
+			casilla38AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla38A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla38M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla38M.RenderModel();
+		//casilla38A.RenderModel();
+		//casilla38AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 39
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado38 >= 1)
+		{
+			casilla39AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla39A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla39M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla39M.RenderModel();
+		//casilla39A.RenderModel();
+		//casilla39AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 40
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado39 >= 1)
+		{
+			casilla40AR.RenderModel();
+		}
+		if ((glfwGetTime() - dianocheTiempo) < 10)
+		{
+			casilla40A.RenderModel();
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 20)
+		{
+			casilla40M.RenderModel();
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}
+
+		//casilla40M.RenderModel();
+		//casilla40A.RenderModel();
+		//casilla40AR.RenderModel();
+
+											// ##################################### MODELOS DE LAS CASILLAS ##################################### \\
+
+		// RAIDEN - CASILLA 02
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(-120.0f, /*9.9f*/raidenSubeBaja, 80.0)); //EN EL TRANSLATE DE Y SE CAMBIA POR EL NOMBRE DE LA VARIABLE
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -raidenRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f)); //SE LE AUMENTA EL ROUTETE DONDE SE PONE ROTA EN TODAS VA EL -
+		model = glm::scale(model, glm::vec3(7.0f, 7.0f, 7.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla01M.RenderModel();
+
+		// SCORPION - CASILLA 03
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(-120.0f,/* 10.1f*/scorpionSubeBaja, 60.0));
+		model = glm::rotate(model, -scorpionRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(7.0f, 7.0f, 7.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla02M.RenderModel();
+
+		// SHAO KAHN - CASILLA 04
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(-120.0f, /*9.9f*/shaoSubeBaja, 40.0));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -shaoRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(7.0f, 7.0f, 7.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla03M.RenderModel();
+
+		// HELL MOUNTAIN - CASILLA 05
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(-120.0f, /*4.4f*/hellSubeBaja, 20.0));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -hellRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.06f, 0.06f, 0.06f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla04M.RenderModel();
+
+		// VIEWER - CASILLA 06
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(-120.0f, /*5.5f*/viewerSubeBaja, 0.0));
+		model = glm::rotate(model, -viewerRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.09f, 0.09f, 0.09f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla05M.RenderModel();
+
+		// TREE STUMP - CASILLA 07
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(-120.0f, /*8.55f*/tree_stumpSubeBaja, -20.0));
+		model = glm::rotate(model, -tree_stumpRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.08f, 0.08f, 0.08f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla06M.RenderModel();
+
+		// PINE TREE - CASILLA 08
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(-120.0f, /*9.7f*/pine_treeSubeBaja, -40.0));
+		model = glm::rotate(model, -pine_treeRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(7.0f, 7.0f, 7.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla07M.RenderModel();
+
+		// FIRE DRAGON - CASILLA 09
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(-120.0f, /*6.0f*/fire_dragonSubeBaja, -55.0));
+		model = glm::rotate(model, -fire_dragonRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(7.0f, 7.0f, 7.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla08M.RenderModel();
+
+		// SCORPION - CASILLA 10
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(-120.0f,/* 5.9f*/scorpion2SubeBaja, -80.0));
+		model = glm::rotate(model, -scorpion2Rota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(20.0f, 20.0f, 20.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla09M.RenderModel();
+
+
+
+		// WOLF - CASILLA 11
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(-100.0f, /*5.9f*/wolfSubeBaja, -120.0));
+		model = glm::rotate(model, -wolfRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla11M.RenderModel();
+
+		// BARAKA - CASILLA 12
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(-80.0f, /*10.0f*/BarakaSubeBaja, -120.0));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -BarakaRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(8.5f, 8.5f, 8.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla12M.RenderModel();
+
+		// BO RAI CHO - CASILLA 13
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(-60.0f, /*8.5f*/boSubeBaja, -120.0));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -boRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(3.5f, 3.5f, 3.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla13M.RenderModel();
+
+		// CASSIE CAGE - CASILLA 14
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(-40.0f, /*10.0f*/cassieSubeBaja, -120.0));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -cassieRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(8.5f, 8.5f, 8.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla14M.RenderModel();
+
+		// SKULL - CASILLA 15
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(-20.0f, /*2.0f*/skullSubeBaja, -120.0));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -skullRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.325f, 0.325f, 0.325f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla15M.RenderModel();
+
+		// ROCKY ROAD - CASILLA 16
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(0.0f, /*2.0f*/rockySubeBaja, -120.0));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -rockyRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.325f, 0.325f, 0.325f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla16M.RenderModel();
+
+		// NEOCORTEX - CASILLA 17
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(20.0f, /*4.0f*/drneoSubeBaja, -120.0));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -drneoRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(15.0f, 15.0f, 15.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla17M.RenderModel();
+
+		// FROG - CASILLA 18
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(40.0f, /*2.0f*/frogSubeBaja, -120.0));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -frogRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla18M.RenderModel();
+
+		// POLAR - CASILLA 19
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(60.0f, /*5.0f*/polarSubeBaja, -120.0));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -polarRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.16f, 0.16f, 0.16f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla19M.RenderModel();
+
+		// WIZARD - CASILLA 20
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(80.0f, /*6.8f*/wizardSubeBaja, -120.0));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -wizardRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.18f, 0.18f, 0.18f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla20M.RenderModel();
+
+		// PINSTRIPE - CASILLA 21
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(120.0f, /*pinstripe*/pinstripeSubeBaja, -100.0));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -pinstripeRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(6.0f, 6.0f, 6.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla21M.RenderModel();
+
+		// LION - CASILLA 22
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(120.0f, /*6.0f*/lionSubeBaja, -80.0));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -lionRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.25f, 1.25f, 1.25f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla22M.RenderModel();
+
+		// BABY T - CASILLA 23
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(120.0f, /*5.2f*/babytSubeBaja, -60.0));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -babytRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla23M.RenderModel();
+
+		// AKU AKU - CASILLA 24
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(120.0f, /*4.0f*/akuakuSubeBaja, -40.0));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -akuakuRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla24M.RenderModel();
+
+		// PALM_TREE - CASILLA 25
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(120.0f, /*6.0f*/palm_treeSubeBaja, -20.0));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -palm_treeRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.25f, 0.25f, 0.25f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla25M.RenderModel();
+
+		// FLOWERS - CASILLA 26
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(120.0f, /*4.2f*/flowersSubeBaja, 0.0));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -flowersRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla26M.RenderModel();
+
+		// BASIC_TREE - CASILLA 27
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(120.0f, /*5.2f*/basicSubeBaja, 20.0));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -basicRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla27M.RenderModel();
+
+		//Brian - Casilla28
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(120.0f, /*7.5f*/brianSubeBaja, 40.0));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -brianRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ModeloCasilla28.RenderModel();
+
+		//Ernie - Casilla29
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(124.0f, /*9.5f*/ernieSubeBaja, 60.0));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -ernieRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ModeloCasilla29.RenderModel();
+
+		//Lois - Casilla30
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(120.0f, /*9.5f*/luisaSubeBaja, 80.0));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -luisaRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ModeloCasilla30.RenderModel();
+
+		//Meg - Casilla31
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(100.0f, /*9.0f*/megSubeBaja, 120.0));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -megRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ModeloCasilla31.RenderModel();
+
+		//Peter - Casilla32
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(80.0f, /*9.0f*/peterSubeBaja, 120.0));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -peterRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ModeloCasilla32.RenderModel();
+
+		//Joe - Casilla33
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(60.0f, /*9.0f*/joeSubeBaja, 120.0));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -joeRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ModeloCasilla33.RenderModel();
+
+		//Chris - Casilla34
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(40.0f, /*-1.0f*/chrisSubeBaja, 120.0));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -chrisRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(11.0f, 11.0f, 11.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ModeloCasilla34.RenderModel();
+
+		//Drunken - Casilla35
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(20.0f, /*4.5f*/casaSubeBaja, 120.0));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -casaRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ModeloCasilla35.RenderModel();
+
+		//Arbol - Casilla36
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, /*9.5f*/treeSubeBaja, 120.0));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -treeRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ModeloCasilla36.RenderModel();
+
+		//Arbol Navidad - Casilla37
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-20.0f, /*7.0f*/navidadSubeBaja, 120.0));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -navidadRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ModeloCasilla37.RenderModel();
+
+		//Vinny - Casilla38
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-40.0f, /*7.5f*/vinnySubeBaja, 120.0));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -vinnyRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ModeloCasilla38.RenderModel();
+
+		//Flores - Casilla39
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-60.0f, /*7.0f*/flowers2SubeBaja, 125.0));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -flowers2Rota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ModeloCasilla39.RenderModel();
+
+		//Carter - Casilla40
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-80.0f, /*9.6f*/carterSubeBaja, 120.0));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -carterRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ModeloCasilla40.RenderModel();
+
+											// ##################################### SUBZERO AVATAR ##################################### \\
+
+		// AVATAR SUB ZERO PARA RECORRIDO
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(-100.0f, 19.8f, 100.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+		// RECORRIDO AVATAR
+		// EL PRIMER TRANSLATE (HASTA LLEGAR A UNA PARTE)
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, mueveAvatar01));
+		model = glm::rotate(model, rotaAvatar01 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+		// RECORRIDO AVATAR
+		// EL PRIMER TRANSLATE (HASTA LLEGAR A UNA PARTE)
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, mueveAvatar02));
+		model = glm::rotate(model, rotaAvatar02 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+		// RECORRIDO AVATAR
+		// EL PRIMER TRANSLATE (HASTA LLEGAR A UNA PARTE)
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, mueveAvatar03));
+		model = glm::rotate(model, rotaAvatar03 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+		// RECORRIDO AVATAR
+		// EL PRIMER TRANSLATE (HASTA LLEGAR A UNA PARTE)
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, mueveAvatar04));
+		model = glm::rotate(model, rotaAvatar04 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+
+		modelauxTorso = model; // GUARDA TORSO
+
+		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		torsoSubZero.RenderModel();
+
+		model = modelauxTorso; // A PARTIR DE TORSO
+
+		model = glm::translate(model, glm::vec3(-3.5f, 2.0f, -0.3f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+
+		modelauxBrazoDerecho = model; // GUARDA BRAZO DERECHO
+
+		model = glm::scale(model, glm::vec3(1.2f, 1.2f, 1.2f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		esfera.RenderModel();
+
+		model = modelauxBrazoDerecho; // A PARTIR DE BRAZO DERECHO
+
+		model = glm::translate(model, glm::vec3(-0.3f, 0.0f, 0.1f));
+		model = glm::rotate(model, -rotaBrazoD * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		brazoDerechoSubZero.RenderModel();
+
+		model = modelauxTorso; // A PARTIR DE TORSO
+
+		model = glm::translate(model, glm::vec3(3.5f, 2.0f, -0.3f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+
+		modelauxBrazoIzquierdo = model; // GUARDA BRAZO IZQUIERDO
+
+		model = glm::scale(model, glm::vec3(1.2f, 1.2f, 1.2f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		esfera.RenderModel();
+
+		model = modelauxBrazoIzquierdo; // A PARTIR DE BRAZO IZQUIERDO
+
+		model = glm::translate(model, glm::vec3(0.3f, 0.0f, 0.1f));
+		model = glm::rotate(model, rotaBrazoI * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		brazoIzquieroSubZero.RenderModel();
+
+		model = modelauxTorso; // A PARTIR DE TORSO
+
+		model = glm::translate(model, glm::vec3(0.0f, -5.0f, 0.0f));
+
+		modelauxCintura = model; // GUARDA CINTURA
+
+		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		cinturaSubZero.RenderModel();
+
+		model = modelauxCintura; //  PARTIR DE LA CINTURA
+
+		model = glm::translate(model, glm::vec3(-1.3f, -1.5f, 0.0f));
+
+		modelauxPiernaDerecha = model; // GUARDA PIERNA DERECHA
+
+		model = glm::scale(model, glm::vec3(1.2f, 1.2f, 1.2f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		esfera.RenderModel();
+
+		model = modelauxPiernaDerecha; // A PARTIR DE LA PIERNA DERECHA
+
+		model = glm::translate(model, glm::vec3(0.0f, 0.3f, 0.0f));
+		model = glm::rotate(model, rotaPiernaD * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		piernaDerechaSubZero.RenderModel();
+
+		model = modelauxCintura; //  PARTIR DE LA CINTURA
+
+		model = glm::translate(model, glm::vec3(1.3f, -1.5f, 0.0f));
+
+		modelauxPiernaIzquierda = model; // GUARDA PIERNA IZQUIERDA
+
+		model = glm::scale(model, glm::vec3(1.2f, 1.2f, 1.2f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		esfera.RenderModel();
+
+		model = modelauxPiernaIzquierda; // A PARTIR DE LA PIERNA IZQUIERDA
+
+		model = glm::translate(model, glm::vec3(0.0f, 0.3f, 0.0f));
+		model = glm::rotate(model, rotaPiernaI * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		piernaIzquierdaSubZero.RenderModel();
+
+											// ##################################### MODELOS DE ANIMACIONES ##################################### \\
+
+		// SUBZERO
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-15.0f, 10.0f, -10.0));
+		model = glm::rotate(model, -135 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		subZeroAnimacion.RenderModel();
+
+												// ##################################### CARRO ##################################### \\
+
+		//CARROS CARRETERA
+
+		model = glm::mat4(1.0);
+
+		if (!enMovimientoX && !enMovimientoZ) {
+			if (mueveCarro < 320) {
+				// Movimiento en el primer tramo (en el eje X)
+				mueveCarro += mueveCarroOffset * deltaTime;
+
+				// Actualiza la posición del modelo
+				model = glm::translate(glm::mat4(1.0f), glm::vec3(-160.0f + mueveCarro, 0.0f, 160.0f));
+				model = glm::rotate(model, glm::radians(giraCarro), glm::vec3(0.0f, 1.0f, 0.0f));
+			}
+			else {
+				// Solo entra en la curva una vez
+				if (!enCurva) {
+					enCurva = true;
+				}
+
+				if (giraCarro < giraCarroTarget) { // Rota hasta alcanzar el ángulo objetivo
+					giraCarro += 1.0f * deltaTime;
+
+					mueveCarro += curvaCarroOffset * deltaTime;
+
+					// Calcular el vector de dirección
+					float radians = glm::radians(giraCarro);
+					glm::vec3 direccion;
+					direccion.x = cos(radians);
+					direccion.z = sin(radians);
+
+					// Actualiza la posición del modelo durante la curva
+					model = glm::translate(glm::mat4(1.0f), glm::vec3(-160.0f + mueveCarro, 0.0f, 160.0f)) * glm::rotate(glm::mat4(1.0f), glm::radians(giraCarro), glm::vec3(0.0f, 1.0f, 0.0f));
+				}
+				else {
+					giraCarro = giraCarroTarget;
+					enCurva = false;
+
+					if (mueveCarro2 < 320) {
+						mueveCarro2 += mueveCarroOffset * deltaTime;
+						model = glm::translate(glm::mat4(1.0f), glm::vec3(-160.0f + mueveCarro, 0.0f, 160.0f - mueveCarro2)) * glm::rotate(glm::mat4(1.0f), glm::radians(giraCarro), glm::vec3(0.0f, 1.0f, 0.0f));
+					}
+					else {
+						enMovimientoX = true;
+						mueveCarro2 = 320.0f;
+						giraCarro = giraCarroTarget;
+					}
+				}
+			}
+		}
+		else if (enMovimientoX) {
+			//printf("Estado de enMovimientoX: %d, mueveCarro2: %f\n", enMovimientoZ, mueveCarro2);
+
+			if (!enCurva) {
+				enCurva = true;
+			}
+
+			if (giraCarro < giraCarroTargetX) {
+				giraCarro += 1.0f * deltaTime;
+				if (giraCarro > giraCarroTargetX) {
+					giraCarro = giraCarroTargetX;
+				}
+				float radians = glm::radians(giraCarro);
+				model = glm::translate(glm::mat4(1.0f), glm::vec3(-160.0f + mueveCarro, 0.0f, -160.0f)) *
+					glm::rotate(glm::mat4(1.0f), glm::radians(giraCarro), glm::vec3(0.0f, 1.0f, 0.0f));
+
+				//printf("Durante curva -> mueveCarro: %f, giraCarro: %f\n", mueveCarro, giraCarro);
+			}
+
+			// Cambia al movimiento en Z positivo cuando llega a -160 en X
+			if (giraCarro >= giraCarroTargetX) {
+				if (mueveCarro > 0) { // Mover en X negativo hasta alcanzar -160
+					mueveCarro -= mueveCarroOffset * deltaTime;
+					model = glm::translate(glm::mat4(1.0f), glm::vec3(-160.0f + mueveCarro, 0.0f, -160.0f)) *
+						glm::rotate(glm::mat4(1.0f), glm::radians(giraCarro), glm::vec3(0.0f, 1.0f, 0.0f));
+				}
+				else {
+					// Cambio a movimiento en Z positivo
+					enMovimientoX = false;
+					enMovimientoZ = true;
+					enCurva = false;
+					mueveCarro = 0.0f; // Asegurar que se detenga exactamente en -160 en X
+					mueveCarro2 = 0.0f; // Asegurar que se detenga exactamente en -160 en X
+					giraCarro = giraCarroTargetX; // Mantener el ángulo final de 270°
+				}
+			}
+
+			//printf("Final X movimiento -> mueveCarro: %f, giraCarro: %f\n", mueveCarro, giraCarro);
+		}
+		else if (enMovimientoZ) {
+			// Solo entra en la curva una vez
+			if (!enCurva) {
+				enCurva = true;
+			}
+
+			if (giraCarro < 0) { // Solo girar 5 grados (de 270 a 265)
+				giraCarro -= 0.5f * deltaTime; // Velocidad de giro más lenta
+				mueveCarro2 += curvaCarroOffset * deltaTime;
+
+				// Calcular el vector de dirección
+				float radians = glm::radians(giraCarro);
+				glm::vec3 direccion;
+				direccion.x = cos(radians);
+				direccion.z = sin(radians);
+
+				// Actualiza la posición del modelo durante la curva
+				model = glm::translate(glm::mat4(1.0f),
+					glm::vec3(-160.0f, 0.0f, -160.0f + mueveCarro2)) *
+					glm::rotate(glm::mat4(1.0f), glm::radians(giraCarro), glm::vec3(0.0f, 1.0f, 0.0f));
+			}
+			else {
+				giraCarro = 0.0f; // Mantener un giro muy sutil
+				enCurva = false;
+
+				if (mueveCarro2 < 320) {
+					mueveCarro2 += mueveCarroOffset * deltaTime;
+					model = glm::translate(glm::mat4(1.0f),
+						glm::vec3(-160.0f, 0.0f, -160.0f + mueveCarro2)) *
+						glm::rotate(glm::mat4(1.0f), glm::radians(giraCarro), glm::vec3(0.0f, 1.0f, 0.0f));
+				}
+				else {
+					enMovimientoZ = false;
+					mueveCarro2 = 0.0f;
+					giraCarro = 90.0f;
+				}
+			}
+
+			//printf("Durante curva -> mueveCarro2: %f, giraCarro: %f\n", mueveCarro2, giraCarro);
+		}
+		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		carroCoco.RenderModel();
+
+											// ##################################### CARRETERA ##################################### \\
+
+		//CARRETERA
+		//RECTA 1
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(34.2f, -1.0f, 166.0));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 12.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		recta.RenderModel();
+
+		//CURVA 1
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(166.0f, -1.0f, 161.5f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		curva.RenderModel();
+
+		//RECTA 2
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(169.0f, -1.0f, -35.0));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 12.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		recta.RenderModel();
+	
+		//CURVA 2
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(164.5f, -1.0f, -166.8));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		curva.RenderModel();
+
+		//RECTA 3
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(34.0f, -1.0f, -170.0));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 12.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		recta.RenderModel();
+
+		//CURVA 3
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-164.0f, -1.0f, -165.5f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		curva.RenderModel();
+
+		//RECTA 4
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-167.0f, -1.0f, -35.0));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 12.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		recta.RenderModel();
+
+		//CURVA 4
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-162.5f, -1.0f, 162.9));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		curva.RenderModel();
+
+											// ##################################### ENTORNO ##################################### \\
+
+		// GLOBO 1
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(250.0f, 150.0f, 250.0));
+		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		globo.RenderModel();
+
+		// GLOBO 2
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(250.0f, 150.0f, -250.0));
+		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		globo.RenderModel();
+
+		// GLOBO 3
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-250.0f, 150.0f, 250.0));
+		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		globo.RenderModel();
+
+		// GLOBO 4
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-250.0f, 150.0f, -250.0));
+		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		globo.RenderModel();
 
 		//OBJETOS EN EL TABLERO
 		//Casa Cynthia
@@ -5194,1208 +7671,8 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		arbusto.RenderModel();
 
-		// CASILLAS 
-		model = glm::mat4(1.0);
 
-		// 1
-		model = glm::translate(model, glm::vec3(-100.0f, 0.3f, 100.0));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-
-		modelauxCasillas = model; // GUARDA
-
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla01A.RenderModel();
-		casilla01M.RenderModel();
-		//casilla01AR.RenderModel();
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 2
-		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		casilla02M.RenderModel();
-		//casilla02A.RenderModel();
-		//casilla02AR.RenderModel();
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 3
-		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		casilla03M.RenderModel();
-		//casilla03A.RenderModel();
-		//casilla03AR.RenderModel();
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 4
-		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla04M.RenderModel();
-		//casilla04A.RenderModel();
-		casilla04AR.RenderModel();
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 5
-		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla05M.RenderModel();
-		//casilla05A.RenderModel();
-		casilla05AR.RenderModel();
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 6
-		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla06M.RenderModel();
-		//casilla06A.RenderModel();
-		casilla06AR.RenderModel();
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 7
-		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla07M.RenderModel();
-		//casilla07A.RenderModel();
-		casilla07AR.RenderModel();
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 8
-		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla08M.RenderModel();
-		//casilla08A.RenderModel();
-		casilla08AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 9
-		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla09M.RenderModel();
-		//casilla09A.RenderModel();
-		casilla09AR.RenderModel();
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 10
-		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla10M.RenderModel();
-		//casilla10A.RenderModel();
-		casilla10AR.RenderModel();
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 11
-		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla11M.RenderModel();
-		//casilla11A.RenderModel();
-		casilla11AR.RenderModel();
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 12
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla12M.RenderModel();
-		//casilla12A.RenderModel();
-		casilla12AR.RenderModel();
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 13
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla13M.RenderModel();
-		//casilla13A.RenderModel();
-		casilla13AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 14
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla14M.RenderModel();
-		//casilla14A.RenderModel();
-		casilla14AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 15
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
-		/*model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla15M.RenderModel();
-		//casilla15A.RenderModel();
-		casilla15AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 16
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla16M.RenderModel();
-		//casilla16A.RenderModel();
-		casilla16AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 17
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla17M.RenderModel();
-		//casilla17A.RenderModel();
-		casilla17AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 18
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla18M.RenderModel();
-		//casilla18A.RenderModel();
-		casilla18AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 19
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla19M.RenderModel();
-		//casilla19A.RenderModel();
-		casilla19AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 20
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla20M.RenderModel();
-		//casilla20A.RenderModel();
-		casilla20AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 21
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
-
-		modelauxCasillas = model; // GUARDA
-
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla21M.RenderModel();
-		//casilla21A.RenderModel();
-		casilla21AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 22
-		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla22M.RenderModel();
-		//casilla22A.RenderModel();
-		casilla22AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 23
-		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla23M.RenderModel();
-		//casilla23A.RenderModel();
-		casilla23AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 24
-		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla24M.RenderModel();
-		//casilla24A.RenderModel();
-		casilla24AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 25
-		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla25M.RenderModel();
-		//casilla25A.RenderModel();
-		casilla25AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 26
-		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla26M.RenderModel();
-		//casilla26A.RenderModel();
-		casilla26AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 27
-		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla27M.RenderModel();
-		//casilla27A.RenderModel();
-		casilla27AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 28
-		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
-		/*model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
-		modelauxCasillas = model; // GUARDA
-
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla28M.RenderModel();
-		//casilla28A.RenderModel();
-		casilla28AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 29
-		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla29M.RenderModel();
-		//casilla29A.RenderModel();
-		casilla29AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 30
-		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla30M.RenderModel();
-		//casilla30A.RenderModel();
-		casilla30AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 31
-		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla31M.RenderModel();
-		//casilla31A.RenderModel();
-		casilla31AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 32
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla32M.RenderModel();
-		//casilla32A.RenderModel();
-		casilla32AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 33
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f,-20.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla33M.RenderModel();
-		//casilla33A.RenderModel();
-		casilla33AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 34
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla34M.RenderModel();
-		//casilla34A.RenderModel();
-		casilla34AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 35
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla35M.RenderModel();
-		//casilla35A.RenderModel();
-		casilla35AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 36
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla36M.RenderModel();
-		//casilla36A.RenderModel();
-		casilla36AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 37
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla37M.RenderModel();
-		//casilla37A.RenderModel();
-		casilla37AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 38
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla38M.RenderModel();
-		//casilla38A.RenderModel();
-		casilla38AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 39
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla39M.RenderModel();
-		//casilla39A.RenderModel();
-		casilla39AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 40
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casilla40M.RenderModel();
-		//casilla40A.RenderModel();
-		casilla40AR.RenderModel();
-
-		// RAIDEN - CASILLA 02
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(-120.0f, /*9.9f*/raidenSubeBaja, 80.0)); //EN EL TRANSLATE DE Y SE CAMBIA POR EL NOMBRE DE LA VARIABLE
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -raidenRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f)); //SE LE AUMENTA EL ROUTETE DONDE SE PONE ROTA EN TODAS VA EL -
-		model = glm::scale(model, glm::vec3(7.0f, 7.0f, 7.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla01M.RenderModel();
-
-		// SCORPION - CASILLA 03
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(-120.0f,/* 10.1f*/scorpionSubeBaja, 60.0));
-		model = glm::rotate(model, -scorpionRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(7.0f, 7.0f, 7.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla02M.RenderModel();
-
-		// SHAO KAHN - CASILLA 04
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(-120.0f, /*9.9f*/shaoSubeBaja, 40.0));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -shaoRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(7.0f, 7.0f, 7.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla03M.RenderModel();
-
-		// HELL MOUNTAIN - CASILLA 05
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(-120.0f, /*4.4f*/hellSubeBaja, 20.0));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -hellRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.06f, 0.06f, 0.06f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla04M.RenderModel();
-
-		// VIEWER - CASILLA 06
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(-120.0f, /*5.5f*/viewerSubeBaja, 0.0));
-		model = glm::rotate(model, -viewerRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.09f, 0.09f, 0.09f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla05M.RenderModel();
-
-		// TREE STUMP - CASILLA 07
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(-120.0f, /*8.55f*/tree_stumpSubeBaja, -20.0));
-		model = glm::rotate(model, -tree_stumpRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.08f, 0.08f, 0.08f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla06M.RenderModel();
-
-		// PINE TREE - CASILLA 08
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(-120.0f, /*9.7f*/pine_treeSubeBaja, -40.0));
-		model = glm::rotate(model, -pine_treeRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(7.0f, 7.0f, 7.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla07M.RenderModel();
-
-		// FIRE DRAGON - CASILLA 09
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(-120.0f, /*6.0f*/fire_dragonSubeBaja, -55.0));
-		model = glm::rotate(model, -fire_dragonRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(7.0f, 7.0f, 7.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla08M.RenderModel();
-
-		// SCORPION - CASILLA 10
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(-120.0f,/* 5.9f*/scorpion2SubeBaja, -80.0));
-		model = glm::rotate(model, -scorpion2Rota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(20.0f, 20.0f, 20.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla09M.RenderModel();
-
-		// WOLF - CASILLA 11
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(-100.0f, /*5.9f*/wolfSubeBaja, -120.0));
-		model = glm::rotate(model, -wolfRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla11M.RenderModel();
-
-		// BARAKA - CASILLA 12
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(-80.0f, /*10.0f*/BarakaSubeBaja, -120.0));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -BarakaRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(8.5f, 8.5f, 8.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla12M.RenderModel();
-
-		// BO RAI CHO - CASILLA 13
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(-60.0f, /*8.5f*/boSubeBaja, -120.0));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -boRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(3.5f, 3.5f, 3.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla13M.RenderModel();
-
-		// CASSIE CAGE - CASILLA 14
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(-40.0f, /*10.0f*/cassieSubeBaja, -120.0));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -cassieRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(8.5f, 8.5f, 8.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla14M.RenderModel();
-
-		// SKULL - CASILLA 15
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(-20.0f, /*2.0f*/skullSubeBaja, -120.0));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -skullRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.325f, 0.325f, 0.325f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla15M.RenderModel();
-
-		// ROCKY ROAD - CASILLA 16
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(0.0f, /*2.0f*/frogSubeBaja, -120.0));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -frogRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.325f, 0.325f, 0.325f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla16M.RenderModel();
-
-		// NEOCORTEX - CASILLA 17
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(20.0f, /*4.0f*/drneoSubeBaja, -120.0));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -drneoRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(15.0f, 15.0f, 15.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla17M.RenderModel();
-
-		// FROG - CASILLA 18
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(40.0f, /*2.0f*/frogSubeBaja, -120.0));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -frogRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla18M.RenderModel();
-		
-		// POLAR - CASILLA 19
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(60.0f, /*5.0f*/polarSubeBaja, -120.0));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -polarRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.16f, 0.16f, 0.16f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla19M.RenderModel();
-
-		// WIZARD - CASILLA 20
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(80.0f, /*6.8f*/wizardSubeBaja, -120.0));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -wizardRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.18f, 0.18f, 0.18f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla20M.RenderModel();
-
-		// PINSTRIPE - CASILLA 21
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(120.0f, /*pinstripe*/pinstripeSubeBaja, -100.0));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -pinstripeRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(6.0f, 6.0f, 6.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla21M.RenderModel();
-
-		// LION - CASILLA 22
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(120.0f, /*6.0f*/lionSubeBaja, -80.0));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -lionRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.25f, 1.25f, 1.25f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla22M.RenderModel();
-
-		// BABY T - CASILLA 23
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(120.0f, /*5.2f*/babytSubeBaja, -60.0));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -babytRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla23M.RenderModel();
-
-		// AKU AKU - CASILLA 24
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(120.0f, /*4.0f*/akuakuSubeBaja, -40.0));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -akuakuRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla24M.RenderModel();
-
-		// PALM_TREE - CASILLA 25
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(120.0f, /*6.0f*/palm_treeSubeBaja, -20.0));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -palm_treeRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.25f, 0.25f, 0.25f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla25M.RenderModel();
-
-		// FLOWERS - CASILLA 26
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(120.0f, /*4.2f*/flowersSubeBaja, 0.0));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -flowersRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla26M.RenderModel();
-
-		// BASIC_TREE - CASILLA 27
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(120.0f, /*5.2f*/basicSubeBaja, 20.0));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -basicRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla27M.RenderModel();
-
-		//Brian - Casilla28
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(120.0f, /*7.5f*/brianSubeBaja, 40.0));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -brianRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		ModeloCasilla28.RenderModel();
-
-		//Ernie - Casilla29
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(124.0f, /*9.5f*/ernieSubeBaja, 60.0));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -ernieRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		ModeloCasilla29.RenderModel();
-
-		//Lois - Casilla30
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(120.0f, /*9.5f*/luisaSubeBaja, 80.0));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -luisaRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		ModeloCasilla30.RenderModel();
-
-		//Meg - Casilla31
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(100.0f, /*9.0f*/megSubeBaja, 120.0));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -megRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		ModeloCasilla31.RenderModel();
-
-		//Peter - Casilla32
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(80.0f, /*9.0f*/peterSubeBaja, 120.0));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -peterRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		ModeloCasilla32.RenderModel();
-
-		//Joe - Casilla33
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(60.0f, /*9.0f*/joeSubeBaja, 120.0));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -joeRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		ModeloCasilla33.RenderModel();
-
-		//Chris - Casilla34
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(40.0f, /*-1.0f*/chrisSubeBaja, 120.0));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -chrisRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(11.0f, 11.0f, 11.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		ModeloCasilla34.RenderModel();
-
-		//Drunken - Casilla35
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(20.0f, /*4.5f*/casaSubeBaja, 120.0));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -casaRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		ModeloCasilla35.RenderModel();
-
-		//Arbol - Casilla36
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, /*9.5f*/treeSubeBaja, 120.0));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -treeRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		ModeloCasilla36.RenderModel();
-
-		//Arbol Navidad - Casilla37
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-20.0f, /*7.0f*/navidadSubeBaja, 120.0));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -navidadRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		ModeloCasilla37.RenderModel();
-
-		//Vinny - Casilla38
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-40.0f, /*7.5f*/vinnySubeBaja, 120.0));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -vinnyRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		ModeloCasilla38.RenderModel();
-
-		//Flores - Casilla39
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-60.0f, /*7.0f*/flowers2SubeBaja, 125.0));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -flowers2Rota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		ModeloCasilla39.RenderModel();
-
-		//Carter - Casilla40
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-80.0f, /*9.6f*/carterSubeBaja, 120.0));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -carterRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		ModeloCasilla40.RenderModel();
-
-		// AVATAR SUB ZERO PARA RECORRIDO
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(-100.0f, 19.8f, 100.0f));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-
-		// RECORRIDO AVATAR
-		// EL PRIMER TRANSLATE (HASTA LLEGAR A UNA PARTE)
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, mueveAvatar01));
-		model = glm::rotate(model, rotaAvatar01 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-
-		// RECORRIDO AVATAR
-		// EL PRIMER TRANSLATE (HASTA LLEGAR A UNA PARTE)
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, mueveAvatar02));
-		model = glm::rotate(model, rotaAvatar02 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-
-		// RECORRIDO AVATAR
-		// EL PRIMER TRANSLATE (HASTA LLEGAR A UNA PARTE)
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, mueveAvatar03));
-		model = glm::rotate(model, rotaAvatar03 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-
-		// RECORRIDO AVATAR
-		// EL PRIMER TRANSLATE (HASTA LLEGAR A UNA PARTE)
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, mueveAvatar04));
-		model = glm::rotate(model, rotaAvatar04 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-
-
-		modelauxTorso = model; // GUARDA TORSO
-
-		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		torsoSubZero.RenderModel();
-
-		model = modelauxTorso; // A PARTIR DE TORSO
-
-		model = glm::translate(model, glm::vec3(-3.5f, 2.0f, -0.3f));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
-
-		modelauxBrazoDerecho = model; // GUARDA BRAZO DERECHO
-
-		model = glm::scale(model, glm::vec3(1.2f, 1.2f, 1.2f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		esfera.RenderModel();
-
-		model = modelauxBrazoDerecho; // A PARTIR DE BRAZO DERECHO
-
-		model = glm::translate(model, glm::vec3(-0.3f, 0.0f, 0.1f));
-		model = glm::rotate(model, -rotaBrazoD * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		brazoDerechoSubZero.RenderModel();
-
-		model = modelauxTorso; // A PARTIR DE TORSO
-
-		model = glm::translate(model, glm::vec3(3.5f, 2.0f, -0.3f));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
-
-		modelauxBrazoIzquierdo = model; // GUARDA BRAZO IZQUIERDO
-
-		model = glm::scale(model, glm::vec3(1.2f, 1.2f, 1.2f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		esfera.RenderModel();
-
-		model = modelauxBrazoIzquierdo; // A PARTIR DE BRAZO IZQUIERDO
-
-		model = glm::translate(model, glm::vec3(0.3f, 0.0f, 0.1f));
-		model = glm::rotate(model, rotaBrazoI * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		brazoIzquieroSubZero.RenderModel();
-
-		model = modelauxTorso; // A PARTIR DE TORSO
-
-		model = glm::translate(model, glm::vec3(0.0f, -5.0f, 0.0f));
-
-		modelauxCintura = model; // GUARDA CINTURA
-
-		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		cinturaSubZero.RenderModel();
-
-		model = modelauxCintura; //  PARTIR DE LA CINTURA
-
-		model = glm::translate(model, glm::vec3(-1.3f, -1.5f, 0.0f));
-
-		modelauxPiernaDerecha = model; // GUARDA PIERNA DERECHA
-
-		model = glm::scale(model, glm::vec3(1.2f, 1.2f, 1.2f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		esfera.RenderModel();
-
-		model = modelauxPiernaDerecha; // A PARTIR DE LA PIERNA DERECHA
-
-		model = glm::translate(model, glm::vec3(0.0f, 0.3f, 0.0f));
-		model = glm::rotate(model, rotaPiernaD * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		piernaDerechaSubZero.RenderModel();
-
-		model = modelauxCintura; //  PARTIR DE LA CINTURA
-
-		model = glm::translate(model, glm::vec3(1.3f, -1.5f, 0.0f));
-
-		modelauxPiernaIzquierda = model; // GUARDA PIERNA IZQUIERDA
-
-		model = glm::scale(model, glm::vec3(1.2f, 1.2f, 1.2f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		esfera.RenderModel();
-
-		model = modelauxPiernaIzquierda; // A PARTIR DE LA PIERNA IZQUIERDA
-
-		model = glm::translate(model, glm::vec3(0.0f, 0.3f, 0.0f));
-		model = glm::rotate(model, rotaPiernaI * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		piernaIzquierdaSubZero.RenderModel();
-
-
-		//CARROS CARRETERA
-
-		model = glm::mat4(1.0);
-
-		if (!enMovimientoX && !enMovimientoZ) {
-			if (mueveCarro < 320) {
-				// Movimiento en el primer tramo (en el eje X)
-				mueveCarro += mueveCarroOffset * deltaTime;
-
-				// Actualiza la posición del modelo
-				model = glm::translate(glm::mat4(1.0f), glm::vec3(-160.0f + mueveCarro, 0.0f, 160.0f));
-				model = glm::rotate(model, glm::radians(giraCarro), glm::vec3(0.0f, 1.0f, 0.0f));
-			}
-			else {
-				// Solo entra en la curva una vez
-				if (!enCurva) {
-					enCurva = true;
-				}
-
-				if (giraCarro < giraCarroTarget) { // Rota hasta alcanzar el ángulo objetivo
-					giraCarro += 1.0f * deltaTime;
-
-					mueveCarro += curvaCarroOffset * deltaTime;
-
-					// Calcular el vector de dirección
-					float radians = glm::radians(giraCarro);
-					glm::vec3 direccion;
-					direccion.x = cos(radians);
-					direccion.z = sin(radians);
-
-					// Actualiza la posición del modelo durante la curva
-					model = glm::translate(glm::mat4(1.0f), glm::vec3(-160.0f + mueveCarro, 0.0f, 160.0f)) * glm::rotate(glm::mat4(1.0f), glm::radians(giraCarro), glm::vec3(0.0f, 1.0f, 0.0f));
-				}
-				else {
-					giraCarro = giraCarroTarget;
-					enCurva = false;
-
-					if (mueveCarro2 < 320) {
-						mueveCarro2 += mueveCarroOffset * deltaTime;
-						model = glm::translate(glm::mat4(1.0f), glm::vec3(-160.0f + mueveCarro, 0.0f, 160.0f - mueveCarro2)) * glm::rotate(glm::mat4(1.0f), glm::radians(giraCarro), glm::vec3(0.0f, 1.0f, 0.0f));
-					}
-					else {
-						enMovimientoX = true;
-						mueveCarro2 = 320.0f;
-						giraCarro = giraCarroTarget;
-					}
-				}
-			}
-		}
-		else if (enMovimientoX) {
-			/*printf("Estado de enMovimientoX: %d, mueveCarro2: %f\n", enMovimientoZ, mueveCarro2);*/
-
-			if (!enCurva) {
-				enCurva = true;
-			}
-
-			if (giraCarro < giraCarroTargetX) {
-				giraCarro += 1.0f * deltaTime;
-				if (giraCarro > giraCarroTargetX) {
-					giraCarro = giraCarroTargetX;
-				}
-				float radians = glm::radians(giraCarro);
-				model = glm::translate(glm::mat4(1.0f), glm::vec3(-160.0f + mueveCarro, 0.0f, -160.0f)) *
-					glm::rotate(glm::mat4(1.0f), glm::radians(giraCarro), glm::vec3(0.0f, 1.0f, 0.0f));
-
-				/*printf("Durante curva -> mueveCarro: %f, giraCarro: %f\n", mueveCarro, giraCarro);*/
-			}
-
-			// Cambia al movimiento en Z positivo cuando llega a -160 en X
-			if (giraCarro >= giraCarroTargetX) {
-				if (mueveCarro > 0) { // Mover en X negativo hasta alcanzar -160
-					mueveCarro -= mueveCarroOffset * deltaTime;
-					model = glm::translate(glm::mat4(1.0f), glm::vec3(-160.0f + mueveCarro, 0.0f, -160.0f)) *
-						glm::rotate(glm::mat4(1.0f), glm::radians(giraCarro), glm::vec3(0.0f, 1.0f, 0.0f));
-				}
-				else {
-					// Cambio a movimiento en Z positivo
-					enMovimientoX = false;
-					enMovimientoZ = true;
-					enCurva = false;
-					mueveCarro = 0.0f; // Asegurar que se detenga exactamente en -160 en X
-					mueveCarro2 = 0.0f; // Asegurar que se detenga exactamente en -160 en X
-					giraCarro = giraCarroTargetX; // Mantener el ángulo final de 270°
-				}
-			}
-
-			/*printf("Final X movimiento -> mueveCarro: %f, giraCarro: %f\n", mueveCarro, giraCarro);*/
-		}
-		else if (enMovimientoZ) {
-			// Solo entra en la curva una vez
-			if (!enCurva) {
-				enCurva = true;
-			}
-
-			if (giraCarro < 0) { // Solo girar 5 grados (de 270 a 265)
-				giraCarro -= 0.5f * deltaTime; // Velocidad de giro más lenta
-				mueveCarro2 += curvaCarroOffset * deltaTime;
-
-				// Calcular el vector de dirección
-				float radians = glm::radians(giraCarro);
-				glm::vec3 direccion;
-				direccion.x = cos(radians);
-				direccion.z = sin(radians);
-
-				// Actualiza la posición del modelo durante la curva
-				model = glm::translate(glm::mat4(1.0f),
-					glm::vec3(-160.0f, 0.0f, -160.0f + mueveCarro2)) *
-					glm::rotate(glm::mat4(1.0f), glm::radians(giraCarro), glm::vec3(0.0f, 1.0f, 0.0f));
-			}
-			else {
-				giraCarro = 0.0f; // Mantener un giro muy sutil
-				enCurva = false;
-
-				if (mueveCarro2 < 320) {
-					mueveCarro2 += mueveCarroOffset * deltaTime;
-					model = glm::translate(glm::mat4(1.0f),
-						glm::vec3(-160.0f, 0.0f, -160.0f + mueveCarro2)) *
-						glm::rotate(glm::mat4(1.0f), glm::radians(giraCarro), glm::vec3(0.0f, 1.0f, 0.0f));
-				}
-				else {
-					enMovimientoZ = false;
-					mueveCarro2 = 0.0f;
-					giraCarro = 0.0f;
-				}
-			}
-
-			/*printf("Durante curva -> mueveCarro2: %f, giraCarro: %f\n", mueveCarro2, giraCarro);*/
-		}
-
-
-
-
-		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		carroCoco.RenderModel();
-
-
-
-
-
-
-		//CARRETERA
-		//RECTA 1
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(34.2f, -1.0f, 166.0));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 12.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		recta.RenderModel();
-
-		//CURVA 1
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(166.0f, -1.0f, 161.5f));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		curva.RenderModel();
-
-		//RECTA 2
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(169.0f, -1.0f, -35.0));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 12.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		recta.RenderModel();
-	
-		//CURVA 2
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(164.5f, -1.0f, -166.8));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		curva.RenderModel();
-
-		//RECTA 3
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(34.0f, -1.0f, -170.0));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 12.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		recta.RenderModel();
-
-		//CURVA 3
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-164.0f, -1.0f, -165.5f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		curva.RenderModel();
-
-		//RECTA 4
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-167.0f, -1.0f, -35.0));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 12.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		recta.RenderModel();
-
-		//CURVA 4
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-162.5f, -1.0f, 162.9));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		curva.RenderModel();
+											// ##################################### SUELO Y LETRERO ANIMADO ##################################### \\
 
 		//SUELO DE EN MEDIO
 		toffsetsuelou += 0.01f;
@@ -6403,27 +7680,22 @@ int main()
 		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
 		model = glm::mat4(1.0);
 		model = glm::scale(model, glm::vec3(10.0f, 5.0f, 10.0f));
-
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		color = glm::vec3(1.0f, 1.0f, 1.0f);
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		pasto.UseTexture();
 		meshList[2]->RenderMesh();
 
-
-
 		//LETRERO MONOPOLY
-		
 		toffsetletrerou += 0.001f * deltaTime;  // Mueve el letrero hacia la derecha
 		toffset = glm::vec2(toffsetletrerou, toffsetletrerov);
 		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, 1.0f, 0.0));
+		model = glm::translate(model, glm::vec3(0.0f, 3.0f, 0.0));
 		model = glm::rotate(model, 90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::rotate(model, -45 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::scale(model, glm::vec3(80.0f, 10.0f, 150.0f));
-
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		color = glm::vec3(1.0f, 1.0f, 1.0f);
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
