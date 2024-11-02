@@ -1,9 +1,5 @@
 
 // PROYECTO DE LABORATORIO
-// Miranda González José Francisco. Grupo teoría: 04. Grupo laboratorio: 03. 318222327
-// Monter González Luis Enrique. Grupo teoría: 06. Grupo laboratorio: 03. 318276605
-// Vázquez Gómez Carlos Iván. Grupo teoría: 04. Grupo laboratorio: 03. 420055185
-
 
 //para cargar imagen
 #define STB_IMAGE_IMPLEMENTATION
@@ -39,15 +35,15 @@
 #include "SpotLight.h"
 #include "Material.h"
 
-// PARA ELEGIR LOS GRADOS DE MANERA RANDOM EN LOS DADOS
+// PARA ELEGIR LOS GRADOS DE MANERA RANDOM
 #include <iostream>
 #include <cstdlib> // Para rand() y srand()
 #include <ctime>   // Para time()
 
+				
+
 const float toRadians = 3.14159265f / 180.0f;
-
-									// ##################################### VARIABLES PARA ANIMACION ##################################### \\
-
+			// ##################################### VARIABLES PARA ANIMACION ##################################### \\
 // CONTROL DE LUZ DIRECCIONAL
 float totalDia = 30.0f;
 float atardecer = 30.0f;
@@ -59,7 +55,8 @@ float intensidad = 0.0f;
 float FaseDia = 0.0f;
 float oscuridad = 0.0f;
 float adjustedIntensity = 0.0f;
-
+bool esDia = true;
+bool esNoche = false;
 // VARIABLES PARA ANIMACION DEL DADO DE 8 CARAS
 float subeBajaDado8 = 35.0f;
 float subeBajaDadoOffset8 = 0.3f;
@@ -85,22 +82,22 @@ int resultado = 0;
 
 // VARIABLES PARA ANIAMCION DE RECORRIDO
 float mueveAvatar01 = 0.0f;
-float mueveAvatar01Offset = 0.1f;
+float mueveAvatar01Offset = 0.3f;
 float mueveAvatar01Base = 0.0f;
 int resultadoAnterior01 = 0;
 
 float mueveAvatar02 = 0.0f;
-float mueveAvatar02Offset = 0.1f;
+float mueveAvatar02Offset = 0.3f;
 float mueveAvatar02Base = 0.0f;
 int resultadoAnterior02 = 0;
 
 float mueveAvatar03 = 0.0f;
-float mueveAvatar03Offset = 0.1f;
+float mueveAvatar03Offset = 0.3f;
 float mueveAvatar03Base = 0.0f;
 int resultadoAnterior03 = 0;
 
 float mueveAvatar04 = 0.0f;
-float mueveAvatar04Offset = 0.1f;
+float mueveAvatar04Offset = 0.3f;
 float mueveAvatar04Base = 0.0f;
 int resultadoAnterior04 = 0;
 
@@ -114,7 +111,7 @@ int conta01 = 0;
 
 float diferencia02 = 0.0f;
 bool hayDiferencia02 = true;
-int conta02 = 0; 
+int conta02 = 0;
 
 // VARIABLES PARA LA ANIMACION DE LA VUELTA 
 float rotaAvatar01 = 0.0f;
@@ -529,9 +526,6 @@ int  carterCont02 = 0;
 bool  carter = true;
 float  carterTiempo = 0.0f;
 
-// CAMBIO DE DIA Y NOCHE
-float dianocheTiempo;
-
 // COCINADO EN LAS CASILLAS
 int cocinado01 = 0;
 int cocinado02 = 0;
@@ -573,7 +567,8 @@ int cocinado37 = 0;
 int cocinado38 = 0;
 int cocinado39 = 0;
 
-////ANIMACION DEL CARRO COCO
+
+//ANIMACION DEL CARRO COCO
 float mueveCarro = 0.0f;              // Posición inicial del carro en el primer tramo
 float giraCarro = 90.0f;               // Ángulo inicial de rotación (90 grados)
 float mueveCarro2 = 0.0f;              // Posición en el segundo tramo
@@ -587,6 +582,7 @@ bool enCurva = false; // Bandera para saber si estamos en la curva
 bool enMovimientoXNegativo = false; // Nueva bandera para el movimiento en X negativo
 bool enMovimientoZ = false; // Bandera para saber si estamos en movimiento en el eje Z
 bool enMovimientoX = false; // Bandera para saber si estamos en movimiento en el eje Z
+float dianocheTiempo = 0.0f;
 
 //VARIABLES PARA ANIMACION MONOPOLY Y PASTO
 float toffsetletrerou = 0.0f;
@@ -607,7 +603,6 @@ Camera currentCamara;
 bool camaraAereaAc = false;
 float posCamX = 2000.0f;
 float posCamZ = 2000.0f;
-
 Texture brickTexture;
 Texture dirtTexture;
 Texture plainTexture;
@@ -616,13 +611,11 @@ Texture AgaveTexture;
 Texture letrero;
 Texture pasto;
 
-									// ##################################### CREACION DE MODELOS ##################################### \\
-
 // DADOS MODELOS
 Model dado4CarasM;
 Model dado8CarasM;
 
-// CASILLAS DE COLOR AZUL (NOCHE)
+// CASILLAS MODELOS
 Model casillaM;
 Model casilla01M;
 Model casilla02M;
@@ -665,7 +658,7 @@ Model casilla38M;
 Model casilla39M;
 Model casilla40M;
 
-//CASILLA DE COLOR AMARILLO (DIA)
+//CASILLA AMARILLA
 Model casilla01A;
 Model casilla02A;
 Model casilla03A;
@@ -707,7 +700,8 @@ Model casilla38A;
 Model casilla39A;
 Model casilla40A;
 
-//CASILLAS "ILUMINADA" (COCINADO AL PASAR POR LA CASILLA)
+
+//CASILLAS "ILUMINADA"
 Model casilla01AR;
 Model casilla02AR;
 Model casilla03AR;
@@ -748,6 +742,7 @@ Model casilla37AR;
 Model casilla38AR;
 Model casilla39AR;
 Model casilla40AR;
+
 
 // MODELOS DE LAS CASILLAS
 Model modeloCasilla01M;
@@ -809,13 +804,7 @@ Model brazoIzquieroSubZero;
 Model piernaDerechaSubZero;
 Model piernaIzquierdaSubZero;
 
-// MODELOS PARA ANIMACION 
-Model subZeroAnimacion;
-Model scorpionCabeza;
-Model scorpionCuerpo;
-
-// MODELOS DEL ENTORNO
-Model globo;
+// MODELO TABLEROS
 Model casaCynthia;
 Model arboltablero1;
 Model palmeratablero;
@@ -840,8 +829,6 @@ Model kabal;
 // MODELOS AUXILIARES
 Model esfera;
 
-									// ##################################### SKYBOX ##################################### \\
-
 // SKYBOX DIA 
 Skybox skyboxDia;
 // SKYBOX NOCHE
@@ -851,6 +838,7 @@ Skybox skyboxNoche;
 Material Material_brillante;
 Material Material_opaco;
 
+
 //Sphere cabeza = Sphere(0.5, 20, 20);
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
@@ -858,6 +846,7 @@ static double limitFPS = 1.0 / 60.0;
 
 // luz direccional
 DirectionalLight mainLight;
+DirectionalLight mainLight2;
 //para declarar varias luces de tipo pointlight
 PointLight pointLights[MAX_POINT_LIGHTS];
 SpotLight spotLights[MAX_SPOT_LIGHTS];
@@ -867,6 +856,7 @@ static const char* vShader = "shaders/shader_light.vert";
 
 // Fragment Shader
 static const char* fShader = "shaders/shader_light.frag";
+
 
 //función de calculo de normales por promedio de vértices 
 void calcAverageNormals(unsigned int* indices, unsigned int indiceCount, GLfloat* vertices, unsigned int verticeCount,
@@ -900,8 +890,6 @@ void calcAverageNormals(unsigned int* indices, unsigned int indiceCount, GLfloat
 
 void CreateObjects()
 {
-										// ##################################### PASTO ##################################### \\
-	
 	// PISO (PASTO)
 	unsigned int pisoPastoIndices[] = {
 		0, 1, 2,
@@ -1027,8 +1015,6 @@ int main()
 	//Camara que solo se mueve de forma ortogonal
 	CamaraAerea = Camera(glm::vec3(posCamX, 150.0f, posCamZ), glm::vec3(0.0f, 1.0f, 0.0f), 75.0f, -90.0f, 0.3f, 0.5f);
 
-	// camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.3f, 0.5f);
-
 	brickTexture = Texture("Textures/brick.png");
 	brickTexture.LoadTextureA();
 	dirtTexture = Texture("Textures/dirt.png");
@@ -1044,15 +1030,14 @@ int main()
 	pasto = Texture("Textures/pasto1.png");
 	pasto.LoadTextureA();
 
-										// ##################################### CARGA DE MODELOS ##################################### \\
 
-	// DADOS 
+	// DADOS MODELOS
 	dado4CarasM = Model();
 	dado4CarasM.LoadModel("Models/dado4Caras.obj");
 	dado8CarasM = Model();
 	dado8CarasM.LoadModel("Models/dado8Caras.obj");
 
-	// CASILLAS AZULES 
+	// CASILLAS MODELOS
 	casillaM = Model();
 	casillaM.LoadModel("Models/casilla.obj");
 	casilla01M = Model();
@@ -1136,7 +1121,7 @@ int main()
 	casilla40M = Model();
 	casilla40M.LoadModel("Models/casilla40.obj");
 
-	//CASILLAS AMARILLAS
+	//CASILLAS COLOR AMARILLO
 	casilla01A = Model();
 	casilla01A.LoadModel("Models/casilla01A.obj");
 	casilla02A = Model();
@@ -1218,7 +1203,7 @@ int main()
 	casilla40A = Model();
 	casilla40A.LoadModel("Models/casilla40A.obj");
 
-	//CASILLAS "ILUMINADAS" (COCINADO)
+	//CASILLAS COLOR "ILUMINADAS"
 	casilla01AR = Model();
 	casilla01AR.LoadModel("Models/casilla01AR.obj");
 	casilla02AR = Model();
@@ -1299,7 +1284,9 @@ int main()
 	casilla39AR.LoadModel("Models/casilla39AR.obj");
 	casilla40AR = Model();
 	casilla40AR.LoadModel("Models/casilla40AR.obj");
-	
+
+
+
 	// MODELOS DE LAS CASILLAS
 	modeloCasilla01M = Model();
 	modeloCasilla01M.LoadModel("Models/raidenCasilla01.obj");
@@ -1400,17 +1387,8 @@ int main()
 	piernaIzquierdaSubZero = Model();
 	piernaIzquierdaSubZero.LoadModel("Models/avatarSubZeroPiernaIzquierda.obj");
 
-	// MODELOS PARA ANIMACIONES
-	subZeroAnimacion = Model();
-	subZeroAnimacion.LoadModel("Models/subZeroAnimacion.obj");
-	scorpionCabeza = Model();
-	scorpionCabeza.LoadModel("Models/scorpionCabeza.obj");
-	scorpionCuerpo = Model();
-	scorpionCuerpo.LoadModel("Models/scorpionCuerpo.obj");
 
-	// MODELOS DEL ENTORNO
-	globo = Model();
-	globo.LoadModel("Models/globo.obj");
+	//MODELOS TABLERO
 	casaCynthia = Model();
 	casaCynthia.LoadModel("Models/casaCynthia.obj");
 	arboltablero1 = Model();
@@ -1464,8 +1442,6 @@ int main()
 	carroCoco = Model();
 	carroCoco.LoadModel("Models/carroCoco.obj");
 
-										// ##################################### SKYBOX ##################################### \\
-
 	// SKYBOX DE DIA 
 	std::vector<std::string> skyboxFaces01;
 	skyboxFaces01.push_back("Textures/Skybox/Skybox5Dia.tga");
@@ -1491,12 +1467,17 @@ int main()
 	Material_brillante = Material(4.0f, 256);
 	Material_opaco = Material(0.3f, 4);
 
-	// LUZ DIRECCIONAL
 	DirectionalLight* auxLight = &mainLight;
 	//luz direccional, sólo 1 y siempre debe de existir
 	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
-		0.5f, 0.1f,
+		0.8f, 0.5f,
 		0.0f, -1.0f, 0.0f);
+
+	mainLight2 = DirectionalLight(1.0f, 1.0f, 1.0f,
+		0.1f, 0.1f,
+		0.0f, -1.0f, 0.0f
+		);
+
 	//contador de luces puntuales
 	unsigned int pointLightCount = 0;
 	//Declaración de primer luz puntual
@@ -1505,6 +1486,7 @@ int main()
 		-200.0f, 4.0f, 80.0f,
 		0.3f, 0.2f, 0.1f);
 	pointLightCount++;
+
 	unsigned int spotLightCount = 0;
 	//linterna
 	spotLights[0] = SpotLight(1.0f, 1.0f, 1.0f,
@@ -1514,6 +1496,7 @@ int main()
 		1.0f, 0.0f, 0.0f,
 		5.0f);
 	spotLightCount++;
+
 	//LUZ textura 
 	spotLights[1] = SpotLight(1.0f, 0.0f, 0.0f,
 		0.8f, 8.0f,
@@ -1523,21 +1506,20 @@ int main()
 		40.0f);
 	spotLightCount++;
 	
+
+
+	
 	//se crean mas luces puntuales y spotlight 
 
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0,
 		uniformSpecularIntensity = 0, uniformShininess = 0, uniformTextureOffset=0;
 	GLuint uniformColor = 0;
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
-
-										// ##################################### TIEMPO ##################################### \\
-
-	// PARA CONTROLAR EL TIEMPO
+	// PARA CONTROLAR EL TIEMPO, AUN NO LO ESTOY OCUPANDO
 	glfwSetTime(0);
 
-										// ##################################### GRADOS ALEATORIOS ##################################### \\
-
-	// INICIALIZAR LA SEMILLA SOLO UNA VEZ
+	// GRADOS ALEATORIOS 
+	// Inicializar la semilla solo una vez
 	std::srand(static_cast<unsigned>(std::time(0)));
 
 	// PARA GRADOS DE X DADO 8 CARAS
@@ -1571,8 +1553,32 @@ int main()
 		deltaTime = now - lastTime;
 		deltaTime += (now - lastTime) / limitFPS;
 		lastTime = now;
+		//if (mainWindow.getsKeys()[GLFW_KEY_C]) {
+		//	camaraAereaAc = true;
+		//	printf("estoy entrando putos");
+		//}
+		////IMPLEMENTACION CAMARA
+		//if (camaraAereaAc) {
+		//	currentCamera = &CamaraAerea;
+		//	if (mainWindow.getsKeys()[GLFW_KEY_W]) {
+		//		posCamX += 15.0f;
+		//	}
+		//	if (mainWindow.getsKeys()[GLFW_KEY_S]) {
+		//		posCamX -= 15.0f;
+		//	}
+		//	if (mainWindow.getsKeys()[GLFW_KEY_A]) {
+		//		posCamZ -= 15.0f;
+		//	}
+		//	if (mainWindow.getsKeys()[GLFW_KEY_D]) {
+		//		posCamZ += 15.0f;
+		//	}
+		//}
+		//else {
+		//	currentCamera = &camera;
+		//	
+		//}
 
-											// ##################################### BAJAR AMBOS DADOS (Y) ##################################### \\
+
 
 		// PARA BAJAR
 		// TECLA Y
@@ -2346,16 +2352,12 @@ int main()
 			}
 		}
 
-											// ##################################### SUMA DE AMBOS DADOS ##################################### \\
-
 		// RESULTADO DE LOS DADOS
 		if (resultado8Caras != 0 && resultado4Caras != 0)
 		{
 			resultado = resultado4Caras + resultado8Caras;
 			//printf("RESULTADO = %i", resultado);
 		}
-
-							// ##################################### RESULTADO DIFERENTE AL ANTERIOR PARA ACTUALIZAR POSICION ##################################### \\
 
 		// VERIFICAR SI 'RESULTADO' HA CAMBIADO
 		if (resultado != resultadoAnterior01) {
@@ -2385,9 +2387,8 @@ int main()
 			//printf(" EL SEGUNDOOOOOO = %f y RESULTADOANTERIOR01 = %i             \n", mueveAvatar02Base, resultadoAnterior01);
 		}
 
-											// ##################################### LO QUE RESTA DE AVANZAR ##################################### \\
-
 		// DIFERENCIA
+		// DUDA SI ES BASE O ASI COMO ESTA EL MUEVEAVATAR01
 		if (((mueveAvatar01 + (resultado * 20)) > 200))
 		{
 			diferencia = (mueveAvatar01Base + (resultado * 20)) - 200;
@@ -2404,6 +2405,7 @@ int main()
 		}
 
 		// DIFERENCIA
+		// DUDA SI ES BASE O ASI COMO ESTA EL MUEVEAVATAR01
 		if (((mueveAvatar02 + (resultado * 20)) > 200))
 		{
 			diferencia01 = (mueveAvatar02Base + (resultado * 20)) - 200;
@@ -2420,6 +2422,7 @@ int main()
 		}
 
 		// DIFERENCIA
+		// DUDA SI ES BASE O ASI COMO ESTA EL MUEVEAVATAR01
 		if (((mueveAvatar03 + (resultado * 20)) > 200))
 		{
 			diferencia02 = (mueveAvatar03Base + (resultado * 20)) - 200;
@@ -2435,7 +2438,7 @@ int main()
 			diferencia02 = 0.0f;
 		}
 
-											// ##################################### AVANZAR CON EL RESULTADO ##################################### \\
+		// DEBERIA ESTAR OTRA AQUI, PERO MEJOR REINICIO TODO AL FINAL
 
 		// MOVIMIENTO AVATAR
 		if (mueveAvatar01 <= 200)
@@ -2557,6 +2560,7 @@ int main()
 				hayDiferencia = !hayDiferencia;
 			}
 		}
+
 		else if (mueveAvatar02 <= 200)
 		{
 			//printf("AVATAR VALOR: %f", mueveAvatar01);
@@ -2876,8 +2880,6 @@ int main()
 		}
 		else
 		{
-												// REINICAR TODOS LOS VALORES AL COMPLETAR UNA VUELTA
-												
 			// VARIABLES PARA ANIMACION DEL DADO DE 8 CARAS
 			subeBajaDado8 = 35.0f;
 			rotaDadox8 = 0.0f;
@@ -3092,12 +3094,12 @@ int main()
 			pinstripeTiempo = 0.0f;
 
 			// CASILLA 22
-			 lionSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			 lionRota = 0.0f;
-			 lionCont01 = 0;
-			 lionCont02 = 0;
-			 lion = true;
-			 lionTiempo = 0.0f;
+			lionSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			lionRota = 0.0f;
+			lionCont01 = 0;
+			lionCont02 = 0;
+			lion = true;
+			lionTiempo = 0.0f;
 
 			// CASILLA 23
 			babytSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
@@ -3140,12 +3142,12 @@ int main()
 			basicTiempo = 0.0f;
 
 			// CASILLA 28
-			 brianSubeBaja = -14.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			 brianRota = 0.0f;
-			  brianCont01 = 0;
-			  brianCont02 = 0;
-			  brian = true;
-			  brianTiempo = 0.0f;
+			brianSubeBaja = -14.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+			brianRota = 0.0f;
+			brianCont01 = 0;
+			brianCont02 = 0;
+			brian = true;
+			brianTiempo = 0.0f;
 
 			// CASILLA 29
 			ernieSubeBaja = -13.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
@@ -3284,8 +3286,7 @@ int main()
 			cocinado38 = 0;
 			cocinado39 = 0;
 		}
-
-									// ##################################### ACTIVAR ANIMACION DE LOS MODELOS DE CASILLAS ##################################### \\
+					// ##################################### ACTIVAR ANIMACION DE LOS MODELOS DE CASILLAS ##################################### \\
 
 		// ACTIVAR BANDERAS DE ANIMACION ESPECIAL
 		// CASILLA 2 - 10
@@ -3449,9 +3450,6 @@ int main()
 		{
 			carterCont01 += 1; //SE CAMBIA AL MODELO NUEVO
 		}
-
-										// ##################################### SUBIR AMBOS DADOS (U) ##################################### \\
-
 		// PARA SUBIR
 		// U
 		if (mainWindow.getsubeBajaDado() == false)
@@ -3494,7 +3492,7 @@ int main()
 			}
 		}
 
-									// ##################################### ANIMACION DE LOS MODELOS DE LAS CASILLAS ##################################### \\
+		// ##################################### ANIMACION DE LOS MODELOS DE LAS CASILLAS ##################################### \\
 
 		// INTERACCIINES ESPECIALES DE CASILLAS
 		// RAIDEN
@@ -5154,7 +5152,6 @@ int main()
 				}
 			}
 		}
-
 		//Recibir eventos del usuario
 		glfwPollEvents();
 		camera.keyControl(mainWindow.getsKeys(), deltaTime);
@@ -5163,15 +5160,16 @@ int main()
 		// Clear the window
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-								// ##################################### CONTROL LUZ DIRECCIONAL ##################################### 
-		glm::vec3 sunDirection;
+		
+		glm::vec3 sunDirection; 
 		FaseDia = now - dianocheTiempo;
 
+		
 		if (FaseDia < totalDia) {
 			auxLight = &mainLight;
 			skyboxDia.DrawSkybox(currentCamera->calculateViewMatrix(), projection);
-
+			esNoche = false;
+			esDia = true;
 			//Simulando el sol de este a oeste
 			angle = (FaseDia / totalDia) *2.0f * pi;
 			sunDirection = glm::vec3(cos(angle), -sin(angle), 0.0f);
@@ -5199,6 +5197,8 @@ int main()
 			{
 				adjustedIntensity = 0.2f;
 				skyboxNoche.DrawSkybox(currentCamera->calculateViewMatrix(), projection);
+				esNoche = true;
+				esDia = false;
 			}
 			mainLight.SetDirection(sunDirection);
 			mainLight.SetIntensity(adjustedIntensity);
@@ -5206,7 +5206,7 @@ int main()
 		}
 		else if(FaseDia<ciclototal){
 			
-			//printf("Estoy entrando");
+			printf("Estoy entrando");
 			/*auxLight = &mainLight2;*/
 			skyboxNoche.DrawSkybox(currentCamera->calculateViewMatrix(), projection);
 			mainLight.SetIntensity(0.2f);
@@ -5216,10 +5216,10 @@ int main()
 		else {
 			dianocheTiempo = glfwGetTime();
 		}
-
-		/*	if ((glfwGetTime() - dianocheTiempo) < 120)
+		
+	/*	if ((glfwGetTime() - dianocheTiempo) < 120)
 		{
-
+			
 			skyboxDia.DrawSkybox(camera.calculateViewMatrix(), projection);
 			mainLight.SetDirection(sunDirection);
 		}
@@ -5232,7 +5232,6 @@ int main()
 		{
 			dianocheTiempo = glfwGetTime();
 		}*/
-
 		shaderList[0].UseShader();
 		uniformModel = shaderList[0].GetModelLocation();
 		uniformProjection = shaderList[0].GetProjectionLocation();
@@ -5240,7 +5239,6 @@ int main()
 		uniformEyePosition = shaderList[0].GetEyePositionLocation();
 		uniformColor = shaderList[0].getColorLocation();
 		uniformTextureOffset = shaderList[0].getOffsetLocation();
-
 		//información en el shader de intensidad especular y brillo
 		uniformSpecularIntensity = shaderList[0].GetSpecularIntensityLocation();
 		uniformShininess = shaderList[0].GetShininessLocation();
@@ -5256,7 +5254,7 @@ int main()
 		/*spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());*/
 
 		//información al shader de fuentes de iluminación
-		shaderList[0].SetDirectionalLight(&mainLight);
+		shaderList[0].SetDirectionalLight(auxLight);
 		shaderList[0].SetPointLights(pointLights, pointLightCount);
 		shaderList[0].SetSpotLights(spotLights, spotLightCount);
 
@@ -5265,8 +5263,6 @@ int main()
 		glm::mat4 model(1.0);
 		glm::mat4 modelaux(1.0);
 		glm::vec2 toffset = glm::vec2(0.0f, 0.0f);
-
-											// ##################################### MATRICES AUXILIAR ##################################### \\
 
 		// MATRIZ AUXILIAR PARA LAS CASILLAS
 		glm::mat4 modelauxCasillas(1.0);
@@ -5285,7 +5281,7 @@ int main()
 		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, -2.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(30.0f, 1.0f, 30.0f));
+		model = glm::scale(model, glm::vec3(22.5f, 1.0f, 22.5f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
@@ -5294,8 +5290,6 @@ int main()
 
 		meshList[2]->RenderMesh();
 		
-											// ##################################### DADOS ##################################### \\
-
 		// DADO DE 4 CARAS
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, subeBajaDado4, 20.0));
@@ -5317,1983 +5311,6 @@ int main()
 		model = glm::rotate(model, rotaDadoy8 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		dado8CarasM.RenderModel();
-
-											// ##################################### CASILLAS ##################################### \\
-
-		// CASILLAS 
-		model = glm::mat4(1.0);
-
-		// 1
-		model = glm::translate(model, glm::vec3(-100.0f, 0.3f, 100.0));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-
-		modelauxCasillas = model; // GUARDA
-
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (/*(glfwGetTime() - dianocheTiempo) < 60*/FaseDia < totalDia)
-		{
-			casilla01A.RenderModel();
-		}
-		else if (/*(glfwGetTime() - dianocheTiempo) <*/ FaseDia < (totalDia + atardecer))
-		{
-			casilla01M.RenderModel();
-		}
-		/*else
-		{
-			dianocheTiempo = glfwGetTime();
-		}*/
-
-		//casilla01A.RenderModel(); // Amarillo
-		//casilla01M.RenderModel(); // Azul
-		//casilla01AR.RenderModel(); // Cocinadas
-
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 2
-		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado01 >= 1)
-		{
-			casilla02AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla02A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla02M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla02M.RenderModel();
-		//casilla02A.RenderModel();
-		//casilla02AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 3
-		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado02 >= 1)
-		{
-			casilla03AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla03A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla03M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla03M.RenderModel();
-		//casilla03A.RenderModel();
-		//casilla03AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 4
-		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado03 >= 1)
-		{
-			casilla04AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla04A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla04M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla04M.RenderModel();
-		//casilla04A.RenderModel();
-		//casilla04AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 5
-		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado04 >= 1)
-		{
-			casilla05AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla05A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla05M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla05M.RenderModel();
-		//casilla05A.RenderModel();
-		//casilla05AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 6
-		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado05 >= 1)
-		{
-			casilla06AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla06A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla06M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla06M.RenderModel();
-		//casilla06A.RenderModel();
-		//casilla06AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 7
-		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado06 >= 1)
-		{
-			casilla07AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla07A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla07M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla07M.RenderModel();
-		//casilla07A.RenderModel();
-		//casilla07AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 8
-		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado07 >= 1)
-		{
-			casilla08AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla08A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla08M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla08M.RenderModel();
-		//casilla08A.RenderModel();
-		//casilla08AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 9
-		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado08 >= 1)
-		{
-			casilla09AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla09A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla09M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla09M.RenderModel();
-		//casilla09A.RenderModel();
-		//casilla09AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 10
-		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado09 >= 1)
-		{
-			casilla10AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla10A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla10M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla10M.RenderModel();
-		//casilla10A.RenderModel();
-		//casilla10AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 11
-		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado10 >= 1)
-		{
-			casilla11AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla11A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla11M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla11M.RenderModel();
-		//casilla11A.RenderModel();
-		//casilla11AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 12
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado11 >= 1)
-		{
-			casilla12AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla12A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla12M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla12M.RenderModel();
-		//casilla12A.RenderModel();
-		//casilla12AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 13
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado12 >= 1)
-		{
-			casilla13AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla13A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla13M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla13M.RenderModel();
-		//casilla13A.RenderModel();
-		//casilla13AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 14
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado13 >= 1)
-		{
-			casilla14AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla14A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla14M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla14M.RenderModel();
-		//casilla14A.RenderModel();
-		//casilla14AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 15
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
-		/*model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado14 >= 1)
-		{
-			casilla15AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla15A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla15M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla15M.RenderModel();
-		//casilla15A.RenderModel();
-		//casilla15AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 16
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado15 >= 1)
-		{
-			casilla16AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla16A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla16M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla16M.RenderModel();
-		//casilla16A.RenderModel();
-		//casilla16AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 17
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado16 >= 1)
-		{
-			casilla17AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla17A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla17M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla17M.RenderModel();
-		//casilla17A.RenderModel();
-		//casilla17AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 18
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado17 >= 1)
-		{
-			casilla18AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla18A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla18M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla18M.RenderModel();
-		//casilla18A.RenderModel();
-		//casilla18AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 19
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado18 >= 1)
-		{
-			casilla19AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla19A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla19M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla19M.RenderModel();
-		//casilla19A.RenderModel();
-		//casilla19AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 20
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado19 >= 1)
-		{
-			casilla20AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla20A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla20M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla20M.RenderModel();
-		//casilla20A.RenderModel();
-		//casilla20AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 21
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
-
-		modelauxCasillas = model; // GUARDA
-
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado20 >= 1)
-		{
-			casilla21AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla21A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla21M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla21M.RenderModel();
-		//casilla21A.RenderModel();
-		//casilla21AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 22
-		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado21 >= 1)
-		{
-			casilla22AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla22A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla22M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla22M.RenderModel();
-		//casilla22A.RenderModel();
-		//casilla22AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 23
-		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado22 >= 1)
-		{
-			casilla23AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla23A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla23M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla23M.RenderModel();
-		//casilla23A.RenderModel();
-		//casilla23AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 24
-		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado23 >= 1)
-		{
-			casilla24AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla24A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla24M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla24M.RenderModel();
-		//casilla24A.RenderModel();
-		//casilla24AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 25
-		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado24 >= 1)
-		{
-			casilla25AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla25A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla25M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla25M.RenderModel();
-		//casilla25A.RenderModel();
-		//casilla25AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 26
-		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado25 >= 1)
-		{
-			casilla26AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla26A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla26M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla26M.RenderModel();
-		//casilla26A.RenderModel();
-		//casilla26AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 27
-		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado26 >= 1)
-		{
-			casilla27AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla27A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla27M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla27M.RenderModel();
-		//casilla27A.RenderModel();
-		//casilla27AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 28
-		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
-		/*model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
-		modelauxCasillas = model; // GUARDA
-
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado27 >= 1)
-		{
-			casilla28AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla28A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla28M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla28M.RenderModel();
-		//casilla28A.RenderModel();
-		//casilla28AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 29
-		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado28 >= 1)
-		{
-			casilla29AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla29A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla29M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla29M.RenderModel();
-		//casilla29A.RenderModel();
-		//casilla29AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 30
-		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado29 >= 1)
-		{
-			casilla30AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla30A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla30M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla30M.RenderModel();
-		//casilla30A.RenderModel();
-		//casilla30AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 31
-		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
-
-		modelauxCasillas = model; // GUARDA
-
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado30 >= 1)
-		{
-			casilla31AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla31A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla31M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla31M.RenderModel();
-		//casilla31A.RenderModel();
-		//casilla31AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 32
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado31 >= 1)
-		{
-			casilla32AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla32A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla32M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla32M.RenderModel();
-		//casilla32A.RenderModel();
-		//casilla32AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 33
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f,-20.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado32 >= 1)
-		{
-			casilla33AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla33A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla33M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla33M.RenderModel();
-		//casilla33A.RenderModel();
-		//casilla33AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 34
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado33 >= 1)
-		{
-			casilla34AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla34A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla34M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla34M.RenderModel();
-		//casilla34A.RenderModel();
-		//casilla34AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 35
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado34 >= 1)
-		{
-			casilla35AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla35A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla35M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla35M.RenderModel();
-		//casilla35A.RenderModel();
-		//casilla35AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 36
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado35 >= 1)
-		{
-			casilla36AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla36A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla36M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla36M.RenderModel();
-		//casilla36A.RenderModel();
-		//casilla36AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 37
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado36 >= 1)
-		{
-			casilla37AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla37A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla37M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla37M.RenderModel();
-		//casilla37A.RenderModel();
-		//casilla37AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 38
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado37 >= 1)
-		{
-			casilla38AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla38A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla38M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla38M.RenderModel();
-		//casilla38A.RenderModel();
-		//casilla38AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 39
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado38 >= 1)
-		{
-			casilla39AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla39A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla39M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla39M.RenderModel();
-		//casilla39A.RenderModel();
-		//casilla39AR.RenderModel();
-
-		model = modelauxCasillas; // A PARTIR DE 
-
-		// 40
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
-
-		modelauxCasillas = model; // GUARDA
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-
-		if (cocinado39 >= 1)
-		{
-			casilla40AR.RenderModel();
-		}
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			casilla40A.RenderModel();
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			casilla40M.RenderModel();
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
-		//casilla40M.RenderModel();
-		//casilla40A.RenderModel();
-		//casilla40AR.RenderModel();
-
-											// ##################################### MODELOS DE LAS CASILLAS ##################################### \\
-
-		// RAIDEN - CASILLA 02
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(-120.0f, /*9.9f*/raidenSubeBaja, 80.0)); //EN EL TRANSLATE DE Y SE CAMBIA POR EL NOMBRE DE LA VARIABLE
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -raidenRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f)); //SE LE AUMENTA EL ROUTETE DONDE SE PONE ROTA EN TODAS VA EL -
-		model = glm::scale(model, glm::vec3(7.0f, 7.0f, 7.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla01M.RenderModel();
-
-		// SCORPION - CASILLA 03
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(-120.0f,/* 10.1f*/scorpionSubeBaja, 60.0));
-		model = glm::rotate(model, -scorpionRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(7.0f, 7.0f, 7.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla02M.RenderModel();
-
-		// SHAO KAHN - CASILLA 04
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(-120.0f, /*9.9f*/shaoSubeBaja, 40.0));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -shaoRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(7.0f, 7.0f, 7.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla03M.RenderModel();
-
-		// HELL MOUNTAIN - CASILLA 05
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(-120.0f, /*4.4f*/hellSubeBaja, 20.0));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -hellRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.06f, 0.06f, 0.06f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla04M.RenderModel();
-
-		// VIEWER - CASILLA 06
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(-120.0f, /*5.5f*/viewerSubeBaja, 0.0));
-		model = glm::rotate(model, -viewerRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.09f, 0.09f, 0.09f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla05M.RenderModel();
-
-		// TREE STUMP - CASILLA 07
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(-120.0f, /*8.55f*/tree_stumpSubeBaja, -20.0));
-		model = glm::rotate(model, -tree_stumpRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.08f, 0.08f, 0.08f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla06M.RenderModel();
-
-		// PINE TREE - CASILLA 08
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(-120.0f, /*9.7f*/pine_treeSubeBaja, -40.0));
-		model = glm::rotate(model, -pine_treeRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(7.0f, 7.0f, 7.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla07M.RenderModel();
-
-		// FIRE DRAGON - CASILLA 09
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(-120.0f, /*6.0f*/fire_dragonSubeBaja, -55.0));
-		model = glm::rotate(model, -fire_dragonRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(7.0f, 7.0f, 7.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla08M.RenderModel();
-
-		// SCORPION - CASILLA 10
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(-120.0f,/* 5.9f*/scorpion2SubeBaja, -80.0));
-		model = glm::rotate(model, -scorpion2Rota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(20.0f, 20.0f, 20.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla09M.RenderModel();
-
-
-
-		// WOLF - CASILLA 11
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(-100.0f, /*5.9f*/wolfSubeBaja, -120.0));
-		model = glm::rotate(model, -wolfRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla11M.RenderModel();
-
-		// BARAKA - CASILLA 12
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(-80.0f, /*10.0f*/BarakaSubeBaja, -120.0));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -BarakaRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(8.5f, 8.5f, 8.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla12M.RenderModel();
-
-		// BO RAI CHO - CASILLA 13
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(-60.0f, /*8.5f*/boSubeBaja, -120.0));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -boRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(3.5f, 3.5f, 3.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla13M.RenderModel();
-
-		// CASSIE CAGE - CASILLA 14
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(-40.0f, /*10.0f*/cassieSubeBaja, -120.0));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -cassieRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(8.5f, 8.5f, 8.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla14M.RenderModel();
-
-		// SKULL - CASILLA 15
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(-20.0f, /*2.0f*/skullSubeBaja, -120.0));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -skullRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.325f, 0.325f, 0.325f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla15M.RenderModel();
-
-		// ROCKY ROAD - CASILLA 16
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(0.0f, /*2.0f*/rockySubeBaja, -120.0));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -rockyRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.325f, 0.325f, 0.325f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla16M.RenderModel();
-
-		// NEOCORTEX - CASILLA 17
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(20.0f, /*4.0f*/drneoSubeBaja, -120.0));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -drneoRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(15.0f, 15.0f, 15.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla17M.RenderModel();
-
-		// FROG - CASILLA 18
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(40.0f, /*2.0f*/frogSubeBaja, -120.0));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -frogRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla18M.RenderModel();
-
-		// POLAR - CASILLA 19
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(60.0f, /*5.0f*/polarSubeBaja, -120.0));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -polarRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.16f, 0.16f, 0.16f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla19M.RenderModel();
-
-		// WIZARD - CASILLA 20
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(80.0f, /*6.8f*/wizardSubeBaja, -120.0));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -wizardRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.18f, 0.18f, 0.18f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla20M.RenderModel();
-
-		// PINSTRIPE - CASILLA 21
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(120.0f, /*pinstripe*/pinstripeSubeBaja, -100.0));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -pinstripeRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(6.0f, 6.0f, 6.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla21M.RenderModel();
-
-		// LION - CASILLA 22
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(120.0f, /*6.0f*/lionSubeBaja, -80.0));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -lionRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.25f, 1.25f, 1.25f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla22M.RenderModel();
-
-		// BABY T - CASILLA 23
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(120.0f, /*5.2f*/babytSubeBaja, -60.0));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -babytRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla23M.RenderModel();
-
-		// AKU AKU - CASILLA 24
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(120.0f, /*4.0f*/akuakuSubeBaja, -40.0));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -akuakuRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla24M.RenderModel();
-
-		// PALM_TREE - CASILLA 25
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(120.0f, /*6.0f*/palm_treeSubeBaja, -20.0));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -palm_treeRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.25f, 0.25f, 0.25f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla25M.RenderModel();
-
-		// FLOWERS - CASILLA 26
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(120.0f, /*4.2f*/flowersSubeBaja, 0.0));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -flowersRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla26M.RenderModel();
-
-		// BASIC_TREE - CASILLA 27
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(120.0f, /*5.2f*/basicSubeBaja, 20.0));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -basicRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		modeloCasilla27M.RenderModel();
-
-		//Brian - Casilla28
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(120.0f, /*7.5f*/brianSubeBaja, 40.0));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -brianRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		ModeloCasilla28.RenderModel();
-
-		//Ernie - Casilla29
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(124.0f, /*9.5f*/ernieSubeBaja, 60.0));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -ernieRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		ModeloCasilla29.RenderModel();
-
-		//Lois - Casilla30
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(120.0f, /*9.5f*/luisaSubeBaja, 80.0));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -luisaRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		ModeloCasilla30.RenderModel();
-
-		//Meg - Casilla31
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(100.0f, /*9.0f*/megSubeBaja, 120.0));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -megRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		ModeloCasilla31.RenderModel();
-
-		//Peter - Casilla32
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(80.0f, /*9.0f*/peterSubeBaja, 120.0));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -peterRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		ModeloCasilla32.RenderModel();
-
-		//Joe - Casilla33
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(60.0f, /*9.0f*/joeSubeBaja, 120.0));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -joeRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		ModeloCasilla33.RenderModel();
-
-		//Chris - Casilla34
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(40.0f, /*-1.0f*/chrisSubeBaja, 120.0));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -chrisRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(11.0f, 11.0f, 11.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		ModeloCasilla34.RenderModel();
-
-		//Drunken - Casilla35
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(20.0f, /*4.5f*/casaSubeBaja, 120.0));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -casaRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		ModeloCasilla35.RenderModel();
-
-		//Arbol - Casilla36
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, /*9.5f*/treeSubeBaja, 120.0));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -treeRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		ModeloCasilla36.RenderModel();
-
-		//Arbol Navidad - Casilla37
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-20.0f, /*7.0f*/navidadSubeBaja, 120.0));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -navidadRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		ModeloCasilla37.RenderModel();
-
-		//Vinny - Casilla38
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-40.0f, /*7.5f*/vinnySubeBaja, 120.0));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -vinnyRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		ModeloCasilla38.RenderModel();
-
-		//Flores - Casilla39
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-60.0f, /*7.0f*/flowers2SubeBaja, 125.0));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -flowers2Rota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		ModeloCasilla39.RenderModel();
-
-		//Carter - Casilla40
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-80.0f, /*9.6f*/carterSubeBaja, 120.0));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -carterRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		ModeloCasilla40.RenderModel();
-
-											// ##################################### SUBZERO AVATAR ##################################### \\
-
-		// AVATAR SUB ZERO PARA RECORRIDO
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(-100.0f, 19.8f, 100.0f));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-
-		// RECORRIDO AVATAR
-		// EL PRIMER TRANSLATE (HASTA LLEGAR A UNA PARTE)
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, mueveAvatar01));
-		model = glm::rotate(model, rotaAvatar01 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-
-		// RECORRIDO AVATAR
-		// EL PRIMER TRANSLATE (HASTA LLEGAR A UNA PARTE)
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, mueveAvatar02));
-		model = glm::rotate(model, rotaAvatar02 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-
-		// RECORRIDO AVATAR
-		// EL PRIMER TRANSLATE (HASTA LLEGAR A UNA PARTE)
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, mueveAvatar03));
-		model = glm::rotate(model, rotaAvatar03 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-
-		// RECORRIDO AVATAR
-		// EL PRIMER TRANSLATE (HASTA LLEGAR A UNA PARTE)
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, mueveAvatar04));
-		model = glm::rotate(model, rotaAvatar04 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-
-
-		modelauxTorso = model; // GUARDA TORSO
-
-		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		torsoSubZero.RenderModel();
-
-		model = modelauxTorso; // A PARTIR DE TORSO
-
-		model = glm::translate(model, glm::vec3(-3.5f, 2.0f, -0.3f));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
-
-		modelauxBrazoDerecho = model; // GUARDA BRAZO DERECHO
-
-		model = glm::scale(model, glm::vec3(1.2f, 1.2f, 1.2f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		esfera.RenderModel();
-
-		model = modelauxBrazoDerecho; // A PARTIR DE BRAZO DERECHO
-
-		model = glm::translate(model, glm::vec3(-0.3f, 0.0f, 0.1f));
-		model = glm::rotate(model, -rotaBrazoD * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		brazoDerechoSubZero.RenderModel();
-
-		model = modelauxTorso; // A PARTIR DE TORSO
-
-		model = glm::translate(model, glm::vec3(3.5f, 2.0f, -0.3f));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
-
-		modelauxBrazoIzquierdo = model; // GUARDA BRAZO IZQUIERDO
-
-		model = glm::scale(model, glm::vec3(1.2f, 1.2f, 1.2f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		esfera.RenderModel();
-
-		model = modelauxBrazoIzquierdo; // A PARTIR DE BRAZO IZQUIERDO
-
-		model = glm::translate(model, glm::vec3(0.3f, 0.0f, 0.1f));
-		model = glm::rotate(model, rotaBrazoI * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		brazoIzquieroSubZero.RenderModel();
-
-		model = modelauxTorso; // A PARTIR DE TORSO
-
-		model = glm::translate(model, glm::vec3(0.0f, -5.0f, 0.0f));
-
-		modelauxCintura = model; // GUARDA CINTURA
-
-		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		cinturaSubZero.RenderModel();
-
-		model = modelauxCintura; //  PARTIR DE LA CINTURA
-
-		model = glm::translate(model, glm::vec3(-1.3f, -1.5f, 0.0f));
-
-		modelauxPiernaDerecha = model; // GUARDA PIERNA DERECHA
-
-		model = glm::scale(model, glm::vec3(1.2f, 1.2f, 1.2f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		esfera.RenderModel();
-
-		model = modelauxPiernaDerecha; // A PARTIR DE LA PIERNA DERECHA
-
-		model = glm::translate(model, glm::vec3(0.0f, 0.3f, 0.0f));
-		model = glm::rotate(model, rotaPiernaD * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		piernaDerechaSubZero.RenderModel();
-
-		model = modelauxCintura; //  PARTIR DE LA CINTURA
-
-		model = glm::translate(model, glm::vec3(1.3f, -1.5f, 0.0f));
-
-		modelauxPiernaIzquierda = model; // GUARDA PIERNA IZQUIERDA
-
-		model = glm::scale(model, glm::vec3(1.2f, 1.2f, 1.2f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		esfera.RenderModel();
-
-		model = modelauxPiernaIzquierda; // A PARTIR DE LA PIERNA IZQUIERDA
-
-		model = glm::translate(model, glm::vec3(0.0f, 0.3f, 0.0f));
-		model = glm::rotate(model, rotaPiernaI * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		piernaIzquierdaSubZero.RenderModel();
-
-											// ##################################### MODELOS DE ANIMACIONES ##################################### \\
-
-		// SUBZERO
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-15.0f, 10.0f, -10.0));
-		model = glm::rotate(model, -135 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		subZeroAnimacion.RenderModel();
-
-												// ##################################### CARRO ##################################### \\
-
-		//CARROS CARRETERA
-
-		model = glm::mat4(1.0);
-
-		if (!enMovimientoX && !enMovimientoZ) {
-			if (mueveCarro < 320) {
-				// Movimiento en el primer tramo (en el eje X)
-				mueveCarro += mueveCarroOffset * deltaTime;
-
-				// Actualiza la posición del modelo
-				model = glm::translate(glm::mat4(1.0f), glm::vec3(-160.0f + mueveCarro, 0.0f, 160.0f));
-				model = glm::rotate(model, glm::radians(giraCarro), glm::vec3(0.0f, 1.0f, 0.0f));
-			}
-			else {
-				// Solo entra en la curva una vez
-				if (!enCurva) {
-					enCurva = true;
-				}
-
-				if (giraCarro < giraCarroTarget) { // Rota hasta alcanzar el ángulo objetivo
-					giraCarro += 1.0f * deltaTime;
-
-					mueveCarro += curvaCarroOffset * deltaTime;
-
-					// Calcular el vector de dirección
-					float radians = glm::radians(giraCarro);
-					glm::vec3 direccion;
-					direccion.x = cos(radians);
-					direccion.z = sin(radians);
-
-					// Actualiza la posición del modelo durante la curva
-					model = glm::translate(glm::mat4(1.0f), glm::vec3(-160.0f + mueveCarro, 0.0f, 160.0f)) * glm::rotate(glm::mat4(1.0f), glm::radians(giraCarro), glm::vec3(0.0f, 1.0f, 0.0f));
-				}
-				else {
-					giraCarro = giraCarroTarget;
-					enCurva = false;
-
-					if (mueveCarro2 < 320) {
-						mueveCarro2 += mueveCarroOffset * deltaTime;
-						model = glm::translate(glm::mat4(1.0f), glm::vec3(-160.0f + mueveCarro, 0.0f, 160.0f - mueveCarro2)) * glm::rotate(glm::mat4(1.0f), glm::radians(giraCarro), glm::vec3(0.0f, 1.0f, 0.0f));
-					}
-					else {
-						enMovimientoX = true;
-						mueveCarro2 = 320.0f;
-						giraCarro = giraCarroTarget;
-					}
-				}
-			}
-		}
-		else if (enMovimientoX) {
-			//printf("Estado de enMovimientoX: %d, mueveCarro2: %f\n", enMovimientoZ, mueveCarro2);
-
-			if (!enCurva) {
-				enCurva = true;
-			}
-
-			if (giraCarro < giraCarroTargetX) {
-				giraCarro += 1.0f * deltaTime;
-				if (giraCarro > giraCarroTargetX) {
-					giraCarro = giraCarroTargetX;
-				}
-				float radians = glm::radians(giraCarro);
-				model = glm::translate(glm::mat4(1.0f), glm::vec3(-160.0f + mueveCarro, 0.0f, -160.0f)) *
-					glm::rotate(glm::mat4(1.0f), glm::radians(giraCarro), glm::vec3(0.0f, 1.0f, 0.0f));
-
-				//printf("Durante curva -> mueveCarro: %f, giraCarro: %f\n", mueveCarro, giraCarro);
-			}
-
-			// Cambia al movimiento en Z positivo cuando llega a -160 en X
-			if (giraCarro >= giraCarroTargetX) {
-				if (mueveCarro > 0) { // Mover en X negativo hasta alcanzar -160
-					mueveCarro -= mueveCarroOffset * deltaTime;
-					model = glm::translate(glm::mat4(1.0f), glm::vec3(-160.0f + mueveCarro, 0.0f, -160.0f)) *
-						glm::rotate(glm::mat4(1.0f), glm::radians(giraCarro), glm::vec3(0.0f, 1.0f, 0.0f));
-				}
-				else {
-					// Cambio a movimiento en Z positivo
-					enMovimientoX = false;
-					enMovimientoZ = true;
-					enCurva = false;
-					mueveCarro = 0.0f; // Asegurar que se detenga exactamente en -160 en X
-					mueveCarro2 = 0.0f; // Asegurar que se detenga exactamente en -160 en X
-					giraCarro = giraCarroTargetX; // Mantener el ángulo final de 270°
-				}
-			}
-
-			//printf("Final X movimiento -> mueveCarro: %f, giraCarro: %f\n", mueveCarro, giraCarro);
-		}
-		else if (enMovimientoZ) {
-			// Solo entra en la curva una vez
-			if (!enCurva) {
-				enCurva = true;
-			}
-
-			if (giraCarro < 0) { // Solo girar 5 grados (de 270 a 265)
-				giraCarro -= 0.5f * deltaTime; // Velocidad de giro más lenta
-				mueveCarro2 += curvaCarroOffset * deltaTime;
-
-				// Calcular el vector de dirección
-				float radians = glm::radians(giraCarro);
-				glm::vec3 direccion;
-				direccion.x = cos(radians);
-				direccion.z = sin(radians);
-
-				// Actualiza la posición del modelo durante la curva
-				model = glm::translate(glm::mat4(1.0f),
-					glm::vec3(-160.0f, 0.0f, -160.0f + mueveCarro2)) *
-					glm::rotate(glm::mat4(1.0f), glm::radians(giraCarro), glm::vec3(0.0f, 1.0f, 0.0f));
-			}
-			else {
-				giraCarro = 0.0f; // Mantener un giro muy sutil
-				enCurva = false;
-
-				if (mueveCarro2 < 320) {
-					mueveCarro2 += mueveCarroOffset * deltaTime;
-					model = glm::translate(glm::mat4(1.0f),
-						glm::vec3(-160.0f, 0.0f, -160.0f + mueveCarro2)) *
-						glm::rotate(glm::mat4(1.0f), glm::radians(giraCarro), glm::vec3(0.0f, 1.0f, 0.0f));
-				}
-				else {
-					enMovimientoZ = false;
-					mueveCarro2 = 0.0f;
-					giraCarro = 90.0f;
-				}
-			}
-
-			//printf("Durante curva -> mueveCarro2: %f, giraCarro: %f\n", mueveCarro2, giraCarro);
-		}
-		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		carroCoco.RenderModel();
-
-											// ##################################### CARRETERA ##################################### \\
-
-		//CARRETERA
-		//RECTA 1
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(34.2f, -1.0f, 166.0));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 12.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		recta.RenderModel();
-
-		//CURVA 1
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(166.0f, -1.0f, 161.5f));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		curva.RenderModel();
-
-		//RECTA 2
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(169.0f, -1.0f, -35.0));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 12.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		recta.RenderModel();
-	
-		//CURVA 2
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(164.5f, -1.0f, -166.8));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		curva.RenderModel();
-
-		//RECTA 3
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(34.0f, -1.0f, -170.0));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 12.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		recta.RenderModel();
-
-		//CURVA 3
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-164.0f, -1.0f, -165.5f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		curva.RenderModel();
-
-		//RECTA 4
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-167.0f, -1.0f, -35.0));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 12.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		recta.RenderModel();
-
-		//CURVA 4
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-162.5f, -1.0f, 162.9));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		curva.RenderModel();
-
-											// ##################################### ENTORNO ##################################### \\
-
-		// GLOBO 1
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(250.0f, 150.0f, 250.0));
-		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		globo.RenderModel();
-
-		// GLOBO 2
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(250.0f, 150.0f, -250.0));
-		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		globo.RenderModel();
-
-		// GLOBO 3
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-250.0f, 150.0f, 250.0));
-		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		globo.RenderModel();
-
-		// GLOBO 4
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-250.0f, 150.0f, -250.0));
-		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		globo.RenderModel();
 
 		//OBJETOS EN EL TABLERO
 		//Casa Cynthia
@@ -7671,8 +5688,1831 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		arbusto.RenderModel();
 
+		// ##################################### CASILLAS ##################################### \\
 
-											// ##################################### SUELO Y LETRERO ANIMADO ##################################### \\
+// CASILLAS 
+		model = glm::mat4(1.0);
+
+		// 1
+		model = glm::translate(model, glm::vec3(-100.0f, 0.3f, 100.0));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+		modelauxCasillas = model; // GUARDA
+
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (esDia)
+		{
+			casilla01A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla01M.RenderModel();
+		}
+		/*else
+		{
+			dianocheTiempo = glfwGetTime();
+		}*/
+
+		//casilla01A.RenderModel(); // Amarillo
+		//casilla01M.RenderModel(); // Azul
+		//casilla01AR.RenderModel(); // Cocinadas
+
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 2
+		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado01 >= 1)
+		{
+			casilla02AR.RenderModel();
+		}
+		
+		if (esDia)
+		{
+			casilla02A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla02M.RenderModel();
+		}
+		
+
+		//casilla02M.RenderModel();
+		//casilla02A.RenderModel();
+		//casilla02AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 3
+		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado02 >= 1)
+		{
+			casilla03AR.RenderModel();
+		}
+		
+		if (esDia)
+		{
+			casilla03A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla03M.RenderModel();
+		}
+
+		//casilla03M.RenderModel();
+		//casilla03A.RenderModel();
+		//casilla03AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 4
+		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado03 >= 1)
+		{
+			casilla04AR.RenderModel();
+		}
+		
+		if (esDia)
+		{
+			casilla04A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla04M.RenderModel();
+		}
+
+		//casilla04M.RenderModel();
+		//casilla04A.RenderModel();
+		//casilla04AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 5
+		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado04 >= 1)
+		{
+			casilla05AR.RenderModel();
+		}
+		
+		if (esDia)
+		{
+			casilla05A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla05M.RenderModel();
+		}
+
+		//casilla05M.RenderModel();
+		//casilla05A.RenderModel();
+		//casilla05AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 6
+		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado05 >= 1)
+		{
+			casilla06AR.RenderModel();
+		}
+		
+		if (esDia)
+		{
+			casilla06A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla06M.RenderModel();
+		}
+
+		//casilla06M.RenderModel();
+		//casilla06A.RenderModel();
+		//casilla06AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 7
+		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado06 >= 1)
+		{
+			casilla07AR.RenderModel();
+		}
+		
+		if (esDia)
+		{
+			casilla07A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla07M.RenderModel();
+		}
+
+
+		//casilla07M.RenderModel();
+		//casilla07A.RenderModel();
+		//casilla07AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 8
+		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado07 >= 1)
+		{
+			casilla08AR.RenderModel();
+		}
+		
+		if (esDia)
+		{
+			casilla08A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla08M.RenderModel();
+		}
+
+
+		//casilla08M.RenderModel();
+		//casilla08A.RenderModel();
+		//casilla08AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 9
+		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado08 >= 1)
+		{
+			casilla09AR.RenderModel();
+		}
+		
+
+		if (esDia)
+		{
+			casilla09A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla09M.RenderModel();
+		}
+
+		//casilla09M.RenderModel();
+		//casilla09A.RenderModel();
+		//casilla09AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 10
+		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado09 >= 1)
+		{
+			casilla10AR.RenderModel();
+		}
+		
+		if (esDia)
+		{
+			casilla10A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla10M.RenderModel();
+		}
+
+
+		//casilla10M.RenderModel();
+		//casilla10A.RenderModel();
+		//casilla10AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 11
+		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado10 >= 1)
+		{
+			casilla11AR.RenderModel();
+		}
+		
+		if (esDia)
+		{
+			casilla11A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla11M.RenderModel();
+		}
+
+		//casilla11M.RenderModel();
+		//casilla11A.RenderModel();
+		//casilla11AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 12
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado11 >= 1)
+		{
+			casilla12AR.RenderModel();
+		}
+		
+		if (esDia)
+		{
+			casilla12A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla12M.RenderModel();
+		}
+
+
+		//casilla12M.RenderModel();
+		//casilla12A.RenderModel();
+		//casilla12AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 13
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado12 >= 1)
+		{
+			casilla13AR.RenderModel();
+		}
+		
+		if (esDia)
+		{
+			casilla13A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla13M.RenderModel();
+		}
+
+		//casilla13M.RenderModel();
+		//casilla13A.RenderModel();
+		//casilla13AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 14
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado13 >= 1)
+		{
+			casilla14AR.RenderModel();
+		}
+		
+		if (esDia)
+		{
+			casilla14A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla14M.RenderModel();
+		}
+
+
+		//casilla14M.RenderModel();
+		//casilla14A.RenderModel();
+		//casilla14AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 15
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
+		/*model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado14 >= 1)
+		{
+			casilla15AR.RenderModel();
+		}
+		
+
+		if (esDia)
+		{
+			casilla15A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla15M.RenderModel();
+		}
+
+		//casilla15M.RenderModel();
+		//casilla15A.RenderModel();
+		//casilla15AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 16
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado15 >= 1)
+		{
+			casilla16AR.RenderModel();
+		}
+
+		if (esDia)
+		{
+			casilla16A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla16M.RenderModel();
+		}
+
+		//casilla16M.RenderModel();
+		//casilla16A.RenderModel();
+		//casilla16AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 17
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado16 >= 1)
+		{
+			casilla17AR.RenderModel();
+		}
+		
+		if (esDia)
+		{
+			casilla17A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla17M.RenderModel();
+		}
+
+		//casilla17M.RenderModel();
+		//casilla17A.RenderModel();
+		//casilla17AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 18
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado17 >= 1)
+		{
+			casilla18AR.RenderModel();
+		}
+		
+		if (esDia)
+		{
+			casilla18A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla18M.RenderModel();
+		}
+
+		//casilla18M.RenderModel();
+		//casilla18A.RenderModel();
+		//casilla18AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 19
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado18 >= 1)
+		{
+			casilla19AR.RenderModel();
+		}
+		
+		if (esDia)
+		{
+			casilla19A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla19M.RenderModel();
+		}
+
+		//casilla19M.RenderModel();
+		//casilla19A.RenderModel();
+		//casilla19AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 20
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado19 >= 1)
+		{
+			casilla20AR.RenderModel();
+		}
+		
+		if (esDia)
+		{
+			casilla20A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla20M.RenderModel();
+		}
+
+		//casilla20M.RenderModel();
+		//casilla20A.RenderModel();
+		//casilla20AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 21
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0));
+
+		modelauxCasillas = model; // GUARDA
+
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado20 >= 1)
+		{
+			casilla21AR.RenderModel();
+		}
+		
+		if (esDia)
+		{
+			casilla21A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla21M.RenderModel();
+		}
+
+		//casilla21M.RenderModel();
+		//casilla21A.RenderModel();
+		//casilla21AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 22
+		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado21 >= 1)
+		{
+			casilla22AR.RenderModel();
+		}
+		
+		if (esDia)
+		{
+			casilla22A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla22M.RenderModel();
+		}
+
+		//casilla22M.RenderModel();
+		//casilla22A.RenderModel();
+		//casilla22AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 23
+		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado22 >= 1)
+		{
+			casilla23AR.RenderModel();
+		}
+		
+		if (esDia)
+		{
+			casilla23A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla23M.RenderModel();
+		}
+
+		//casilla23M.RenderModel();
+		//casilla23A.RenderModel();
+		//casilla23AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 24
+		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado23 >= 1)
+		{
+			casilla24AR.RenderModel();
+		}
+		
+		if (esDia)
+		{
+			casilla24A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla24M.RenderModel();
+		}
+
+		//casilla24M.RenderModel();
+		//casilla24A.RenderModel();
+		//casilla24AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 25
+		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado24 >= 1)
+		{
+			casilla25AR.RenderModel();
+		}
+		
+		if (esDia)
+		{
+			casilla25A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla25M.RenderModel();
+		}
+
+		//casilla25M.RenderModel();
+		//casilla25A.RenderModel();
+		//casilla25AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 26
+		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado25 >= 1)
+		{
+			casilla26AR.RenderModel();
+		}
+		
+		if (esDia)
+		{
+			casilla26A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla26M.RenderModel();
+		}
+
+		//casilla26M.RenderModel();
+		//casilla26A.RenderModel();
+		//casilla26AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 27
+		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado26 >= 1)
+		{
+			casilla27AR.RenderModel();
+		}
+		
+
+		if (esDia)
+		{
+			casilla27A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla27M.RenderModel();
+		}
+		//casilla27M.RenderModel();
+		//casilla27A.RenderModel();
+		//casilla27AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 28
+		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
+		/*model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		modelauxCasillas = model; // GUARDA
+
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado27 >= 1)
+		{
+			casilla28AR.RenderModel();
+		}
+		
+
+		if (esDia)
+		{
+			casilla28A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla28M.RenderModel();
+		}
+		//casilla28M.RenderModel();
+		//casilla28A.RenderModel();
+		//casilla28AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 29
+		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado28 >= 1)
+		{
+			casilla29AR.RenderModel();
+		}
+		
+		if (esDia)
+		{
+			casilla29A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla29M.RenderModel();
+		}
+
+		//casilla29M.RenderModel();
+		//casilla29A.RenderModel();
+		//casilla29AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 30
+		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado29 >= 1)
+		{
+			casilla30AR.RenderModel();
+		}
+		
+
+		if (esDia)
+		{
+			casilla30A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla30M.RenderModel();
+		}
+
+		//casilla30M.RenderModel();
+		//casilla30A.RenderModel();
+		//casilla30AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 31
+		model = glm::translate(model, glm::vec3(-20.0f, 0.0f, 0.0));
+
+		modelauxCasillas = model; // GUARDA
+
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado30 >= 1)
+		{
+			casilla31AR.RenderModel();
+		}
+		
+		if (esDia)
+		{
+			casilla31A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla31M.RenderModel();
+		}
+
+		//casilla31M.RenderModel();
+		//casilla31A.RenderModel();
+		//casilla31AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 32
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado31 >= 1)
+		{
+			casilla32AR.RenderModel();
+		}
+		
+		if (esDia)
+		{
+			casilla32A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla32M.RenderModel();
+		}
+
+		//casilla32M.RenderModel();
+		//casilla32A.RenderModel();
+		//casilla32AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 33
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado32 >= 1)
+		{
+			casilla33AR.RenderModel();
+		}
+		
+		if (esDia)
+		{
+			casilla33A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla33M.RenderModel();
+		}
+
+		//casilla33M.RenderModel();
+		//casilla33A.RenderModel();
+		//casilla33AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 34
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado33 >= 1)
+		{
+			casilla34AR.RenderModel();
+		}
+		
+		if (esDia)
+		{
+			casilla34A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla34M.RenderModel();
+		}
+
+		//casilla34M.RenderModel();
+		//casilla34A.RenderModel();
+		//casilla34AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 35
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado34 >= 1)
+		{
+			casilla35AR.RenderModel();
+		}
+		
+		if (esDia)
+		{
+			casilla35A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla35M.RenderModel();
+		}
+
+		//casilla35M.RenderModel();
+		//casilla35A.RenderModel();
+		//casilla35AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 36
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado35 >= 1)
+		{
+			casilla36AR.RenderModel();
+		}
+		
+		if (esDia)
+		{
+			casilla36A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla36M.RenderModel();
+		}
+
+		//casilla36M.RenderModel();
+		//casilla36A.RenderModel();
+		//casilla36AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 37
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado36 >= 1)
+		{
+			casilla37AR.RenderModel();
+		}
+		
+		if (esDia)
+		{
+			casilla37A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla37M.RenderModel();
+		}
+
+		//casilla37M.RenderModel();
+		//casilla37A.RenderModel();
+		//casilla37AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 38
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado37 >= 1)
+		{
+			casilla38AR.RenderModel();
+		}
+		
+		if (esDia)
+		{
+			casilla38A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla38M.RenderModel();
+		}
+
+		//casilla38M.RenderModel();
+		//casilla38A.RenderModel();
+		//casilla38AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 39
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado38 >= 1)
+		{
+			casilla39AR.RenderModel();
+		}
+		
+		if (esDia)
+		{
+			casilla39A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla39M.RenderModel();
+		}
+
+		//casilla39M.RenderModel();
+		//casilla39A.RenderModel();
+		//casilla39AR.RenderModel();
+
+		model = modelauxCasillas; // A PARTIR DE 
+
+		// 40
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -20.0));
+
+		modelauxCasillas = model; // GUARDA
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		if (cocinado39 >= 1)
+		{
+			casilla40AR.RenderModel();
+		}
+
+		if (esDia)
+		{
+			casilla40A.RenderModel();
+		}
+		else if (esNoche)
+		{
+			casilla40M.RenderModel();
+		}
+								// ##################################### MODELOS DE LAS CASILLAS ##################################### \\
+		
+		// RAIDEN - CASILLA 02
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(-120.0f, /*9.9f*/raidenSubeBaja, 80.0)); //EN EL TRANSLATE DE Y SE CAMBIA POR EL NOMBRE DE LA VARIABLE
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -raidenRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f)); //SE LE AUMENTA EL ROUTETE DONDE SE PONE ROTA EN TODAS VA EL -
+		model = glm::scale(model, glm::vec3(7.0f, 7.0f, 7.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla01M.RenderModel();
+
+		// SCORPION - CASILLA 03
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(-120.0f,/* 10.1f*/scorpionSubeBaja, 60.0));
+		model = glm::rotate(model, -scorpionRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(7.0f, 7.0f, 7.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla02M.RenderModel();
+
+		// SHAO KAHN - CASILLA 04
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(-120.0f, /*9.9f*/shaoSubeBaja, 40.0));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -shaoRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(7.0f, 7.0f, 7.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla03M.RenderModel();
+
+		// HELL MOUNTAIN - CASILLA 05
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(-120.0f, /*4.4f*/hellSubeBaja, 20.0));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -hellRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.06f, 0.06f, 0.06f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla04M.RenderModel();
+
+		// VIEWER - CASILLA 06
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(-120.0f, /*5.5f*/viewerSubeBaja, 0.0));
+		model = glm::rotate(model, -viewerRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.09f, 0.09f, 0.09f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla05M.RenderModel();
+
+		// TREE STUMP - CASILLA 07
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(-120.0f, /*8.55f*/tree_stumpSubeBaja, -20.0));
+		model = glm::rotate(model, -tree_stumpRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.08f, 0.08f, 0.08f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla06M.RenderModel();
+
+		// PINE TREE - CASILLA 08
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(-120.0f, /*9.7f*/pine_treeSubeBaja, -40.0));
+		model = glm::rotate(model, -pine_treeRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(7.0f, 7.0f, 7.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla07M.RenderModel();
+
+		// FIRE DRAGON - CASILLA 09
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(-120.0f, /*6.0f*/fire_dragonSubeBaja, -55.0));
+		model = glm::rotate(model, -fire_dragonRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(7.0f, 7.0f, 7.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla08M.RenderModel();
+
+		// SCORPION - CASILLA 10
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(-120.0f,/* 5.9f*/scorpion2SubeBaja, -80.0));
+		model = glm::rotate(model, -scorpion2Rota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(20.0f, 20.0f, 20.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla09M.RenderModel();
+
+
+
+		// WOLF - CASILLA 11
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(-100.0f, /*5.9f*/wolfSubeBaja, -120.0));
+		model = glm::rotate(model, -wolfRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla11M.RenderModel();
+
+		// BARAKA - CASILLA 12
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(-80.0f, /*10.0f*/BarakaSubeBaja, -120.0));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -BarakaRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(8.5f, 8.5f, 8.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla12M.RenderModel();
+
+		// BO RAI CHO - CASILLA 13
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(-60.0f, /*8.5f*/boSubeBaja, -120.0));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -boRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(3.5f, 3.5f, 3.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla13M.RenderModel();
+
+		// CASSIE CAGE - CASILLA 14
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(-40.0f, /*10.0f*/cassieSubeBaja, -120.0));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -cassieRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(8.5f, 8.5f, 8.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla14M.RenderModel();
+
+		// SKULL - CASILLA 15
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(-20.0f, /*2.0f*/skullSubeBaja, -120.0));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -skullRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.325f, 0.325f, 0.325f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla15M.RenderModel();
+
+		// ROCKY ROAD - CASILLA 16
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(0.0f, /*2.0f*/rockySubeBaja, -120.0));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -rockyRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.325f, 0.325f, 0.325f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla16M.RenderModel();
+
+		// NEOCORTEX - CASILLA 17
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(20.0f, /*4.0f*/drneoSubeBaja, -120.0));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -drneoRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(15.0f, 15.0f, 15.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla17M.RenderModel();
+
+		// FROG - CASILLA 18
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(40.0f, /*2.0f*/frogSubeBaja, -120.0));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -frogRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla18M.RenderModel();
+
+		// POLAR - CASILLA 19
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(60.0f, /*5.0f*/polarSubeBaja, -120.0));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -polarRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.16f, 0.16f, 0.16f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla19M.RenderModel();
+
+		// WIZARD - CASILLA 20
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(80.0f, /*6.8f*/wizardSubeBaja, -120.0));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -wizardRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.18f, 0.18f, 0.18f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla20M.RenderModel();
+
+		// PINSTRIPE - CASILLA 21
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(120.0f, /*pinstripe*/pinstripeSubeBaja, -100.0));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -pinstripeRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(6.0f, 6.0f, 6.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla21M.RenderModel();
+
+		// LION - CASILLA 22
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(120.0f, /*6.0f*/lionSubeBaja, -80.0));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -lionRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.25f, 1.25f, 1.25f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla22M.RenderModel();
+
+		// BABY T - CASILLA 23
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(120.0f, /*5.2f*/babytSubeBaja, -60.0));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -babytRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla23M.RenderModel();
+
+		// AKU AKU - CASILLA 24
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(120.0f, /*4.0f*/akuakuSubeBaja, -40.0));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -akuakuRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla24M.RenderModel();
+
+		// PALM_TREE - CASILLA 25
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(120.0f, /*6.0f*/palm_treeSubeBaja, -20.0));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -palm_treeRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.25f, 0.25f, 0.25f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla25M.RenderModel();
+
+		// FLOWERS - CASILLA 26
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(120.0f, /*4.2f*/flowersSubeBaja, 0.0));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -flowersRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla26M.RenderModel();
+
+		// BASIC_TREE - CASILLA 27
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(120.0f, /*5.2f*/basicSubeBaja, 20.0));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -basicRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		modeloCasilla27M.RenderModel();
+
+		//Brian - Casilla28
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(120.0f, /*7.5f*/brianSubeBaja, 40.0));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -brianRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ModeloCasilla28.RenderModel();
+
+		//Ernie - Casilla29
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(124.0f, /*9.5f*/ernieSubeBaja, 60.0));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -ernieRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ModeloCasilla29.RenderModel();
+
+		//Lois - Casilla30
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(120.0f, /*9.5f*/luisaSubeBaja, 80.0));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -luisaRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ModeloCasilla30.RenderModel();
+
+		//Meg - Casilla31
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(100.0f, /*9.0f*/megSubeBaja, 120.0));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -megRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ModeloCasilla31.RenderModel();
+
+		//Peter - Casilla32
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(80.0f, /*9.0f*/peterSubeBaja, 120.0));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -peterRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ModeloCasilla32.RenderModel();
+
+		//Joe - Casilla33
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(60.0f, /*9.0f*/joeSubeBaja, 120.0));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -joeRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ModeloCasilla33.RenderModel();
+
+		//Chris - Casilla34
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(40.0f, /*-1.0f*/chrisSubeBaja, 120.0));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -chrisRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(11.0f, 11.0f, 11.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ModeloCasilla34.RenderModel();
+
+		//Drunken - Casilla35
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(20.0f, /*4.5f*/casaSubeBaja, 120.0));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -casaRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ModeloCasilla35.RenderModel();
+
+		//Arbol - Casilla36
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, /*9.5f*/treeSubeBaja, 120.0));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -treeRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ModeloCasilla36.RenderModel();
+
+		//Arbol Navidad - Casilla37
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-20.0f, /*7.0f*/navidadSubeBaja, 120.0));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -navidadRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ModeloCasilla37.RenderModel();
+
+		//Vinny - Casilla38
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-40.0f, /*7.5f*/vinnySubeBaja, 120.0));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -vinnyRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ModeloCasilla38.RenderModel();
+
+		//Flores - Casilla39
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-60.0f, /*7.0f*/flowers2SubeBaja, 125.0));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -flowers2Rota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ModeloCasilla39.RenderModel();
+
+		//Carter - Casilla40
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-80.0f, /*9.6f*/carterSubeBaja, 120.0));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -carterRota * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ModeloCasilla40.RenderModel();
+
+		// ##################################### SUBZERO AVATAR ##################################### \\
+
+// AVATAR SUB ZERO PARA RECORRIDO
+		model = glm::mat4(1.0);
+
+		model = glm::translate(model, glm::vec3(-100.0f, 19.8f, 100.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+		// RECORRIDO AVATAR
+		// EL PRIMER TRANSLATE (HASTA LLEGAR A UNA PARTE)
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, mueveAvatar01));
+		model = glm::rotate(model, rotaAvatar01 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+		// RECORRIDO AVATAR
+		// EL PRIMER TRANSLATE (HASTA LLEGAR A UNA PARTE)
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, mueveAvatar02));
+		model = glm::rotate(model, rotaAvatar02 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+		// RECORRIDO AVATAR
+		// EL PRIMER TRANSLATE (HASTA LLEGAR A UNA PARTE)
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, mueveAvatar03));
+		model = glm::rotate(model, rotaAvatar03 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+		// RECORRIDO AVATAR
+		// EL PRIMER TRANSLATE (HASTA LLEGAR A UNA PARTE)
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, mueveAvatar04));
+		model = glm::rotate(model, rotaAvatar04 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+
+		modelauxTorso = model; // GUARDA TORSO
+
+		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		torsoSubZero.RenderModel();
+
+		model = modelauxTorso; // A PARTIR DE TORSO
+
+		model = glm::translate(model, glm::vec3(-3.5f, 2.0f, -0.3f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+
+		modelauxBrazoDerecho = model; // GUARDA BRAZO DERECHO
+
+		model = glm::scale(model, glm::vec3(1.2f, 1.2f, 1.2f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		esfera.RenderModel();
+
+		model = modelauxBrazoDerecho; // A PARTIR DE BRAZO DERECHO
+
+		model = glm::translate(model, glm::vec3(-0.3f, 0.0f, 0.1f));
+		model = glm::rotate(model, -rotaBrazoD * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		brazoDerechoSubZero.RenderModel();
+
+		model = modelauxTorso; // A PARTIR DE TORSO
+
+		model = glm::translate(model, glm::vec3(3.5f, 2.0f, -0.3f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+
+		modelauxBrazoIzquierdo = model; // GUARDA BRAZO IZQUIERDO
+
+		model = glm::scale(model, glm::vec3(1.2f, 1.2f, 1.2f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		esfera.RenderModel();
+
+		model = modelauxBrazoIzquierdo; // A PARTIR DE BRAZO IZQUIERDO
+
+		model = glm::translate(model, glm::vec3(0.3f, 0.0f, 0.1f));
+		model = glm::rotate(model, rotaBrazoI * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		brazoIzquieroSubZero.RenderModel();
+
+		model = modelauxTorso; // A PARTIR DE TORSO
+
+		model = glm::translate(model, glm::vec3(0.0f, -5.0f, 0.0f));
+
+		modelauxCintura = model; // GUARDA CINTURA
+
+		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		cinturaSubZero.RenderModel();
+
+		model = modelauxCintura; //  PARTIR DE LA CINTURA
+
+		model = glm::translate(model, glm::vec3(-1.3f, -1.5f, 0.0f));
+
+		modelauxPiernaDerecha = model; // GUARDA PIERNA DERECHA
+
+		model = glm::scale(model, glm::vec3(1.2f, 1.2f, 1.2f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		esfera.RenderModel();
+
+		model = modelauxPiernaDerecha; // A PARTIR DE LA PIERNA DERECHA
+
+		model = glm::translate(model, glm::vec3(0.0f, 0.3f, 0.0f));
+		model = glm::rotate(model, rotaPiernaD * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		piernaDerechaSubZero.RenderModel();
+
+		model = modelauxCintura; //  PARTIR DE LA CINTURA
+
+		model = glm::translate(model, glm::vec3(1.3f, -1.5f, 0.0f));
+
+		modelauxPiernaIzquierda = model; // GUARDA PIERNA IZQUIERDA
+
+		model = glm::scale(model, glm::vec3(1.2f, 1.2f, 1.2f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		esfera.RenderModel();
+
+		model = modelauxPiernaIzquierda; // A PARTIR DE LA PIERNA IZQUIERDA
+
+		model = glm::translate(model, glm::vec3(0.0f, 0.3f, 0.0f));
+		model = glm::rotate(model, rotaPiernaI * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		piernaIzquierdaSubZero.RenderModel();
+
+
+		//CARROS CARRETERA
+
+		model = glm::mat4(1.0);
+
+		if (!enMovimientoX && !enMovimientoZ) {
+			if (mueveCarro < 320) {
+				// Movimiento en el primer tramo (en el eje X)
+				mueveCarro += mueveCarroOffset * deltaTime;
+
+				// Actualiza la posición del modelo
+				model = glm::translate(glm::mat4(1.0f), glm::vec3(-160.0f + mueveCarro, 0.0f, 160.0f));
+				model = glm::rotate(model, glm::radians(giraCarro), glm::vec3(0.0f, 1.0f, 0.0f));
+			}
+			else {
+				// Solo entra en la curva una vez
+				if (!enCurva) {
+					enCurva = true;
+				}
+
+				if (giraCarro < giraCarroTarget) { // Rota hasta alcanzar el ángulo objetivo
+					giraCarro += 1.0f * deltaTime;
+
+					mueveCarro += curvaCarroOffset * deltaTime;
+
+					// Calcular el vector de dirección
+					float radians = glm::radians(giraCarro);
+					glm::vec3 direccion;
+					direccion.x = cos(radians);
+					direccion.z = sin(radians);
+
+					// Actualiza la posición del modelo durante la curva
+					model = glm::translate(glm::mat4(1.0f), glm::vec3(-160.0f + mueveCarro, 0.0f, 160.0f)) * glm::rotate(glm::mat4(1.0f), glm::radians(giraCarro), glm::vec3(0.0f, 1.0f, 0.0f));
+				}
+				else {
+					giraCarro = giraCarroTarget;
+					enCurva = false;
+
+					if (mueveCarro2 < 320) {
+						mueveCarro2 += mueveCarroOffset * deltaTime;
+						model = glm::translate(glm::mat4(1.0f), glm::vec3(-160.0f + mueveCarro, 0.0f, 160.0f - mueveCarro2)) * glm::rotate(glm::mat4(1.0f), glm::radians(giraCarro), glm::vec3(0.0f, 1.0f, 0.0f));
+					}
+					else {
+						enMovimientoX = true;
+						mueveCarro2 = 320.0f;
+						giraCarro = giraCarroTarget;
+					}
+				}
+			}
+		}
+		else if (enMovimientoX) {
+			/*printf("Estado de enMovimientoX: %d, mueveCarro2: %f\n", enMovimientoZ, mueveCarro2);*/
+
+			if (!enCurva) {
+				enCurva = true;
+			}
+
+			if (giraCarro < giraCarroTargetX) {
+				giraCarro += 1.0f * deltaTime;
+				if (giraCarro > giraCarroTargetX) {
+					giraCarro = giraCarroTargetX;
+				}
+				float radians = glm::radians(giraCarro);
+				model = glm::translate(glm::mat4(1.0f), glm::vec3(-160.0f + mueveCarro, 0.0f, -160.0f)) *
+					glm::rotate(glm::mat4(1.0f), glm::radians(giraCarro), glm::vec3(0.0f, 1.0f, 0.0f));
+
+				/*printf("Durante curva -> mueveCarro: %f, giraCarro: %f\n", mueveCarro, giraCarro);*/
+			}
+
+			// Cambia al movimiento en Z positivo cuando llega a -160 en X
+			if (giraCarro >= giraCarroTargetX) {
+				if (mueveCarro > 0) { // Mover en X negativo hasta alcanzar -160
+					mueveCarro -= mueveCarroOffset * deltaTime;
+					model = glm::translate(glm::mat4(1.0f), glm::vec3(-160.0f + mueveCarro, 0.0f, -160.0f)) *
+						glm::rotate(glm::mat4(1.0f), glm::radians(giraCarro), glm::vec3(0.0f, 1.0f, 0.0f));
+				}
+				else {
+					// Cambio a movimiento en Z positivo
+					enMovimientoX = false;
+					enMovimientoZ = true;
+					enCurva = false;
+					mueveCarro = 0.0f; // Asegurar que se detenga exactamente en -160 en X
+					mueveCarro2 = 0.0f; // Asegurar que se detenga exactamente en -160 en X
+					giraCarro = giraCarroTargetX; // Mantener el ángulo final de 270°
+				}
+			}
+
+			/*printf("Final X movimiento -> mueveCarro: %f, giraCarro: %f\n", mueveCarro, giraCarro);*/
+		}
+		else if (enMovimientoZ) {
+			// Solo entra en la curva una vez
+			if (!enCurva) {
+				enCurva = true;
+			}
+
+			if (giraCarro < 0) { // Solo girar 5 grados (de 270 a 265)
+				giraCarro -= 0.5f * deltaTime; // Velocidad de giro más lenta
+				mueveCarro2 += curvaCarroOffset * deltaTime;
+
+				// Calcular el vector de dirección
+				float radians = glm::radians(giraCarro);
+				glm::vec3 direccion;
+				direccion.x = cos(radians);
+				direccion.z = sin(radians);
+
+				// Actualiza la posición del modelo durante la curva
+				model = glm::translate(glm::mat4(1.0f),
+					glm::vec3(-160.0f, 0.0f, -160.0f + mueveCarro2)) *
+					glm::rotate(glm::mat4(1.0f), glm::radians(giraCarro), glm::vec3(0.0f, 1.0f, 0.0f));
+			}
+			else {
+				giraCarro = 0.0f; // Mantener un giro muy sutil
+				enCurva = false;
+
+				if (mueveCarro2 < 320) {
+					mueveCarro2 += mueveCarroOffset * deltaTime;
+					model = glm::translate(glm::mat4(1.0f),
+						glm::vec3(-160.0f, 0.0f, -160.0f + mueveCarro2)) *
+						glm::rotate(glm::mat4(1.0f), glm::radians(giraCarro), glm::vec3(0.0f, 1.0f, 0.0f));
+				}
+				else {
+					enMovimientoZ = false;
+					mueveCarro2 = 0.0f;
+					giraCarro = 90.0f;
+				}
+			}
+
+			/*printf("Durante curva -> mueveCarro2: %f, giraCarro: %f\n", mueveCarro2, giraCarro);*/
+		}
+
+
+
+
+		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		carroCoco.RenderModel();
+
+
+
+
+
+
+		//CARRETERA
+		//RECTA 1
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(34.2f, -1.0f, 166.0));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 12.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		recta.RenderModel();
+
+		//CURVA 1
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(166.0f, -1.0f, 161.5f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		curva.RenderModel();
+
+		//RECTA 2
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(169.0f, -1.0f, -35.0));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 12.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		recta.RenderModel();
+	
+		//CURVA 2
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(164.5f, -1.0f, -166.8));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		curva.RenderModel();
+
+		//RECTA 3
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(34.0f, -1.0f, -170.0));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 12.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		recta.RenderModel();
+
+		//CURVA 3
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-164.0f, -1.0f, -165.5f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		curva.RenderModel();
+
+		//RECTA 4
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-167.0f, -1.0f, -35.0));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 12.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		recta.RenderModel();
+
+		//CURVA 4
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-162.5f, -1.0f, 162.9));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		curva.RenderModel();
 
 		//SUELO DE EN MEDIO
 		toffsetsuelou += 0.01f;
@@ -7680,22 +7520,27 @@ int main()
 		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
 		model = glm::mat4(1.0);
 		model = glm::scale(model, glm::vec3(10.0f, 5.0f, 10.0f));
+
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		color = glm::vec3(1.0f, 1.0f, 1.0f);
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		pasto.UseTexture();
 		meshList[2]->RenderMesh();
 
+
+
 		//LETRERO MONOPOLY
+		
 		toffsetletrerou += 0.001f * deltaTime;  // Mueve el letrero hacia la derecha
 		toffset = glm::vec2(toffsetletrerou, toffsetletrerov);
 		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, 3.0f, 0.0));
+		model = glm::translate(model, glm::vec3(0.0f, 1.0f, 0.0));
 		model = glm::rotate(model, 90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::rotate(model, -45 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::scale(model, glm::vec3(80.0f, 10.0f, 150.0f));
+
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		color = glm::vec3(1.0f, 1.0f, 1.0f);
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
