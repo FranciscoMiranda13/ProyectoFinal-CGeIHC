@@ -41,7 +41,16 @@
 #include <ctime>   // Para time()
 
 const float toRadians = 3.14159265f / 180.0f;
-
+float totalDia = 30.0f;
+float atardecer = 30.0f;
+float totalnoche = 30.0f;
+float ciclototal = 90.0;
+float pi = 3.14159265f;
+float angle;
+float intensidad = 0.0f;
+float FaseDia = 0.0f;
+float oscuridad = 0.0f;
+float adjustedIntensity = 0.0f;
 // VARIABLES PARA ANIMACION DEL DADO DE 8 CARAS
 float subeBajaDado8 = 35.0f;
 float subeBajaDadoOffset8 = 0.3f;
@@ -540,8 +549,13 @@ Window mainWindow;
 std::vector<Mesh*> meshList;
 std::vector<Shader> shaderList;
 
+//CAMARAS
 Camera camera;
-
+Camera CamaraAerea;
+Camera currentCamara;
+bool camaraAereaAc = false;
+float posCamX = 2000.0f;
+float posCamZ = 2000.0f;
 Texture brickTexture;
 Texture dirtTexture;
 Texture plainTexture;
@@ -745,11 +759,33 @@ Model piernaIzquierdaSubZero;
 
 // MODELO TABLEROS
 Model casaCynthia;
+Model arboltablero1;
+Model palmeratablero;
+Model arbolsinhojas;
+Model arboltablero2;
+Model flores1;
+Model arbusto;
+Model carro1;
+Model mesa;
+Model sombrero;
+Model hacha;
+Model estrella;
+Model bazooka;
+Model box1;
+Model box2;
+Model box3;
+Model ermac;
+Model goro;
+Model cage;
+Model kabal;
 
 // MODELOS AUXILIARES
 Model esfera;
 
-Skybox skybox;
+// SKYBOX DIA 
+Skybox skyboxDia;
+// SKYBOX NOCHE
+Skybox skyboxNoche;
 
 //materiales
 Material Material_brillante;
@@ -927,6 +963,10 @@ int main()
 	CreateShaders();
 
 	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.3f, 0.5f);
+	//Variable auxiliar para realizar el cambio de camara
+	Camera* currentCamera = &camera;
+	//Camara que solo se mueve de forma ortogonal
+	CamaraAerea = Camera(glm::vec3(posCamX, 150.0f, posCamZ), glm::vec3(0.0f, 1.0f, 0.0f), 75.0f, -90.0f, 0.3f, 0.5f);
 
 	brickTexture = Texture("Textures/brick.png");
 	brickTexture.LoadTextureA();
@@ -1300,9 +1340,48 @@ int main()
 	piernaIzquierdaSubZero = Model();
 	piernaIzquierdaSubZero.LoadModel("Models/avatarSubZeroPiernaIzquierda.obj");
 
+
 	//MODELOS TABLERO
 	casaCynthia = Model();
 	casaCynthia.LoadModel("Models/casaCynthia.obj");
+	arboltablero1 = Model();
+	arboltablero1.LoadModel("Models/arboltablero.obj");
+	palmeratablero = Model();
+	palmeratablero.LoadModel("Models/palmeratablero.obj");
+	arbolsinhojas = Model();
+	arbolsinhojas.LoadModel("Models/o00_7100.obj");
+	arboltablero2 = Model();
+	arboltablero2.LoadModel("Models/obj_0402_tree3.obj");
+	flores1 = Model();
+	flores1.LoadModel("Models/flowers.obj");
+	arbusto = Model();
+	arbusto.LoadModel("Models/SM_item_flower1.obj");
+	carro1 = Model();
+	carro1.LoadModel("Models/NinaCadyFEShape.obj");
+	ermac = Model();
+	ermac.LoadModel("Models/MK-X_iOS_OUTWORLD_Ermac_MK-X.obj");
+	goro = Model();
+	goro.LoadModel("Models/goro.obj");
+	//cage = Model();
+	//cage.LoadModel("Models/NinaCadyFEShape.obj");
+	//kabal = Model();
+	//kabal.LoadModel("Models/NinaCadyFEShape.obj");
+	//mesa = Model();
+	mesa.LoadModel("Models/RageTable.obj");
+	sombrero = Model();
+	sombrero.LoadModel("Models/KRN_KL_Hat_St.obj");
+	hacha = Model();
+	hacha.LoadModel("Models/KRN_NW_Tomahawk_St.obj");
+	estrella = Model();
+	estrella.LoadModel("Models/estrella.obj");
+	bazooka = Model();
+	bazooka.LoadModel("Models/Bazooka.obj");
+	box1 = Model();
+	box1.LoadModel("Models/akuaku.obj");
+	box2 = Model();
+	box2.LoadModel("Models/nitro.obj");
+	box3 = Model();
+	box3.LoadModel("Models/bounce_crate.obj");
 
 	// MODELO AUXILIAR
 	esfera = Model();
@@ -1316,15 +1395,27 @@ int main()
 	carroCoco = Model();
 	carroCoco.LoadModel("Models/carroCoco.obj");
 
-	std::vector<std::string> skyboxFaces;
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_rt.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_lf.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_dn.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_up.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_bk.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_ft.tga");
+	// SKYBOX DE DIA 
+	std::vector<std::string> skyboxFaces01;
+	skyboxFaces01.push_back("Textures/Skybox/Skybox5Dia.tga");
+	skyboxFaces01.push_back("Textures/Skybox/Skybox1Dia.tga");
+	skyboxFaces01.push_back("Textures/Skybox/Skybox4Dia.tga");
+	skyboxFaces01.push_back("Textures/Skybox/Skybox2Dia.tga");
+	skyboxFaces01.push_back("Textures/Skybox/Skybox3Dia.tga");
+	skyboxFaces01.push_back("Textures/Skybox/Skybox6Dia.tga");
 
-	skybox = Skybox(skyboxFaces);
+	skyboxDia = Skybox(skyboxFaces01);
+
+	// SKYBOX DE NOCHE
+	std::vector<std::string> skyboxFaces02;
+	skyboxFaces02.push_back("Textures/Skybox/Skybox5Noche.tga");
+	skyboxFaces02.push_back("Textures/Skybox/Skybox1Noche.tga");
+	skyboxFaces02.push_back("Textures/Skybox/Skybox4Noche.tga");
+	skyboxFaces02.push_back("Textures/Skybox/Skybox2Noche.tga");
+	skyboxFaces02.push_back("Textures/Skybox/Skybox3Noche.tga");
+	skyboxFaces02.push_back("Textures/Skybox/Skybox6Noche.tga");
+
+	skyboxNoche = Skybox(skyboxFaces02);
 
 	Material_brillante = Material(4.0f, 256);
 	Material_opaco = Material(0.3f, 4);
@@ -1415,23 +1506,30 @@ int main()
 		deltaTime = now - lastTime;
 		deltaTime += (now - lastTime) / limitFPS;
 		lastTime = now;
-
-		//DIA Y NOCHE
-
-		if ((glfwGetTime() - dianocheTiempo) < 10)
-		{
-			/*skyboxDia.DrawSkybox(camera.calculateViewMatrix(), projection);*/
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 20)
-		{
-			mainLight.UseLight(0.1f, 1.0f, 0.1f, );
-			/*skyboxNoche.DrawSkybox(camera.calculateViewMatrix(), projection);*/
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}
-
+		//if (mainWindow.getsKeys()[GLFW_KEY_C]) {
+		//	camaraAereaAc = true;
+		//	printf("estoy entrando putos");
+		//}
+		////IMPLEMENTACION CAMARA
+		//if (camaraAereaAc) {
+		//	currentCamera = &CamaraAerea;
+		//	if (mainWindow.getsKeys()[GLFW_KEY_W]) {
+		//		posCamX += 15.0f;
+		//	}
+		//	if (mainWindow.getsKeys()[GLFW_KEY_S]) {
+		//		posCamX -= 15.0f;
+		//	}
+		//	if (mainWindow.getsKeys()[GLFW_KEY_A]) {
+		//		posCamZ -= 15.0f;
+		//	}
+		//	if (mainWindow.getsKeys()[GLFW_KEY_D]) {
+		//		posCamZ += 15.0f;
+		//	}
+		//}
+		//else {
+		//	currentCamera = &camera;
+		//	
+		//}
 
 
 
@@ -2735,7 +2833,6 @@ int main()
 		}
 		else
 		{
-			printf("Entre a este else");
 			subeBajaDado8 = 35.0f;
 			rotaDadox8 = 0.0f;
 			rotaDadoy8 = 0.0f;
@@ -2792,7 +2889,7 @@ int main()
 		}
 
 		// ACTIVAR BANDERAS DE ANIMACION ESPECIAL
-		printf("mueveavatar %f", mueveAvatar01);
+		
 		if (mueveAvatar01 >= 20)
 		{
 			raidenCont01 += 1;
@@ -2993,12 +3090,11 @@ int main()
 		}
 
 		// INTERACCIINES ESPECIALES DE CASILLAS
-		printf("valor raiden c1 %d", raidenCont01);
-		printf("valor raiden c2 %d", raidenCont02);
+		
 		// RAIDEN
 		if (raidenCont01 >= 1 && raidenCont02 < 1)
 		{
-			printf("ENTRO\n");
+			
 			if (raiden)
 			{
 				if (raidenSubeBaja < 9.9f)
@@ -4573,7 +4669,75 @@ int main()
 		// Clear the window
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		skybox.DrawSkybox(camera.calculateViewMatrix(), projection);
+		
+		glm::vec3 sunDirection; 
+		FaseDia = now - dianocheTiempo;
+
+		auxLight = &mainLight;
+		skyboxDia.DrawSkybox(currentCamera->calculateViewMatrix(), projection);
+		//if (FaseDia < totalDia) {
+		//	auxLight = &mainLight;
+		//	skyboxDia.DrawSkybox(currentCamera->calculateViewMatrix(), projection);
+
+		//	//Simulando el sol de este a oeste
+		//	angle = (FaseDia / totalDia) *2.0f * pi;
+		//	sunDirection = glm::vec3(cos(angle), -sin(angle), 0.0f);
+		//	intensidad = 0.8f; //Maxima intensidad durante el día
+		//	mainLight.SetDirection(sunDirection);
+		//	mainLight.SetIntensity(0.5f);
+		//	mainLight.SetAmbientIntensity(0.5f);
+		//	
+		//}
+		//else if (FaseDia < (totalDia + atardecer)) {
+		//	auxLight = &mainLight;
+		//	skyboxDia.DrawSkybox(currentCamera->calculateViewMatrix(), projection);
+
+		//	// Disminuimos la intensidad gradualmente
+		//	float atardecerProgress = (FaseDia - totalDia) / atardecer; // Progreso de 0 a 1 durante el atardecer
+		//	// Asegúrate de que la intensidad no baje de 0.1f
+		//	float minIntensity = 0.1f; // Intensidad mínima
+		//	float maxIntensity = 0.5f; // Intensidad máxima
+		//	   // Ajusta la intensidad
+
+		//	// Actualiza la dirección del sol
+		//	sunDirection = glm::vec3(cos(pi) * (1.0f - atardecerProgress), -sin(pi) * (1.0f - atardecerProgress), 0.0f);
+		//	adjustedIntensity = maxIntensity - (maxIntensity - minIntensity) * atardecerProgress;
+		//	if (adjustedIntensity < 0.2f)
+		//	{
+		//		adjustedIntensity = 0.2f;
+		//	}
+		//	mainLight.SetDirection(sunDirection);
+		//	mainLight.SetIntensity(adjustedIntensity);
+		//	mainLight.SetAmbientIntensity(adjustedIntensity); // También ajustamos la intensidad ambiental
+		//}
+		//else if(FaseDia<ciclototal){
+		//	
+		//	printf("Estoy entrando");
+		//	/*auxLight = &mainLight2;*/
+		//	skyboxNoche.DrawSkybox(currentCamera->calculateViewMatrix(), projection);
+		//	mainLight.SetIntensity(0.2f);
+		//	mainLight.SetAmbientIntensity(0.2f); // También ajustamos la intensidad ambiental
+		//	
+		//}
+		//else {
+		//	dianocheTiempo = glfwGetTime();
+		//}
+		
+	/*	if ((glfwGetTime() - dianocheTiempo) < 120)
+		{
+			
+			skyboxDia.DrawSkybox(camera.calculateViewMatrix(), projection);
+			mainLight.SetDirection(sunDirection);
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 240)
+		{
+			auxLight = &mainLight2;
+			skyboxNoche.DrawSkybox(camera.calculateViewMatrix(), projection);
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}*/
 		shaderList[0].UseShader();
 		uniformModel = shaderList[0].GetModelLocation();
 		uniformProjection = shaderList[0].GetProjectionLocation();
@@ -4581,7 +4745,6 @@ int main()
 		uniformEyePosition = shaderList[0].GetEyePositionLocation();
 		uniformColor = shaderList[0].getColorLocation();
 		uniformTextureOffset = shaderList[0].getOffsetLocation();
-
 		//información en el shader de intensidad especular y brillo
 		uniformSpecularIntensity = shaderList[0].GetSpecularIntensityLocation();
 		uniformShininess = shaderList[0].GetShininessLocation();
@@ -4597,7 +4760,7 @@ int main()
 		/*spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());*/
 
 		//información al shader de fuentes de iluminación
-		shaderList[0].SetDirectionalLight(&mainLight);
+		shaderList[0].SetDirectionalLight(auxLight);
 		shaderList[0].SetPointLights(pointLights, pointLightCount);
 		shaderList[0].SetSpotLights(spotLights, spotLightCount);
 
@@ -4624,7 +4787,7 @@ int main()
 		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, -2.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(30.0f, 1.0f, 30.0f));
+		model = glm::scale(model, glm::vec3(22.5f, 1.0f, 22.5f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
@@ -4658,11 +4821,379 @@ int main()
 		//OBJETOS EN EL TABLERO
 		//Casa Cynthia
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(250.0f, 1.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(225.0f, 0.0f, 0.0f));
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		casaCynthia.RenderModel();
+
+		//ARBOL
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(70.0f, 0.0f, 60.0f));
+		/*model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(8.0f, 8.0f, 8.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arboltablero1.RenderModel();
+
+		//PALMERA
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-70.0f, 0.0f, -70.0f));
+		/*model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		palmeratablero.RenderModel();
+
+		//ARBOL SIN HOJAS
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(70.0f, 0.0f, -70.0f));
+		/*model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbolsinhojas.RenderModel();
+
+		//ARBOL 2
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-70.0f, 0.0f, 70.0f));
+		/*model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arboltablero2.RenderModel();
+
+		//CARRO
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(55.0f, 7.0f, 10.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.18f, 0.18f, 0.18f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		carro1.RenderModel();
+
+		//MODELOS 4
+		//ERMARC
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(30.0f, 0.5f, 0.0f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(9.0f, 9.0f, 9.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ermac.RenderModel();
+
+		//Goro
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(30.0f, 0.5f, 20.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(8.0f, 8.0f, 8.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		goro.RenderModel();
+
+		//MESA DE ITEMS
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(20.0f, 0.0f, 55.0f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(20.0f, 15.0f, 20.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		mesa.RenderModel();
+
+		//SOMBRERO ITEM
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(25.0f, 7.2f, 58.0f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		sombrero.RenderModel();
+
+		//HACHA ITEM
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(20.0f, 7.4f, 58.0f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		hacha.RenderModel();
+
+		//ESTRELLA ITEM
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(15.0f, 7.4f, 58.0f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		estrella.RenderModel();
+
+		//BAZOOKA ITEM
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(15.0f, 7.4f, 53.0f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		bazooka.RenderModel();
+
+		//BOX1 ITEM
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(28.0f, 7.4f, 52.0f));
+		/*model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));*/
+		model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		box1.RenderModel();
+
+		//BOX2 ITEM
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(24.0f, 7.4f, 52.0f));
+		/*model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));*/
+		model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		box2.RenderModel();
+
+		//BOX3 ITEM
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(20.0f, 7.4f, 52.0f));
+		/*model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));*/
+		model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		box3.RenderModel();
+
+		//PRIMERO LADO LLENANDO DE FLORES
+		//FLORES ROJAS
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-70.0f, 0.0f, -50.0f));
+		/*model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		flores1.RenderModel();
+
+		//ARBUSTO
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-70.0f, 0.0f, -30.0f));
+		/*model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbusto.RenderModel();
+
+		//FLORES ROJAS
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-70.0f, 0.0f, -10.0f));
+		/*model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		flores1.RenderModel();
+
+		//ARBUSTO
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-70.0f, 0.0f, 10.0f));
+		/*model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbusto.RenderModel();
+
+		//FLORES ROJAS
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-70.0f, 0.0f, 30.0f));
+		/*model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		flores1.RenderModel();
+
+		//ARBUSTO
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-70.0f, 0.0f, 50.0f));
+		/*model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbusto.RenderModel();
+
+		//SEGUNDO LADO DEL TABLERO
+
+		//FLORES ROJAS
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-50.0f, 0.0f, -70.0f));
+		/*model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		flores1.RenderModel();
+
+		//ARBUSTO
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-30.0f, 0.0f, -70.0f));
+		/*model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbusto.RenderModel();
+
+		//FLORES ROJAS
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-10.0f, 0.0f, -70.0f));
+		/*model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		flores1.RenderModel();
+
+		//ARBUSTO
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(10.0f, 0.0f, -70.0f));
+		/*model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbusto.RenderModel();
+
+		//FLORES ROJAS
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(30.0f, 0.0f, -70.0f));
+		/*model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		flores1.RenderModel();
+
+		//ARBUSTO
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(50.0f, 0.0f, -70.0f));
+		/*model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbusto.RenderModel();
+
+		//TERCER LADO
+		//FLORES ROJAS
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(70.0f, 0.0f, -50.0f));
+		/*model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		flores1.RenderModel();
+
+		//ARBUSTO
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(70.0f, 0.0f, -30.0f));
+		/*model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbusto.RenderModel();
+
+		//FLORES ROJAS
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(70.0f, 0.0f, -10.0f));
+		/*model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		flores1.RenderModel();
+
+		//ARBUSTO
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(70.0f, 0.0f, 10.0f));
+		/*model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbusto.RenderModel();
+
+		//FLORES ROJAS
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(70.0f, 0.0f, 30.0f));
+		/*model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		flores1.RenderModel();
+
+		//ARBUSTO
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(70.0f, 0.0f, 50.0f));
+		/*model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbusto.RenderModel();
+
+		//CUARTA 
+		//FLORES ROJAS
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-50.0f, 0.0f, -70.0f));
+		/*model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		flores1.RenderModel();
+
+		//ARBUSTO
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-30.0f, 0.0f, -70.0f));
+		/*model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbusto.RenderModel();
+
+		//FLORES ROJAS
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-10.0f, 0.0f, -70.0f));
+		/*model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		flores1.RenderModel();
+
+		//ARBUSTO
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(10.0f, 0.0f, -70.0f));
+		/*model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbusto.RenderModel();
+
+		//FLORES ROJAS
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(30.0f, 0.0f, -70.0f));
+		/*model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		flores1.RenderModel();
+
+		//ARBUSTO
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(50.0f, 0.0f, -70.0f));
+		/*model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbusto.RenderModel();
+
+		//TERCER LADO
+		//FLORES ROJAS
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(50.0f, 0.0f, 70.0f));
+		/*model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		flores1.RenderModel();
+
+		//ARBUSTO
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(30.0f, 0.0f, 70.0f));
+		/*model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbusto.RenderModel();
+
+		//FLORES ROJAS
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(10.0f, 0.0f, 70.0f));
+		/*model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		flores1.RenderModel();
+
+		//ARBUSTO
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-10.0f, 0.0f, 70.0f));
+		/*model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbusto.RenderModel();
+
+		//FLORES ROJAS
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-30.0f, 0.0f, 70.0f));
+		/*model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		flores1.RenderModel();
+
+		//ARBUSTO
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-50.0f, 0.0f, 70.0f));
+		/*model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arbusto.RenderModel();
+
 		// CASILLAS 
 		model = glm::mat4(1.0);
 
@@ -5711,7 +6242,7 @@ int main()
 			}
 		}
 		else if (enMovimientoX) {
-			printf("Estado de enMovimientoX: %d, mueveCarro2: %f\n", enMovimientoZ, mueveCarro2);
+			/*printf("Estado de enMovimientoX: %d, mueveCarro2: %f\n", enMovimientoZ, mueveCarro2);*/
 
 			if (!enCurva) {
 				enCurva = true;
@@ -5726,7 +6257,7 @@ int main()
 				model = glm::translate(glm::mat4(1.0f), glm::vec3(-160.0f + mueveCarro, 0.0f, -160.0f)) *
 					glm::rotate(glm::mat4(1.0f), glm::radians(giraCarro), glm::vec3(0.0f, 1.0f, 0.0f));
 
-				printf("Durante curva -> mueveCarro: %f, giraCarro: %f\n", mueveCarro, giraCarro);
+				/*printf("Durante curva -> mueveCarro: %f, giraCarro: %f\n", mueveCarro, giraCarro);*/
 			}
 
 			// Cambia al movimiento en Z positivo cuando llega a -160 en X
@@ -5747,7 +6278,7 @@ int main()
 				}
 			}
 
-			printf("Final X movimiento -> mueveCarro: %f, giraCarro: %f\n", mueveCarro, giraCarro);
+			/*printf("Final X movimiento -> mueveCarro: %f, giraCarro: %f\n", mueveCarro, giraCarro);*/
 		}
 		else if (enMovimientoZ) {
 			// Solo entra en la curva una vez
@@ -5787,7 +6318,7 @@ int main()
 				}
 			}
 
-			printf("Durante curva -> mueveCarro2: %f, giraCarro: %f\n", mueveCarro2, giraCarro);
+			/*printf("Durante curva -> mueveCarro2: %f, giraCarro: %f\n", mueveCarro2, giraCarro);*/
 		}
 
 
@@ -5887,7 +6418,7 @@ int main()
 		toffset = glm::vec2(toffsetletrerou, toffsetletrerov);
 		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, 3.0f, 0.0));
+		model = glm::translate(model, glm::vec3(0.0f, 1.0f, 0.0));
 		model = glm::rotate(model, 90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::rotate(model, -45 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
