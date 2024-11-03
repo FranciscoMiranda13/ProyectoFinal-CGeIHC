@@ -825,7 +825,12 @@ Model ermac;
 Model goro;
 Model cage;
 Model kabal;
-
+Model esqueleto;
+Model Architect;
+Model cleveland;
+Model glenn_quagmire;
+Model herbert;
+Model Chicken_Nitro;
 // MODELOS AUXILIARES
 Model esfera;
 
@@ -1409,11 +1414,26 @@ int main()
 	ermac.LoadModel("Models/MK-X_iOS_OUTWORLD_Ermac_MK-X.obj");
 	goro = Model();
 	goro.LoadModel("Models/goro.obj");
-	//cage = Model();
-	//cage.LoadModel("Models/NinaCadyFEShape.obj");
-	//kabal = Model();
-	//kabal.LoadModel("Models/NinaCadyFEShape.obj");
-	//mesa = Model();
+	cage = Model();
+	cage.LoadModel("Models/cage.obj");
+	kabal = Model();
+	kabal.LoadModel("Models/kabal.obj");
+	esqueleto = Model();
+	esqueleto.LoadModel("Models/CrashSkeleton.obj");
+	Architect = Model();
+	Architect.LoadModel("Models/Architect.obj");
+	cleveland = Model();
+	cleveland.LoadModel("Models/cleveland.obj");
+	glenn_quagmire = Model();
+	glenn_quagmire.LoadModel("Models/glenn_quagmire.obj");
+	herbert = Model();
+	herbert.LoadModel("Models/herbert.obj");
+	Chicken_Nitro = Model();
+	Chicken_Nitro.LoadModel("Models/Chicken_Nitro.obj");
+
+	
+
+	mesa = Model();
 	mesa.LoadModel("Models/RageTable.obj");
 	sombrero = Model();
 	sombrero.LoadModel("Models/KRN_KL_Hat_St.obj");
@@ -5314,12 +5334,208 @@ int main()
 
 		//OBJETOS EN EL TABLERO
 		//Casa Cynthia
+		/*model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(210.0f, -1.0f, 0.0f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		casaCynthia.RenderModel();*/
+
+		//Casa Cynthia
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(225.0f, 0.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(210.0f, -1.0f, 65.0f));
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		casaCynthia.RenderModel();
+
+		//Casa Cynthia
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(210.0f, -1.0f, 130.0f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		casaCynthia.RenderModel();
+
+		//Casa Cynthia
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(210.0f, -1.0f, -65.0f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		casaCynthia.RenderModel();
+
+		//Casa Cynthia
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(210.0f, -1.0f,-130.0f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		casaCynthia.RenderModel();
+
+		//Casa Cynthia
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(130.0f, -1.0f, 210.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		casaCynthia.RenderModel();
+
+		//Casa Cynthia
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(65.0f, -1.0f, 210.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		casaCynthia.RenderModel();
+
+		//Casa Cynthia
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, -1.0f, 210.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		casaCynthia.RenderModel();
+
+		//Casa Cynthia
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-65.0f, -1.0f, 210.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		casaCynthia.RenderModel();
+
+		//Casa Cynthia
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-130.0f, -1.0f, 210.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		casaCynthia.RenderModel();
+
+		//Casa Cynthia
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-210.0f, -1.0f, 130.0f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		casaCynthia.RenderModel();
+
+		//Casa Cynthia
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-210.0f, -1.0f, 65.0f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		casaCynthia.RenderModel();
+
+
+		////Casa Cynthia
+		//model = glm::mat4(1.0);
+		//model = glm::translate(model, glm::vec3(-210.0f, -1.0f, 0.0f));
+		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//casaCynthia.RenderModel();
+
+		//Casa Cynthia
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-210.0f, -1.0f, -65.0f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		casaCynthia.RenderModel();
+
+		//Casa Cynthia
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-210.0f, -1.0f, -130.0f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		casaCynthia.RenderModel();
+
+		//Casa Cynthia
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-130.0f, -1.0f, -210.0f));
+		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		casaCynthia.RenderModel();
+
+		//Casa Cynthia
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-65.0f, -1.0f, -210.0f));
+		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		casaCynthia.RenderModel();
+
+		//Casa Cynthia
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, -1.0f, -210.0f));
+		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		casaCynthia.RenderModel();
+
+		//Casa Cynthia
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(65.0f, -1.0f, -210.0f));
+		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		casaCynthia.RenderModel();
+
+		//Casa Cynthia
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(130.0f, -1.0f, -210.0f));
+		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		casaCynthia.RenderModel();
+
+		//ESQUELETO CRASH
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(210.0f, -1.0f, 0.0f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		esqueleto.RenderModel();
+
+		//ARCHITECT CRASH
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(150.0f, 0.5f, 198.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Architect.RenderModel();
+
+		//CLEVELAND
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(150.0f, 0.5f, -198.0f));
+		/*model = glm::rotate(model, -180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		cleveland.RenderModel();
+
+		//Glenn
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-150.0f, 0.5f, -198.0f));
+		/*model = glm::rotate(model, -180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		glenn_quagmire.RenderModel();
+
+		//HERBERT THE PERVERT
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-150.0f, 0.5f, 198.0f));
+		model = glm::rotate(model, -180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		herbert.RenderModel();
+
+		//CHICKEN
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(10.0f, -1.0f, 10.0f));
+		/*model = glm::rotate(model, -180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));*/
+		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 50.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Chicken_Nitro.RenderModel();
 
 		//ARBOL
 		model = glm::mat4(1.0);
@@ -5377,6 +5593,23 @@ int main()
 		model = glm::scale(model, glm::vec3(8.0f, 8.0f, 8.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		goro.RenderModel();
+
+		//Kabal
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(15.0f, 0.5f, 15.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(8.0f, 8.0f, 8.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		kabal.RenderModel();
+
+		//Cage
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(20.0f, 0.5f, 20.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(8.5f, 8.5f, 8.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		cage.RenderModel();
+
 
 		//MESA DE ITEMS
 		model = glm::mat4(1.0);
@@ -5690,7 +5923,7 @@ int main()
 
 		// ##################################### CASILLAS ##################################### \\
 
-// CASILLAS 
+		// CASILLAS 
 		model = glm::mat4(1.0);
 
 		// 1
