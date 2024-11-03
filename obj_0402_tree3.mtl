@@ -1,0 +1,20 @@
+# Material file for obj_0402_tree3.obj
+
+newmtl tex_0402_tree_wood.004
+	Ns -1
+	d 1
+	illum 2
+	Kd 0.8 0.8 0.8
+	Ks 0.0 0.0 0.0
+	Ka 1.0 1.0 1.0
+	map_Kd tex_0402_tree_wood.png
+
+newmtl tx1_0402_leaves.002
+	Ns -1
+	d 1
+	illum 2
+	Kd 0.8 0.8 0.8
+	Ks 0.0 0.0 0.0
+	Ka 1.0 1.0 1.0
+	map_Kd tx1_0402_leaves.png
+

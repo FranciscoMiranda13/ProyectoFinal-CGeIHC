@@ -1,0 +1,62 @@
+# Blender 4.2.3 LTS MTL File: 'None'
+# www.blender.org
+
+newmtl Accessory
+Ns 250.000000
+Ka 0.100000 0.100000 0.100000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 1
+map_Kd Goro_Accessory_Diff.png
+
+newmtl AccessoryDamage
+Ns 250.000000
+Ka 0.100000 0.100000 0.100000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 1
+map_Kd Goro_Accessory_Diff_Damage.png
+
+newmtl Damage
+Ns 250.000000
+Ka 0.100000 0.100000 0.100000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 1
+map_Kd Goro_Diff_Damage.png
+
+newmtl Goro
+Ns 250.000000
+Ka 0.100000 0.100000 0.100000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 1
+map_Kd Goro_Diff.png
+
+newmtl Hair
+Ns 250.000000
+Ka 0.100000 0.100000 0.100000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 1
+map_Kd Goro_Accessory_Diff.png
+
+newmtl Stump
+Ns 250.000000
+Ka 0.100000 0.100000 0.100000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 1
+map_Kd Stump_Diff.png
