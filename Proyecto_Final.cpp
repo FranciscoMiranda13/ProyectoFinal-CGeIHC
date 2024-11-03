@@ -831,6 +831,7 @@ Model cleveland;
 Model glenn_quagmire;
 Model herbert;
 Model Chicken_Nitro;
+Model MK9_X360_STG_PROP_Statue_Goro;
 // MODELOS AUXILIARES
 Model esfera;
 
@@ -1430,7 +1431,8 @@ int main()
 	herbert.LoadModel("Models/herbert.obj");
 	Chicken_Nitro = Model();
 	Chicken_Nitro.LoadModel("Models/Chicken_Nitro.obj");
-
+	MK9_X360_STG_PROP_Statue_Goro = Model();
+	MK9_X360_STG_PROP_Statue_Goro.LoadModel("Models/MK9_X360_STG_PROP_Statue_Goro.obj");
 	
 
 	mesa = Model();
@@ -5496,6 +5498,14 @@ int main()
 		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		esqueleto.RenderModel();
+
+		//ESTATUA1 CRASH
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(200.0f, -1.0f, 0.0f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 2.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		MK9_X360_STG_PROP_Statue_Goro.RenderModel();
 
 		//ARCHITECT CRASH
 		model = glm::mat4(1.0);
