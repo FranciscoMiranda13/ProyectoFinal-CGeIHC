@@ -1,0 +1,60 @@
+﻿  Proyecto_Final.cpp
+C:\Users\FM\Desktop\Proyecto\Proyecto\Window.h(12,36): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
+  (compilando archivo de origen "Proyecto_Final.cpp")
+  
+C:\Users\FM\Desktop\Proyecto\Proyecto\Window.h(13,37): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
+  (compilando archivo de origen "Proyecto_Final.cpp")
+  
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(137,25): warning C4305: 'inicializando': truncamiento de 'double' a 'float'
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(139,25): warning C4305: 'inicializando': truncamiento de 'double' a 'float'
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(1640,15): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(1642,33): warning C4244: '+=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(1649,33): warning C4805: '==': combinación no segura del tipo 'GLfloat' y el tipo 'bool' en la operación
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(2126,33): warning C4805: '==': combinación no segura del tipo 'GLfloat' y el tipo 'bool' en la operación
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(3527,33): warning C4805: '==': combinación no segura del tipo 'GLfloat' y el tipo 'bool' en la operación
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(3548,33): warning C4805: '==': combinación no segura del tipo 'GLfloat' y el tipo 'bool' en la operación
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(3581,32): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(3621,34): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(3660,30): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(3699,30): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(3742,32): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(3785,36): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(3828,35): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(3871,37): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(3914,35): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(3957,30): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(4000,32): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(4043,28): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(4086,32): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(4129,31): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(4170,31): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(4213,31): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(4256,30): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(4299,31): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(4342,32): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(4385,35): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(4428,30): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(4471,31): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(4514,32): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(4556,35): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(4599,33): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(4641,31): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(4684,31): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(4727,31): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(4770,31): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(4813,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(4856,31): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(4899,29): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(4942,31): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(4985,30): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(5028,30): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(5071,33): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(5114,31): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(5157,34): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(5200,32): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(5232,30): warning C4244: '+=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(5244,30): warning C4244: '+=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(5259,28): warning C4244: '+=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(5326,32): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\FM\Desktop\Proyecto\Proyecto\Proyecto_Final.cpp(7206,38): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+  Proyecto.vcxproj -> C:\Users\FM\Desktop\Proyecto\Debug\Proyecto.exe
