@@ -1,0 +1,47 @@
+# Blender MTL File: 'None'
+# Material Count: 4
+
+newmtl cleveland
+Ns 92.156863
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd cleveland.png
+
+newmtl cleveland_eyelids
+Ns 92.156863
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd cleveland_eyelids.png
+map_d cleveland_eyelids.png
+
+newmtl cleveland_eyes
+Ns 92.156863
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd cleveland_eyes.png
+
+newmtl cleveland_mouth
+Ns 92.156863
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd cleveland_mouth.png
