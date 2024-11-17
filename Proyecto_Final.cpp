@@ -618,6 +618,12 @@ float escala03 = 0.0f;
 float escala03Offset = 0.1f;
 float tiempoTransformacion = 0.0f;
 
+// AYUDA PARA EL RECORRIDO
+bool recorrido01 = true;
+bool recorrido02 = true;
+bool recorrido03 = true;
+bool recorrido04 = true;
+
 Window mainWindow;
 std::vector<Mesh*> meshList;
 std::vector<Shader> shaderList;
@@ -869,6 +875,7 @@ Model glenn_quagmire;
 Model herbert;
 Model Chicken_Nitro;
 Model MK9_X360_STG_PROP_Statue_Goro;
+Model lampara;
 
 // MODELOS PARA LA TRASNFORMACION
 Model scorpionOriginal;
@@ -1517,6 +1524,8 @@ int main()
 	scorpionTransformacion.LoadModel("Models/scorpionTransformacion.obj");
 	fireball = Model();
 	fireball.LoadModel("Models/bolaDeFuego.obj");
+	lampara = Model();
+	lampara.LoadModel("Models/Portal_Totem.obj");
 
 	// MODELO AUXILIAR
 	esfera = Model();
@@ -1566,9 +1575,9 @@ int main()
 	//contador de luces puntuales
 	unsigned int pointLightCount = 0;
 	//Declaración de primer luz puntual
-	pointLights[0] = PointLight(1.0f, 0.0f, 0.0f,
+	pointLights[0] = PointLight(1.0f, 1.0f, 1.0f,
 		0.0f, 1.0f,
-		-200.0f, 4.0f, 80.0f,
+		-1000.0f, 0.0f, -40.0f,
 		0.3f, 0.2f, 0.1f);
 	pointLightCount++;
 	unsigned int spotLightCount = 0;
@@ -1582,11 +1591,11 @@ int main()
 	spotLightCount++;
 
 	// LUZ LIGADA AL PERSONAJE POR LA NOCHE
-	spotLights[1] = SpotLight(1.0f, 1.0f, 1.0f,
-		0.8f, 2.0f,
+	spotLights[1] = SpotLight(1.0f, 0.0f, 1.0f,
+		5.0f, 2.0f,
 		0.0f, 0.0f, 0.0f,
 		0.0f, 0.0f, 0.0f,
-		0.3f, 0.0f, 0.001f,
+		0.0f, 0.0f, 0.001f,
 		20.0f);
 	spotLightCount++;
 	
@@ -2422,36 +2431,6 @@ int main()
 			//printf("RESULTADO = %i", resultado);
 		}
 
-							// ##################################### RESULTADO DIFERENTE AL ANTERIOR PARA ACTUALIZAR POSICION ##################################### \\
-
-		// VERIFICAR SI 'RESULTADO' HA CAMBIADO
-		if (resultado != resultadoAnterior01) {
-			mueveAvatar01Base = mueveAvatar01; // ALMACENAR LA POSICION ACTUAL COMO BASE
-			resultadoAnterior01 = resultado;     // ACTUALIZA EL VALOR ANTERIOR
-			//printf(" MUEVEAVATAR01BASE = %f y RESULTADOANTERIOR01 = %i             \n", mueveAvatar01Base, resultadoAnterior01);
-		}
-
-		// VERIFICAR SI 'RESULTADO' HA CAMBIADO
-		if (resultado != resultadoAnterior02) {
-			mueveAvatar02Base = mueveAvatar02; // ALMACENAR LA POSICION ACTUAL COMO BASE
-			resultadoAnterior02 = resultado;     // ACTUALIZA EL VALOR ANTERIOR
-			//printf(" EL SEGUNDOOOOOO = %f y RESULTADOANTERIOR01 = %i             \n", mueveAvatar02Base, resultadoAnterior01);
-		}
-
-		// VERIFICAR SI 'RESULTADO' HA CAMBIADO
-		if (resultado != resultadoAnterior03) {
-			mueveAvatar03Base = mueveAvatar03; // ALMACENAR LA POSICION ACTUAL COMO BASE
-			resultadoAnterior03 = resultado;     // ACTUALIZA EL VALOR ANTERIOR
-			//printf(" EL SEGUNDOOOOOO = %f y RESULTADOANTERIOR01 = %i             \n", mueveAvatar02Base, resultadoAnterior01);
-		}
-
-		// VERIFICAR SI 'RESULTADO' HA CAMBIADO
-		if (resultado != resultadoAnterior04) {
-			mueveAvatar04Base = mueveAvatar04; // ALMACENAR LA POSICION ACTUAL COMO BASE
-			resultadoAnterior04 = resultado;     // ACTUALIZA EL VALOR ANTERIOR
-			//printf(" EL SEGUNDOOOOOO = %f y RESULTADOANTERIOR01 = %i             \n", mueveAvatar02Base, resultadoAnterior01);
-		}
-
 											// ##################################### LO QUE RESTA DE AVANZAR ##################################### \\
 
 		// DIFERENCIA
@@ -2545,6 +2524,14 @@ int main()
 					}
 				}
 			}
+			else
+			{
+				if (resultado4Caras == 0 && resultado8Caras == 0)
+				{
+					mueveAvatar01Base = mueveAvatar01;
+					resultado = 0;
+				}
+			}
 		}
 		else if (rotaAvatar01 > -90)
 		{
@@ -2621,7 +2608,20 @@ int main()
 			}
 			else
 			{
-				hayDiferencia = !hayDiferencia;
+				if (resultado4Caras == 0 && resultado8Caras == 0)
+				{
+					mueveAvatar02Base = mueveAvatar02;
+					resultado = 0;
+					hayDiferencia = !hayDiferencia;
+				}
+			}
+		}
+		else if (diferencia == 0.0f && recorrido01)
+		{
+			if (resultado4Caras == 0 && resultado8Caras == 0)
+			{
+				resultado = 0;
+				recorrido01 = !recorrido01;
 			}
 		}
 		else if (mueveAvatar02 <= 200)
@@ -2664,6 +2664,14 @@ int main()
 					}
 				}
 
+			}
+			else
+			{
+				if (resultado4Caras == 0 && resultado8Caras == 0)
+				{
+					mueveAvatar02Base = mueveAvatar02;
+					resultado = 0;
+				}
 			}
 		}
 		else if (rotaAvatar02 > -90)
@@ -2741,7 +2749,20 @@ int main()
 			}
 			else
 			{
-				hayDiferencia01 = !hayDiferencia01;
+				if (resultado4Caras == 0 && resultado8Caras == 0)
+				{
+					mueveAvatar03Base = mueveAvatar03;
+					resultado = 0;
+					hayDiferencia01 = !hayDiferencia01;
+				}
+			}
+		}
+		else if (diferencia01 == 0.0f && recorrido02)
+		{
+			if (resultado4Caras == 0 && resultado8Caras == 0)
+			{
+				resultado = 0;
+				recorrido02 = !recorrido02;
 			}
 		}
 		else if (mueveAvatar03 <= 200)
@@ -2784,6 +2805,14 @@ int main()
 					}
 				}
 
+			}
+			else
+			{
+				if (resultado4Caras == 0 && resultado8Caras == 0)
+				{
+					mueveAvatar03Base = mueveAvatar03;
+					resultado = 0;
+				}
 			}
 		}
 		else if (rotaAvatar03 > -90)
@@ -2861,7 +2890,20 @@ int main()
 			}
 			else
 			{
-				hayDiferencia02 = !hayDiferencia02;
+				if (resultado4Caras == 0 && resultado8Caras == 0)
+				{
+					mueveAvatar04Base = mueveAvatar04;
+					resultado = 0;
+					hayDiferencia02 = !hayDiferencia02;
+				}
+			}
+		}
+		else if (diferencia02 == 0.0f && recorrido03)
+		{
+			if (resultado4Caras == 0 && resultado8Caras == 0)
+			{
+				resultado = 0;
+				recorrido03 = !recorrido03;
 			}
 		}
 		else if (mueveAvatar04 <= 200)
@@ -2905,6 +2947,14 @@ int main()
 				}
 
 			}
+			else
+			{
+				if (resultado4Caras == 0 && resultado8Caras == 0)
+				{
+					mueveAvatar04Base = mueveAvatar04;
+					resultado = 0;
+				}
+			}
 		}
 		else if (rotaAvatar04 > -90)
 		{
@@ -2945,6 +2995,11 @@ int main()
 		{
 												// REINICAR TODOS LOS VALORES AL COMPLETAR UNA VUELTA
 												
+			// VARIABLES PARA RECORRIDO 
+			recorrido01 = true;
+			recorrido02 = true; 
+			recorrido03 = true; 
+
 			// VARIABLES PARA ANIMACION DEL DADO DE 8 CARAS
 			subeBajaDado8 = 35.0f;
 			rotaDadox8 = 0.0f;
