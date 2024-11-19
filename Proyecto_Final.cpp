@@ -5,6 +5,7 @@
 // Vázquez Gómez Carlos Iván. Grupo teoría: 04. Grupo laboratorio: 03. 420055185
 
 
+
 //para cargar imagen
 #define STB_IMAGE_IMPLEMENTATION
 
@@ -13,7 +14,7 @@
 #include <cmath>
 #include <vector>
 #include <math.h>
-
+#include <iomanip>
 #include <glew.h>
 #include <glfw3.h>
 
@@ -44,9 +45,22 @@
 #include <cstdlib> // Para rand() y srand()
 #include <ctime>   // Para time()
 
+//SONIDO
+#include <irrklang.h>
+using namespace irrklang;
+
+#pragma comment(lib, "irrKlang.lib")
+
+ISoundEngine* Ambiental = createIrrKlangDevice();
+ISoundEngine* Guagmire3D = createIrrKlangDevice();
+ISoundEngine* crash = createIrrKlangDevice();
+ISoundEngine* fuego = createIrrKlangDevice();
+
 const float toRadians = 3.14159265f / 180.0f;
 
 									// ##################################### VARIABLES PARA ANIMACION ##################################### \\
+									// 
+
 
 // CONTROL DE LUZ DIRECCIONAL
 float totalDia = 30.0f;
@@ -116,7 +130,7 @@ int conta01 = 0;
 
 float diferencia02 = 0.0f;
 bool hayDiferencia02 = true;
-int conta02 = 0; 
+int conta02 = 0;
 
 // VARIABLES PARA LA ANIMACION DE LA VUELTA 
 float rotaAvatar01 = 0.0f;
@@ -657,7 +671,7 @@ Texture AgaveTexture;
 Texture letrero;
 Texture pasto;
 
-									// ##################################### CREACION DE MODELOS ##################################### \\
+// ##################################### CREACION DE MODELOS ##################################### \\
 
 // DADOS MODELOS
 Model dado4CarasM;
@@ -909,7 +923,6 @@ Model base02;
 // MODELOS AUXILIARES
 Model esfera;
 Model esferaN;
-
 									// ##################################### SKYBOX ##################################### \\
 
 // SKYBOX DIA 
@@ -937,6 +950,9 @@ static const char* vShader = "shaders/shader_light.vert";
 
 // Fragment Shader
 static const char* fShader = "shaders/shader_light.frag";
+
+//función para teclado de keyframes 
+void inputKeyframes(bool* keys);
 
 //función de calculo de normales por promedio de vértices 
 void calcAverageNormals(unsigned int* indices, unsigned int indiceCount, GLfloat* vertices, unsigned int verticeCount,
@@ -1082,7 +1098,6 @@ void CreateShaders()
 }
 
 
-
 int main()
 {
 	mainWindow = Window(1366, 768); // 1280, 1024 or 1024, 768
@@ -1114,9 +1129,9 @@ int main()
 	pasto = Texture("Textures/pasto1.png");
 	pasto.LoadTextureA();
 
-										// ##################################### CARGA DE MODELOS ##################################### \\
+	// ##################################### CARGA DE MODELOS ##################################### \\
 
-	// DADOS 
+// DADOS 
 	dado4CarasM = Model();
 	dado4CarasM.LoadModel("Models/dado4Caras.obj");
 	dado8CarasM = Model();
@@ -1369,7 +1384,7 @@ int main()
 	casilla39AR.LoadModel("Models/casilla39AR.obj");
 	casilla40AR = Model();
 	casilla40AR.LoadModel("Models/casilla40AR.obj");
-	
+
 	// MODELOS DE LAS CASILLAS
 	modeloCasilla01M = Model();
 	modeloCasilla01M.LoadModel("Models/raidenCasilla01.obj");
@@ -1483,7 +1498,7 @@ int main()
 	piernaIzquierdaCrash.LoadModel("Models/crashPiernaIzquierda.obj");
 
 	// MODELOS PARA ANIMACIONES
-	
+
 	// SUBZERO
 	subZeroAnimacion = Model();
 	subZeroAnimacion.LoadModel("Models/subZeroAnimacion.obj");
@@ -1615,32 +1630,51 @@ int main()
 	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
 		0.5f, 0.1f,
 		0.0f, -1.0f, 0.0f);
-	//contador de luces puntuales
-	unsigned int pointLightCount = 0;
-	//Declaración de primer luz puntual
-	pointLights[0] = PointLight(1.0f, 1.0f, 1.0f,
-		0.0f, 1.0f,
-		-1000.0f, 0.0f, -40.0f,
+
+	unsigned int pointLightCount = 0; 	//contador de luces puntuales
+
+	//LUZ LIGADA AL PERSONAJE
+	pointLights[0] = PointLight(1.0f, 1.0f, 0.0f,
+		5.0f, 10.0f,
+		-200.0f, 4.0f, 80.0f,
 		0.3f, 0.2f, 0.1f);
 	pointLightCount++;
+
+	//LUZ ESQUINA 1
+	pointLights[1] = PointLight(1.0f, 1.0f, 1.0f,
+		5.0f, 15.0f,
+		-100.0f, 10.0f, -100.0f,
+		0.3f, 0.2f, 0.1f);
+	pointLightCount++;
+
+	//LUZ ESQUIN 2
+	pointLights[2] = PointLight(1.0f, 1.0f, 1.0f,
+		5.0f, 15.0f,
+		100.0f, 10.0f, -100.0f,
+		0.3f, 0.2f, 0.1f);
+	pointLightCount++;
+
 	unsigned int spotLightCount = 0;
-	//linterna
+
+	//LUZ ESQUINA 3
 	spotLights[0] = SpotLight(1.0f, 1.0f, 1.0f,
-		0.0f, 2.0f,
-		0.0f, 0.0f, 0.0f,
+		5.0f, 15.0f,
+		100.0f, 10.0f, 100.0f,
 		0.0f, -1.0f, 0.0f,
-		1.0f, 0.0f, 0.0f,
-		5.0f);
+		0.3f, 0.2f, 0.1f,
+		90.0f);
 	spotLightCount++;
 
-	// LUZ LIGADA AL PERSONAJE POR LA NOCHE
-	spotLights[1] = SpotLight(1.0f, 0.0f, 1.0f,
-		5.0f, 2.0f,
-		0.0f, 0.0f, 0.0f,
-		0.0f, 0.0f, 0.0f,
-		0.0f, 0.0f, 0.001f,
-		20.0f);
+	// LUZ ESQUINA 4
+	spotLights[1] = SpotLight(1.0f, 1.0f, 1.0f,
+		5.0f, 15.0f,
+		-100.0f, 10.0f, 100.0f,
+		0.0f, -1.0f, 0.0f,
+		0.3f, 0.2f, 0.1f,
+		90.0f);
 	spotLightCount++;
+	
+
 	
 	//se crean mas luces puntuales y spotlight 
 
@@ -1683,6 +1717,45 @@ int main()
 	std::vector<int> listaY_1 = { 60, 120, 180, 240, 300, 360, -60, -120, -180, -240, -300, -360 };
 	int gradosDeY_1 = listaY_1[std::rand() % listaY_1.size()];
 
+	//Se agregan nuevos frames 
+
+	/*printf("\nTeclas para uso de Keyframes:\n");
+	printf("Presionar barra espaciadora para reproducir animación.\n");
+	printf("Presionar 0 para volver a habilitar reproducción de la animación.\n");
+
+	printf("Presionar L para guardar frame.\n");
+	printf("Presionar P para habilitar guardar un nuevo frame.\n");
+
+	printf("Presionar 1 para mover en X negativo.\n");
+	printf("Presionar 3 para mover en X positivo.\n");
+
+	printf("Presionar 1 para mover en X negativo.\n");
+	printf("Presionar 3 para mover en X positivo.\n");
+
+	printf("Presionar G para mover en Y negativo.\n");
+	printf("Presionar F para mover en Y positivo.\n");
+
+	printf("Presionar 6 para rotar (giro) en sentido horario (incrementa 90).\n");
+	printf("Presionar 7 para rotar (giro) en sentido antihorario (decrementa 90).\n");
+
+	printf("Presionar 2 para habilitar la modificación de las variables nuevamente.\n");
+
+	printf("Presionar 8 para rotar alas en sentido anti horario\n");
+	printf("Presionar 9 para rotar alas en sentido  horario\n");*/
+
+											// ##################################### SONIDO ##################################### \\
+	
+	
+	
+	Ambiental->play2D("Media/ambiente.mp3", true);
+
+	Guagmire3D->play2D("Media/quagmire.mp3", true);
+	crash->play2D("Media/crash.mp3", true);
+	fuego->play2D("Media/fuego.mp3", true);
+	Ambiental->setSoundVolume(0.45f);
+	fuego->setSoundVolume(0.0f);
+
+
 	////Loop mientras no se cierra la ventana
 	while (!mainWindow.getShouldClose())
 	{
@@ -1690,7 +1763,70 @@ int main()
 		deltaTime = now - lastTime;
 		deltaTime += (now - lastTime) / limitFPS;
 		lastTime = now;
+											// ##################################### PRIMER AUDIO 3D ##################################### \\
 
+		if ((camera.getCameraPosition().x <= -130.0f && camera.getCameraPosition().x >= -170.0f) &&
+			(camera.getCameraPosition().z >= -218.0f && camera.getCameraPosition().z <= -178.0f)) {
+			// Muy cerca del modelo
+			Ambiental->setSoundVolume(0.0f);
+			Guagmire3D->setSoundVolume(1.0f);
+		}
+		else if ((camera.getCameraPosition().x <= -110.0f && camera.getCameraPosition().x >= -190.0f) &&
+			(camera.getCameraPosition().z >= -238.0f && camera.getCameraPosition().z <= -158.0f)) {
+			// Cerca del modelo
+			Ambiental->setSoundVolume(0.1f);
+			Guagmire3D->setSoundVolume(0.7f);
+		}
+		else if ((camera.getCameraPosition().x <= -90.0f && camera.getCameraPosition().x >= -210.0f) &&
+			(camera.getCameraPosition().z >= -258.0f && camera.getCameraPosition().z <= -138.0f)) {
+			// Un poco lejos del modelo
+			Ambiental->setSoundVolume(0.2f);
+			Guagmire3D->setSoundVolume(0.5f);
+		}
+		else if ((camera.getCameraPosition().x <= -70.0f && camera.getCameraPosition().x >= -230.0f) &&
+			(camera.getCameraPosition().z >= -278.0f && camera.getCameraPosition().z <= -118.0f)) {
+			// Lejos del modelo
+			Ambiental->setSoundVolume(0.3f);
+			Guagmire3D->setSoundVolume(0.3f);
+		}
+		else {
+			// Muy lejos del modelo
+			Ambiental->setSoundVolume(0.45f);
+			Guagmire3D->setSoundVolume(0.0f);
+		}
+											// ##################################### SEGUNDO AUDIO 3D ##################################### \\
+
+		if ((camera.getCameraPosition().x <= -5.0f && camera.getCameraPosition().x >= -25.0f) &&
+			(camera.getCameraPosition().z >= -55.0f && camera.getCameraPosition().z <= -35.0f)) {
+			// Muy cerca del modelo
+			Ambiental->setSoundVolume(0.0f);
+			crash->setSoundVolume(1.0f);
+		}
+		else if ((camera.getCameraPosition().x <= 5.0f && camera.getCameraPosition().x >= -35.0f) &&
+			(camera.getCameraPosition().z >= -65.0f && camera.getCameraPosition().z <= -25.0f)) {
+			// Cerca del modelo
+			Ambiental->setSoundVolume(0.1f);
+			crash->setSoundVolume(0.8f);
+		}
+		else if ((camera.getCameraPosition().x <= 15.0f && camera.getCameraPosition().x >= -45.0f) &&
+			(camera.getCameraPosition().z >= -75.0f && camera.getCameraPosition().z <= -15.0f)) {
+			// Un poco lejos del modelo
+			Ambiental->setSoundVolume(0.2f);
+			crash->setSoundVolume(0.6f);
+		}
+		else if ((camera.getCameraPosition().x <= 25.0f && camera.getCameraPosition().x >= -55.0f) &&
+			(camera.getCameraPosition().z >= -85.0f && camera.getCameraPosition().z <= -5.0f)) {
+			// Lejos del modelo
+			Ambiental->setSoundVolume(0.3f);
+			crash->setSoundVolume(0.4f);
+		}
+		else {
+			// Muy lejos del modelo
+			Ambiental->setSoundVolume(0.45f);
+			crash->setSoundVolume(0.0f);
+		}
+
+		
 											// ##################################### BAJAR AMBOS DADOS (Y) ##################################### \\
 
 		// PARA BAJAR
@@ -2524,9 +2660,9 @@ int main()
 			diferencia02 = 0.0f;
 		}
 
-											// ##################################### AVANZAR CON EL RESULTADO ##################################### \\
+		// ##################################### AVANZAR CON EL RESULTADO ##################################### \\
 
-		// MOVIMIENTO AVATAR
+// MOVIMIENTO AVATAR
 		if (mueveAvatar01 <= 200)
 		{
 			//printf("AVATAR VALOR: %f", mueveAvatar01);
@@ -5431,6 +5567,22 @@ int main()
 			dianocheTiempo = glfwGetTime();
 		}
 
+		/*	if ((glfwGetTime() - dianocheTiempo) < 120)
+		{
+
+			skyboxDia.DrawSkybox(camera.calculateViewMatrix(), projection);
+			mainLight.SetDirection(sunDirection);
+		}
+		else if ((glfwGetTime() - dianocheTiempo) < 240)
+		{
+			auxLight = &mainLight2;
+			skyboxNoche.DrawSkybox(camera.calculateViewMatrix(), projection);
+		}
+		else
+		{
+			dianocheTiempo = glfwGetTime();
+		}*/
+
 		shaderList[0].UseShader();
 		uniformModel = shaderList[0].GetModelLocation();
 		uniformProjection = shaderList[0].GetProjectionLocation();
@@ -5455,8 +5607,9 @@ int main()
 
 		//información al shader de fuentes de iluminación
 		shaderList[0].SetDirectionalLight(&mainLight);
-		shaderList[0].SetPointLights(pointLights, pointLightCount);
-		shaderList[0].SetSpotLights(spotLights, spotLightCount);
+		
+
+
 
 		glm::mat4 model(1.0);
 		glm::mat4 modelaux(1.0);
@@ -5546,6 +5699,15 @@ int main()
 		{
 			casilla01M.RenderModel();
 		}
+		/*else
+		{
+			dianocheTiempo = glfwGetTime();
+		}*/
+
+		//casilla01A.RenderModel(); // Amarillo
+		//casilla01M.RenderModel(); // Azul
+		//casilla01AR.RenderModel(); // Cocinadas
+
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -5556,19 +5718,28 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado01 >= 1)
-		{
-			casilla02AR.RenderModel();
-		}
+		
 
 		if (esDia)
 		{
-			casilla02A.RenderModel();
+			
+			if (cocinado01 >= 1)
+			{
+				casilla02AR.RenderModel();
+			}
+			else {
+				casilla02A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
 			casilla02M.RenderModel();
 		}
+
+
+		//casilla02M.RenderModel();
+		//casilla02A.RenderModel();
+		//casilla02AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -5580,19 +5751,28 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado02 >= 1)
-		{
-			casilla03AR.RenderModel();
-		}
+		
 
 		if (esDia)
 		{
-			casilla03A.RenderModel();
+			
+
+			if (cocinado02 >= 1)
+			{
+				casilla03AR.RenderModel();
+			}
+			else {
+				casilla03A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
 			casilla03M.RenderModel();
 		}
+
+		//casilla03M.RenderModel();
+		//casilla03A.RenderModel();
+		//casilla03AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -5604,19 +5784,28 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado03 >= 1)
-		{
-			casilla04AR.RenderModel();
-		}
+		
 
 		if (esDia)
 		{
-			casilla04A.RenderModel();
+			
+
+			if (cocinado03 >= 1)
+			{
+				casilla04AR.RenderModel();
+			}
+			else {
+				casilla04A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
 			casilla04M.RenderModel();
 		}
+
+		//casilla04M.RenderModel();
+		//casilla04A.RenderModel();
+		//casilla04AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -5628,19 +5817,28 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado04 >= 1)
-		{
-			casilla05AR.RenderModel();
-		}
+	
 
 		if (esDia)
 		{
-			casilla05A.RenderModel();
+			
+
+			if (cocinado04 >= 1)
+			{
+				casilla05AR.RenderModel();
+			}
+			else {
+				casilla05A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
 			casilla05M.RenderModel();
 		}
+
+		//casilla05M.RenderModel();
+		//casilla05A.RenderModel();
+		//casilla05AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -5652,19 +5850,28 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado05 >= 1)
-		{
-			casilla06AR.RenderModel();
-		}
+		
 
 		if (esDia)
 		{
-			casilla06A.RenderModel();
+			
+
+			if (cocinado05 >= 1)
+			{
+				casilla06AR.RenderModel();
+			}
+			else {
+				casilla06A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
 			casilla06M.RenderModel();
 		}
+
+		//casilla06M.RenderModel();
+		//casilla06A.RenderModel();
+		//casilla06AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -5676,19 +5883,29 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado06 >= 1)
-		{
-			casilla07AR.RenderModel();
-		}
+		
 
 		if (esDia)
 		{
-			casilla07A.RenderModel();
+			
+
+			if (cocinado06 >= 1)
+			{
+				casilla07AR.RenderModel();
+			}
+			else {
+				casilla07A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
 			casilla07M.RenderModel();
 		}
+
+
+		//casilla07M.RenderModel();
+		//casilla07A.RenderModel();
+		//casilla07AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -5700,19 +5917,27 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado07 >= 1)
-		{
-			casilla08AR.RenderModel();
-		}
-
+		
 		if (esDia)
 		{
-			casilla08A.RenderModel();
+			
+			if (cocinado07 >= 1)
+			{
+				casilla08AR.RenderModel();
+			}
+			else {
+				casilla08A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
 			casilla08M.RenderModel();
 		}
+
+
+		//casilla08M.RenderModel();
+		//casilla08A.RenderModel();
+		//casilla08AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -5724,20 +5949,29 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado08 >= 1)
-		{
-			casilla09AR.RenderModel();
-		}
+	
 
 
 		if (esDia)
 		{
-			casilla09A.RenderModel();
+			
+
+			if (cocinado08 >= 1)
+			{
+				casilla09AR.RenderModel();
+			}
+			else {
+				casilla09A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
 			casilla09M.RenderModel();
 		}
+
+		//casilla09M.RenderModel();
+		//casilla09A.RenderModel();
+		//casilla09AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -5749,19 +5983,29 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado09 >= 1)
-		{
-			casilla10AR.RenderModel();
-		}
+		
 
 		if (esDia)
 		{
-			casilla10A.RenderModel();
+		
+
+			if (cocinado09 >= 1)
+			{
+				casilla10AR.RenderModel();
+			}
+			else {
+				casilla10A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
 			casilla10M.RenderModel();
 		}
+
+
+		//casilla10M.RenderModel();
+		//casilla10A.RenderModel();
+		//casilla10AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -5773,19 +6017,28 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado10 >= 1)
-		{
-			casilla11AR.RenderModel();
-		}
+		
 
 		if (esDia)
 		{
-			casilla11A.RenderModel();
+			
+
+			if (cocinado10 >= 1)
+			{
+				casilla11AR.RenderModel();
+			}
+			else {
+				casilla11A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
 			casilla11M.RenderModel();
 		}
+
+		//casilla11M.RenderModel();
+		//casilla11A.RenderModel();
+		//casilla11AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -5797,19 +6050,29 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado11 >= 1)
-		{
-			casilla12AR.RenderModel();
-		}
+		
 
 		if (esDia)
 		{
-			casilla12A.RenderModel();
+			
+
+			if (cocinado11 >= 1)
+			{
+				casilla12AR.RenderModel();
+			}
+			else {
+				casilla12A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
 			casilla12M.RenderModel();
 		}
+
+
+		//casilla12M.RenderModel();
+		//casilla12A.RenderModel();
+		//casilla12AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -5821,19 +6084,28 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado12 >= 1)
-		{
-			casilla13AR.RenderModel();
-		}
+		
 
 		if (esDia)
 		{
-			casilla13A.RenderModel();
+			
+
+			if (cocinado12 >= 1)
+			{
+				casilla13AR.RenderModel();
+			}
+			else {
+				casilla13A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
 			casilla13M.RenderModel();
 		}
+
+		//casilla13M.RenderModel();
+		//casilla13A.RenderModel();
+		//casilla13AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -5845,19 +6117,29 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado13 >= 1)
-		{
-			casilla14AR.RenderModel();
-		}
+		
 
 		if (esDia)
 		{
-			casilla14A.RenderModel();
+			
+
+			if (cocinado13 >= 1)
+			{
+				casilla14AR.RenderModel();
+			}
+			else {
+				casilla14A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
 			casilla14M.RenderModel();
 		}
+
+
+		//casilla14M.RenderModel();
+		//casilla14A.RenderModel();
+		//casilla14AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -5870,20 +6152,26 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado14 >= 1)
-		{
-			casilla15AR.RenderModel();
-		}
-
-
+		
 		if (esDia)
 		{
-			casilla15A.RenderModel();
+			
+			if (cocinado14 >= 1)
+			{
+				casilla15AR.RenderModel();
+			}
+			else {
+				casilla15A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
 			casilla15M.RenderModel();
 		}
+
+		//casilla15M.RenderModel();
+		//casilla15A.RenderModel();
+		//casilla15AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -5895,19 +6183,27 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado15 >= 1)
-		{
-			casilla16AR.RenderModel();
-		}
+		
 
 		if (esDia)
 		{
-			casilla16A.RenderModel();
+			
+			if (cocinado15 >= 1)
+			{
+				casilla16AR.RenderModel();
+			}
+			else {
+				casilla16A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
 			casilla16M.RenderModel();
 		}
+
+		//casilla16M.RenderModel();
+		//casilla16A.RenderModel();
+		//casilla16AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -5919,19 +6215,27 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado16 >= 1)
-		{
-			casilla17AR.RenderModel();
-		}
+		
 
 		if (esDia)
 		{
-			casilla17A.RenderModel();
+			
+			if (cocinado16 >= 1)
+			{
+				casilla17AR.RenderModel();
+			}
+			else {
+				casilla17A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
 			casilla17M.RenderModel();
 		}
+
+		//casilla17M.RenderModel();
+		//casilla17A.RenderModel();
+		//casilla17AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -5943,19 +6247,27 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado17 >= 1)
-		{
-			casilla18AR.RenderModel();
-		}
+		
 
 		if (esDia)
 		{
-			casilla18A.RenderModel();
+			
+			if (cocinado17 >= 1)
+			{
+				casilla18AR.RenderModel();
+			}
+			else {
+				casilla18A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
 			casilla18M.RenderModel();
 		}
+
+		//casilla18M.RenderModel();
+		//casilla18A.RenderModel();
+		//casilla18AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -5967,19 +6279,27 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado18 >= 1)
-		{
-			casilla19AR.RenderModel();
-		}
+	
 
 		if (esDia)
 		{
-			casilla19A.RenderModel();
+			
+			if (cocinado18 >= 1)
+			{
+				casilla19AR.RenderModel();
+			}
+			else {
+				casilla19A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
 			casilla19M.RenderModel();
 		}
+
+		//casilla19M.RenderModel();
+		//casilla19A.RenderModel();
+		//casilla19AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -5990,19 +6310,26 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado19 >= 1)
-		{
-			casilla20AR.RenderModel();
-		}
-
+		
 		if (esDia)
 		{
-			casilla20A.RenderModel();
+			
+			if (cocinado19 >= 1)
+			{
+				casilla20AR.RenderModel();
+			}
+			else {
+				casilla20A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
 			casilla20M.RenderModel();
 		}
+
+		//casilla20M.RenderModel();
+		//casilla20A.RenderModel();
+		//casilla20AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -6014,19 +6341,27 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado20 >= 1)
-		{
-			casilla21AR.RenderModel();
-		}
+		
 
 		if (esDia)
 		{
-			casilla21A.RenderModel();
+			
+			if (cocinado20 >= 1)
+			{
+				casilla21AR.RenderModel();
+			}
+			else {
+				casilla21A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
 			casilla21M.RenderModel();
 		}
+
+		//casilla21M.RenderModel();
+		//casilla21A.RenderModel();
+		//casilla21AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -6038,19 +6373,27 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado21 >= 1)
-		{
-			casilla22AR.RenderModel();
-		}
+		
 
 		if (esDia)
 		{
-			casilla22A.RenderModel();
+			
+			if (cocinado21 >= 1)
+			{
+				casilla22AR.RenderModel();
+			}
+			else {
+				casilla22A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
 			casilla22M.RenderModel();
 		}
+
+		//casilla22M.RenderModel();
+		//casilla22A.RenderModel();
+		//casilla22AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -6062,19 +6405,27 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado22 >= 1)
-		{
-			casilla23AR.RenderModel();
-		}
+		
 
 		if (esDia)
 		{
-			casilla23A.RenderModel();
+			
+			if (cocinado22 >= 1)
+			{
+				casilla23AR.RenderModel();
+			}
+			else {
+				casilla23A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
 			casilla23M.RenderModel();
 		}
+
+		//casilla23M.RenderModel();
+		//casilla23A.RenderModel();
+		//casilla23AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -6086,19 +6437,28 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado23 >= 1)
-		{
-			casilla24AR.RenderModel();
-		}
+		
 
 		if (esDia)
 		{
-			casilla24A.RenderModel();
+			
+
+			if (cocinado23 >= 1)
+			{
+				casilla24AR.RenderModel();
+			}
+			else {
+				casilla24A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
 			casilla24M.RenderModel();
 		}
+
+		//casilla24M.RenderModel();
+		//casilla24A.RenderModel();
+		//casilla24AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -6110,19 +6470,27 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado24 >= 1)
-		{
-			casilla25AR.RenderModel();
-		}
+		
 
 		if (esDia)
 		{
-			casilla25A.RenderModel();
+			
+
+			if (cocinado24 >= 1)
+			{
+				casilla25AR.RenderModel();
+			} {
+				casilla25A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
 			casilla25M.RenderModel();
 		}
+
+		//casilla25M.RenderModel();
+		//casilla25A.RenderModel();
+		//casilla25AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -6134,19 +6502,27 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado25 >= 1)
-		{
-			casilla26AR.RenderModel();
-		}
+		
 
 		if (esDia)
 		{
-			casilla26A.RenderModel();
+			
+			if (cocinado25 >= 1)
+			{
+				casilla26AR.RenderModel();
+			}
+			else {
+				casilla26A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
 			casilla26M.RenderModel();
 		}
+
+		//casilla26M.RenderModel();
+		//casilla26A.RenderModel();
+		//casilla26AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -6158,18 +6534,27 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado26 >= 1)
-		{
-			casilla27AR.RenderModel();
-		}
+	
+
+
 		if (esDia)
 		{
-			casilla27A.RenderModel();
+			
+			if (cocinado26 >= 1)
+			{
+				casilla27AR.RenderModel();
+			}
+			else {
+				casilla27A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
 			casilla27M.RenderModel();
 		}
+		//casilla27M.RenderModel();
+		//casilla27A.RenderModel();
+		//casilla27AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -6181,18 +6566,27 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado27 >= 1)
-		{
-			casilla28AR.RenderModel();
-		}
+		
+
+
 		if (esDia)
 		{
-			casilla28A.RenderModel();
+			
+			if (cocinado27 >= 1)
+			{
+				casilla28AR.RenderModel();
+			}
+			else {
+				casilla28A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
 			casilla28M.RenderModel();
 		}
+		//casilla28M.RenderModel();
+		//casilla28A.RenderModel();
+		//casilla28AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -6204,19 +6598,27 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado28 >= 1)
-		{
-			casilla29AR.RenderModel();
-		}
+		
 
 		if (esDia)
 		{
-			casilla29A.RenderModel();
+			
+			if (cocinado28 >= 1)
+			{
+				casilla29AR.RenderModel();
+			}
+			else {
+				casilla29A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
 			casilla29M.RenderModel();
 		}
+
+		//casilla29M.RenderModel();
+		//casilla29A.RenderModel();
+		//casilla29AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -6228,18 +6630,28 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado29 >= 1)
-		{
-			casilla30AR.RenderModel();
-		}
+		
+
+
 		if (esDia)
 		{
-			casilla30A.RenderModel();
+			
+			if (cocinado29 >= 1)
+			{
+				casilla30AR.RenderModel();
+			}
+			else {
+				casilla30A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
 			casilla30M.RenderModel();
 		}
+
+		//casilla30M.RenderModel();
+		//casilla30A.RenderModel();
+		//casilla30AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -6251,18 +6663,27 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado30 >= 1)
-		{
-			casilla31AR.RenderModel();
-		}
+		
+
 		if (esDia)
 		{
-			casilla31A.RenderModel();
+			
+			if (cocinado30 >= 1)
+			{
+				casilla31AR.RenderModel();
+			}
+			else {
+				casilla31A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
 			casilla31M.RenderModel();
 		}
+
+		//casilla31M.RenderModel();
+		//casilla31A.RenderModel();
+		//casilla31AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -6274,19 +6695,27 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado31 >= 1)
-		{
-			casilla32AR.RenderModel();
-		}
+		
 
 		if (esDia)
 		{
-			casilla32A.RenderModel();
+			
+			if (cocinado31 >= 1)
+			{
+				casilla32AR.RenderModel();
+			}
+			else {
+				casilla32A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
 			casilla32M.RenderModel();
 		}
+
+		//casilla32M.RenderModel();
+		//casilla32A.RenderModel();
+		//casilla32AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -6298,19 +6727,27 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado32 >= 1)
-		{
-			casilla33AR.RenderModel();
-		}
+		
 
 		if (esDia)
 		{
-			casilla33A.RenderModel();
+			
+			if (cocinado32 >= 1)
+			{
+				casilla33AR.RenderModel();
+			}
+			else {
+				casilla33A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
 			casilla33M.RenderModel();
 		}
+
+		//casilla33M.RenderModel();
+		//casilla33A.RenderModel();
+		//casilla33AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -6322,19 +6759,27 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado33 >= 1)
-		{
-			casilla34AR.RenderModel();
-		}
+		
 
 		if (esDia)
 		{
-			casilla34A.RenderModel();
+			
+			if (cocinado33 >= 1)
+			{
+				casilla34AR.RenderModel();
+			}
+			else {
+				casilla34A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
 			casilla34M.RenderModel();
 		}
+
+		//casilla34M.RenderModel();
+		//casilla34A.RenderModel();
+		//casilla34AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -6346,14 +6791,18 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado34 >= 1)
-		{
-			casilla35AR.RenderModel();
-		}
+		
 
 		if (esDia)
 		{
-			casilla35A.RenderModel();
+			
+			if (cocinado34 >= 1)
+			{
+				casilla35AR.RenderModel();
+			}
+			else {
+				casilla35A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
@@ -6374,14 +6823,18 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado35 >= 1)
-		{
-			casilla36AR.RenderModel();
-		}
-
+	
 		if (esDia)
 		{
-			casilla36A.RenderModel();
+			
+			if (cocinado35 >= 1)
+			{
+				casilla36AR.RenderModel();
+			}
+			else {
+				casilla36A.RenderModel();
+			}
+
 		}
 		else if (esNoche)
 		{
@@ -6402,14 +6855,18 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado36 >= 1)
-		{
-			casilla37AR.RenderModel();
-		}
+		
 
 		if (esDia)
 		{
-			casilla37A.RenderModel();
+			
+			if (cocinado36 >= 1)
+			{
+				casilla37AR.RenderModel();
+			}
+			else {
+				casilla37A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
@@ -6430,14 +6887,18 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado37 >= 1)
-		{
-			casilla38AR.RenderModel();
-		}
+		
 
 		if (esDia)
 		{
-			casilla38A.RenderModel();
+			
+			if (cocinado37 >= 1)
+			{
+				casilla38AR.RenderModel();
+			}
+			else {
+				casilla38A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
@@ -6458,14 +6919,18 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado38 >= 1)
-		{
-			casilla39AR.RenderModel();
-		}
+	
 
 		if (esDia)
 		{
-			casilla39A.RenderModel();
+			
+			if (cocinado38 >= 1)
+			{
+				casilla39AR.RenderModel();
+			}
+			else {
+				casilla39A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
@@ -6486,14 +6951,18 @@ int main()
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		if (cocinado39 >= 1)
-		{
-			casilla40AR.RenderModel();
-		}
+		
 
 		if (esDia)
 		{
-			casilla40A.RenderModel();
+			
+			if (cocinado39 >= 1)
+			{
+				casilla40AR.RenderModel();
+			}
+			else {
+				casilla40A.RenderModel();
+			}
 		}
 		else if (esNoche)
 		{
@@ -6917,10 +7386,61 @@ int main()
 			glm::vec3 posicion = glm::vec3(model[3]);
 			glm::vec3 direccion = glm::vec3(model[2]);
 
-			if (esNoche)
-			{
-				spotLights[1].SetFlash(posicion, direccion);
+			if (esNoche) {
+					pointLights[0].SetPos(posicion);
+					pointLightCount = 1;
+					shaderList[0].SetPointLights(pointLights, pointLightCount);
+			
+				
+				if (mueveAvatar01 >= 195 && mueveAvatar02<=20) {
+					
+					pointLightCount = 2;
+					shaderList[0].SetPointLights(pointLights, pointLightCount);
+				}
+				if (mueveAvatar01 >= 195 && mueveAvatar02 >= 20) {
+					
+					pointLightCount = 1;
+					shaderList[0].SetPointLights(pointLights, pointLightCount);
+				}
+				if (mueveAvatar02 >= 195 && mueveAvatar03 <= 20) {
+					PointLight tempLight = pointLights[1];
+					pointLights[1] = pointLights[2];
+					pointLightCount = 2;
+					shaderList[0].SetPointLights(pointLights, pointLightCount);
+					pointLights[1] = tempLight;
+				}
+				if (mueveAvatar02 >= 195 && mueveAvatar03 >= 20) {
+					pointLightCount = 1;
+					shaderList[0].SetPointLights(pointLights, pointLightCount);
+				}
+				if (mueveAvatar03 >= 195 && mueveAvatar04 <= 20) {
+					spotLightCount = 1;
+					shaderList[0].SetSpotLights(spotLights, spotLightCount);
+				}
+				if (mueveAvatar03 >= 195 && mueveAvatar04 >= 20) {
+					spotLightCount = 0;
+					shaderList[0].SetSpotLights(spotLights, spotLightCount);
+				}
+				if (mueveAvatar04 >= 190 || mueveAvatar01 <= 0) {
+					SpotLight tempLight02 = spotLights[0];
+					spotLights[0] = spotLights[1];
+					spotLightCount = 1;
+					shaderList[0].SetSpotLights(spotLights, spotLightCount);
+					spotLights[0] = tempLight02;
+				}
+				if (mueveAvatar04 <= 0 && mueveAvatar01 >= 15) {
+					pointLightCount = 0;
+					shaderList[0].SetSpotLights(spotLights, spotLightCount);
+				}
+
 			}
+			else {
+				// Apagar todas las luces durante el día
+					pointLightCount = 0;
+					spotLightCount = 0;
+					shaderList[0].SetPointLights(pointLights, pointLightCount);
+					shaderList[0].SetSpotLights(spotLights, spotLightCount);
+				}
 
 			model = glm::translate(model, glm::vec3(-3.5f, 2.0f, -0.3f));
 			model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -7006,7 +7526,7 @@ int main()
 
 		}
 
-												// ##################################### CRASH AVATAR ##################################### 
+		// ##################################### CRASH AVATAR ##################################### 
 		if (cambio > 0)
 		{
 			// AVATAR CRASH PARA RECORRIDO
@@ -7042,6 +7562,66 @@ int main()
 			cuerpoCrash.RenderModel();
 
 			model = modelauxTorsoC; // A PARTIR DE TORSO
+
+			glm::vec3 posicion2 = glm::vec3(model[3]);
+
+			if (esNoche) {
+				pointLights[0].SetPos(posicion2);
+				pointLightCount = 1;
+				shaderList[0].SetPointLights(pointLights, pointLightCount);
+
+				if (mueveAvatar01 >= 195 && mueveAvatar02 <= 20) {
+
+					pointLightCount = 2;
+					shaderList[0].SetPointLights(pointLights, pointLightCount);
+				}
+				if (mueveAvatar01 >= 195 && mueveAvatar02 >= 20) {
+
+					pointLightCount = 1;
+					shaderList[0].SetPointLights(pointLights, pointLightCount);
+				}
+				if (mueveAvatar02 >= 195 && mueveAvatar03 <= 20) {
+					PointLight tempLight = pointLights[1];
+					pointLights[1] = pointLights[2];
+					pointLightCount = 2;
+					shaderList[0].SetPointLights(pointLights, pointLightCount);
+					pointLights[1] = tempLight;
+				}
+				if (mueveAvatar02 >= 195 && mueveAvatar03 >= 20) {
+					pointLightCount = 1;
+					shaderList[0].SetPointLights(pointLights, pointLightCount);
+				}
+				if (mueveAvatar03 >= 195 && mueveAvatar04 <= 20) {
+					spotLightCount = 1;
+					shaderList[0].SetSpotLights(spotLights, spotLightCount);
+				}
+				if (mueveAvatar03 >= 195 && mueveAvatar04 >= 20) {
+					spotLightCount = 0;
+					shaderList[0].SetSpotLights(spotLights, spotLightCount);
+				}
+
+				if (mueveAvatar04 >= 190 || mueveAvatar01 <= 0) {
+					
+					SpotLight tempLight02 = spotLights[0];
+					spotLights[0] = spotLights[1];
+					spotLightCount = 1;
+					shaderList[0].SetSpotLights(spotLights, spotLightCount);
+					spotLights[0] = tempLight02;
+				}
+		
+				if (mueveAvatar04 <= 0 && mueveAvatar01 >= 15) {
+					spotLightCount = 0;
+					shaderList[0].SetSpotLights(spotLights, spotLightCount);
+				}
+
+			}
+			else {
+				// Apagar todas las luces durante el día
+				pointLightCount = 0;
+				spotLightCount = 0;
+				shaderList[0].SetPointLights(pointLights, pointLightCount);
+				shaderList[0].SetSpotLights(spotLights, spotLightCount);
+			}
 
 			model = glm::translate(model, glm::vec3(-2.55f, 3.8f, -0.3f));
 			model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -7166,9 +7746,9 @@ int main()
 
 		// CRASH
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-15.0f, 
-												6.3f + (abs(5.0f * sin(glm::radians(anguloVariaCrash * 2.0f)))),
-												-45.0));
+		model = glm::translate(model, glm::vec3(-15.0f,
+			6.3f + (abs(5.0f * sin(glm::radians(anguloVariaCrash * 2.0f)))),
+			-45.0));
 		model = glm::rotate(model, rotaCrash * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -7193,9 +7773,11 @@ int main()
 			model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
 			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 			scorpionOriginal.RenderModel();
+			fuego->setSoundVolume(0.3f);
 
 			if (escala01 < 10 && escala02 < 10 && escala03 < 10)
 			{
+				
 				escala01 += escala01Offset * deltaTime;
 				escala02 += escala02Offset * deltaTime;
 				escala03 += escala03Offset * deltaTime;
@@ -7203,9 +7785,10 @@ int main()
 
 			if (escala04 < 0.7 && escala05 < 1.0 && escala06 < 0.7)
 			{
-				escala04 += escala04Offset * (deltaTime/7);
-				escala05 += escala05Offset * (deltaTime/7);
-				escala06 += escala06Offset * (deltaTime/7);
+				
+				escala04 += escala04Offset * (deltaTime / 7);
+				escala05 += escala05Offset * (deltaTime / 7);
+				escala06 += escala06Offset * (deltaTime / 7);
 			}
 			fire += fireOffset * deltaTime;
 		}
@@ -7217,16 +7800,20 @@ int main()
 			model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
 			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 			scorpionTransformacion.RenderModel();
+			fuego->setSoundVolume(0.0f);
 
 			if (escala01 > 0 && escala02 > 0 && escala03 > 0)
 			{
+				
 				escala01 -= escala01Offset * deltaTime;
 				escala02 -= escala02Offset * deltaTime;
 				escala03 -= escala03Offset * deltaTime;
+				
 			}
 
 			if (escala04 > 0.0 && escala05 > 0.0 && escala06 > 0.0)
 			{
+				
 				escala04 -= escala04Offset * (deltaTime / 7);
 				escala05 -= escala05Offset * (deltaTime / 7);
 				escala06 -= escala06Offset * (deltaTime / 7);
@@ -7250,9 +7837,10 @@ int main()
 			model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
 			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 			scorpionTransformacion.RenderModel();
-
+			fuego->setSoundVolume(0.3f);
 			if (escala01 < 10 && escala02 < 10 && escala03 < 10)
 			{
+				
 				escala01 += escala01Offset * deltaTime;
 				escala02 += escala02Offset * deltaTime;
 				escala03 += escala03Offset * deltaTime;
@@ -7260,6 +7848,7 @@ int main()
 
 			if (escala04 < 0.7 && escala05 < 1.0 && escala06 < 0.7)
 			{
+			
 				escala04 += escala04Offset * (deltaTime / 7);
 				escala05 += escala05Offset * (deltaTime / 7);
 				escala06 += escala06Offset * (deltaTime / 7);
@@ -7274,7 +7863,7 @@ int main()
 			model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
 			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 			scorpionOriginal.RenderModel();
-
+			fuego->setSoundVolume(0.0f);
 			if (escala01 > 0 && escala02 > 0 && escala03 > 0)
 			{
 				escala01 -= escala01Offset * deltaTime;
@@ -7284,6 +7873,7 @@ int main()
 
 			if (escala04 > 0.0 && escala05 > 0.0 && escala06 > 0.0)
 			{
+				
 				escala04 -= escala04Offset * (deltaTime / 7);
 				escala05 -= escala05Offset * (deltaTime / 7);
 				escala06 -= escala06Offset * (deltaTime / 7);
@@ -7635,6 +8225,15 @@ int main()
 		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		casaCynthia.RenderModel();
+
+
+		////Casa Cynthia
+		//model = glm::mat4(1.0);
+		//model = glm::translate(model, glm::vec3(-210.0f, -1.0f, 0.0f));
+		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//casaCynthia.RenderModel();
 
 		//Casa Cynthia
 		model = glm::mat4(1.0);
@@ -8127,6 +8726,10 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		arbusto.RenderModel();
 
+		glm::mat4 modelAuxave(1.0);
+
+	
+
 											// ##################################### SUELO Y LETRERO ANIMADO ##################################### \\
 
 		//SUELO DE EN MEDIO
@@ -8156,6 +8759,10 @@ int main()
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		letrero.UseTexture();
 		meshList[4]->RenderMesh();
+
+		
+
+
 
 		glUseProgram(0);
 
