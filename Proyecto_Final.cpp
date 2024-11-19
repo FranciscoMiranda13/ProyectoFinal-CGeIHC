@@ -606,7 +606,7 @@ float anguloVariaSubzero = 0.0f;
 
 // VARIABLES PARA ANIMACION DE CRASH
 float rotaCrash = 0.0f;
-float rotaCrashOffset = 3.0;
+float rotaCrashOffset = 5.0;
 float anguloVariaCrash = 0.0f;
 
 // VARIABLES PARA TRANSFORMACION
@@ -616,6 +616,16 @@ float escala02 = 0.0f;
 float escala02Offset = 0.1f;
 float escala03 = 0.0f;
 float escala03Offset = 0.1f;
+float escala04 = 0.0f;
+float escala04Offset = 0.1f;
+float escala05 = 0.0f;
+float escala05Offset = 0.1f;
+float escala06 = 0.0f;
+float escala06Offset = 0.1f;
+float escala07 = 0.0f;
+float escala07Offset = 0.1f;
+float fire = 0.0f;
+float fireOffset = 3.0f;
 float tiempoTransformacion = 0.0f;
 
 // AYUDA PARA EL RECORRIDO
@@ -623,6 +633,9 @@ bool recorrido01 = true;
 bool recorrido02 = true;
 bool recorrido03 = true;
 bool recorrido04 = true;
+
+// CAMBIO AVATAR
+float cambio = 0;
 
 Window mainWindow;
 std::vector<Mesh*> meshList;
@@ -837,12 +850,21 @@ Model brazoIzquieroSubZero;
 Model piernaDerechaSubZero;
 Model piernaIzquierdaSubZero;
 
+// MODELO DEL AVATAR PARA EL RECORRIDO (CRASH)
+Model cuerpoCrash;
+Model brazoDerechoCrash;
+Model brazoIzquierdoCrash;
+Model piernaDerechaCrash;
+Model piernaIzquierdaCrash;
+
 // MODELOS PARA ANIMACION 
+
 // SUB ZERO
 Model subZeroAnimacion;
 Model scorpionCabeza;
 Model scorpionCuerpo;
 Model baseSubzero;
+
 // CRASH
 Model crashAnimacion;
 
@@ -881,9 +903,12 @@ Model lampara;
 Model scorpionOriginal;
 Model scorpionTransformacion;
 Model fireball;
+Model base01;
+Model base02;
 
 // MODELOS AUXILIARES
 Model esfera;
+Model esferaN;
 
 									// ##################################### SKYBOX ##################################### \\
 
@@ -1445,7 +1470,20 @@ int main()
 	piernaIzquierdaSubZero = Model();
 	piernaIzquierdaSubZero.LoadModel("Models/avatarSubZeroPiernaIzquierda.obj");
 
+	// MODELO DEL AVATAR PARA EL RECORRIDO (CRASH)
+	cuerpoCrash = Model();
+	cuerpoCrash.LoadModel("Models/crashCuerpo.obj");
+	brazoDerechoCrash = Model();
+	brazoDerechoCrash.LoadModel("Models/crashBrazoDerecho.obj");
+	brazoIzquierdoCrash = Model();
+	brazoIzquierdoCrash.LoadModel("Models/crashBrazoIzquierdo.obj");
+	piernaDerechaCrash = Model();
+	piernaDerechaCrash.LoadModel("Models/crashPiernaDerecha.obj");
+	piernaIzquierdaCrash = Model();
+	piernaIzquierdaCrash.LoadModel("Models/crashPiernaIzquierda.obj");
+
 	// MODELOS PARA ANIMACIONES
+	
 	// SUBZERO
 	subZeroAnimacion = Model();
 	subZeroAnimacion.LoadModel("Models/subZeroAnimacion.obj");
@@ -1455,6 +1493,7 @@ int main()
 	scorpionCuerpo.LoadModel("Models/scorpionCuerpo.obj");
 	baseSubzero = Model();
 	baseSubzero.LoadModel("Models/baseSubzero.obj");
+
 	// CRASH
 	crashAnimacion = Model();
 	crashAnimacion.LoadModel("Models/crashAnimacion.obj");
@@ -1524,12 +1563,16 @@ int main()
 	scorpionTransformacion.LoadModel("Models/scorpionTransformacion.obj");
 	fireball = Model();
 	fireball.LoadModel("Models/bolaDeFuego.obj");
-	lampara = Model();
-	lampara.LoadModel("Models/Portal_Totem.obj");
+	base01 = Model();
+	base01.LoadModel("Models/baseScorpion.obj");
+	base02 = Model();
+	base02.LoadModel("Models/baseScorpion2.obj");
 
 	// MODELO AUXILIAR
 	esfera = Model();
 	esfera.LoadModel("Models/esfera.obj");
+	esferaN = Model();
+	esferaN.LoadModel("Models/esferaNaranja.obj");
 
 	//CARROS DE CARRETERA
 	carroCortex = Model();
@@ -2993,418 +3036,428 @@ int main()
 		}
 		else
 		{
-												// REINICAR TODOS LOS VALORES AL COMPLETAR UNA VUELTA
-												
-			// VARIABLES PARA RECORRIDO 
-			recorrido01 = true;
-			recorrido02 = true; 
-			recorrido03 = true; 
+			if (resultado4Caras == 0 && resultado8Caras == 0)
+			{
+				// REINICAR TODOS LOS VALORES AL COMPLETAR UNA VUELTA
 
-			// VARIABLES PARA ANIMACION DEL DADO DE 8 CARAS
-			subeBajaDado8 = 35.0f;
-			rotaDadox8 = 0.0f;
-			rotaDadoy8 = 0.0f;
-			rotaDadoz8 = 0.0f;
+				// VARIABLES PARA RECORRIDO 
+				recorrido01 = true;
+				recorrido02 = true;
+				recorrido03 = true;
 
-			// VARIABLES PARA ANIMACION DEL DADO DE 4 CARAS
-			subeBajaDado4 = 35.0f;
-			rotaDadox4 = 0.0f;
-			rotaDadoy4 = 0.0f;
+				// VARIABLES PARA ANIMACION DEL DADO DE 8 CARAS
+				subeBajaDado8 = 35.0f;
+				rotaDadox8 = 0.0f;
+				rotaDadoy8 = 0.0f;
+				rotaDadoz8 = 0.0f;
 
-			// RRESULTADO DEL DADO
-			resultado4Caras = 0;
-			resultado8Caras = 0;
-			resultado = 0;
+				// VARIABLES PARA ANIMACION DEL DADO DE 4 CARAS
+				subeBajaDado4 = 35.0f;
+				rotaDadox4 = 0.0f;
+				rotaDadoy4 = 0.0f;
 
-			// VARIABLES PARA ANIAMCION DE RECORRIDO
-			mueveAvatar01 = 0.0f;
-			mueveAvatar01Base = 0.0f;
-			resultadoAnterior01 = 0;
-			mueveAvatar02 = 0.0f;
-			mueveAvatar02Base = 0.0f;
-			resultadoAnterior02 = 0;
-			mueveAvatar03 = 0.0f;
-			mueveAvatar03Base = 0.0f;
-			resultadoAnterior03 = 0;
-			mueveAvatar04 = 0.0f;
-			mueveAvatar04Base = 0.0f;
-			resultadoAnterior04 = 0;
-			diferencia = 0.0f;
-			hayDiferencia = true;
-			conta = 0;
-			diferencia01 = 0.0f;
-			hayDiferencia01 = true;
-			conta01 = 0;
-			diferencia02 = 0.0f;
-			hayDiferencia02 = true;
-			conta02 = 0;
+				// RRESULTADO DEL DADO
+				resultado4Caras = 0;
+				resultado8Caras = 0;
+				resultado = 0;
 
-			// VARIABLES PARA LA ANIMACION DE LA VUELTA 
-			rotaAvatar01 = 0.0f;
-			rotaAvatar02 = 0.0f;
-			rotaAvatar03 = 0.0f;
-			rotaAvatar04 = 0.0f;
+				// VARIABLES PARA ANIAMCION DE RECORRIDO
+				mueveAvatar01 = 0.0f;
+				mueveAvatar01Base = 0.0f;
+				resultadoAnterior01 = 0;
+				mueveAvatar02 = 0.0f;
+				mueveAvatar02Base = 0.0f;
+				resultadoAnterior02 = 0;
+				mueveAvatar03 = 0.0f;
+				mueveAvatar03Base = 0.0f;
+				resultadoAnterior03 = 0;
+				mueveAvatar04 = 0.0f;
+				mueveAvatar04Base = 0.0f;
+				resultadoAnterior04 = 0;
+				diferencia = 0.0f;
+				hayDiferencia = true;
+				conta = 0;
+				diferencia01 = 0.0f;
+				hayDiferencia01 = true;
+				conta01 = 0;
+				diferencia02 = 0.0f;
+				hayDiferencia02 = true;
+				conta02 = 0;
 
-			// VARIABLES PARA ANIMACIÓN DE LOS BRAZOS Y PIERNAS
-			rotaBrazoD = 0.0f;
-			rotaBrazoI = 0.0f;
-			rotaPiernaD = 0.0f;
-			rotaPiernaI = 0.0f;
-			subebaja = true;
+				// VARIABLES PARA LA ANIMACION DE LA VUELTA 
+				rotaAvatar01 = 0.0f;
+				rotaAvatar02 = 0.0f;
+				rotaAvatar03 = 0.0f;
+				rotaAvatar04 = 0.0f;
 
-			// ANIMACIONES DE CASILLAS
-			// CASILLA 02
-			raidenSubeBaja = -8.0f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			raidenRota = 0.0f;
-			raidenCont01 = 0;
-			raidenCont02 = 0;
-			raiden = true;
-			raidenTiempo = 0.0f;
+				// VARIABLES PARA ANIMACIÓN DE LOS BRAZOS Y PIERNAS
+				rotaBrazoD = 0.0f;
+				rotaBrazoI = 0.0f;
+				rotaPiernaD = 0.0f;
+				rotaPiernaI = 0.0f;
+				subebaja = true;
 
-			// CASILLA 03
-			scorpionSubeBaja = -9.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			scorpionRota = 0.0f;
-			scorpionCont01 = 0;
-			scorpionCont02 = 0;
-			scorpion = true;
-			scorpionTiempo = 0.0f;
+				// ANIMACIONES DE CASILLAS
+				// CASILLA 02
+				raidenSubeBaja = -8.0f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				raidenRota = 0.0f;
+				raidenCont01 = 0;
+				raidenCont02 = 0;
+				raiden = true;
+				raidenTiempo = 0.0f;
 
-			// CASILLA 04
-			shaoSubeBaja = -9.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			shaoRota = 0.0f;
-			shaoCont01 = 0;
-			shaoCont02 = 0;
-			shao = true;
-			shaoTiempo = 0.0f;
+				// CASILLA 03
+				scorpionSubeBaja = -9.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				scorpionRota = 0.0f;
+				scorpionCont01 = 0;
+				scorpionCont02 = 0;
+				scorpion = true;
+				scorpionTiempo = 0.0f;
 
-			// CASILLA 05
-			hellSubeBaja = -13.0f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			hellRota = 0.0f;
-			hellCont01 = 0;
-			hellCont02 = 0;
-			hell = true;
-			hellTiempo = 0.0f;
+				// CASILLA 04
+				shaoSubeBaja = -9.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				shaoRota = 0.0f;
+				shaoCont01 = 0;
+				shaoCont02 = 0;
+				shao = true;
+				shaoTiempo = 0.0f;
 
-			// CASILLA 06
-			viewerSubeBaja = -11.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			viewerRota = 0.0f;
-			viewerCont01 = 0;
-			viewerCont02 = 0;
-			viewer = true;
-			viewerTiempo = 0.0f;
+				// CASILLA 05
+				hellSubeBaja = -13.0f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				hellRota = 0.0f;
+				hellCont01 = 0;
+				hellCont02 = 0;
+				hell = true;
+				hellTiempo = 0.0f;
 
-			// CASILLA 07
-			tree_stumpSubeBaja = -9.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			tree_stumpRota = 0.0f;
-			tree_stumpCont01 = 0;
-			tree_stumpCont02 = 0;
-			tree_stump = true;
-			tree_stumpTiempo = 0.0f;
+				// CASILLA 06
+				viewerSubeBaja = -11.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				viewerRota = 0.0f;
+				viewerCont01 = 0;
+				viewerCont02 = 0;
+				viewer = true;
+				viewerTiempo = 0.0f;
 
-			// CASILLA 08
-			pine_treeSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			pine_treeRota = 0.0f;
-			pine_treeCont01 = 0;
-			pine_treeCont02 = 0;
-			pine_tree = true;
-			pine_treeTiempo = 0.0f;
+				// CASILLA 07
+				tree_stumpSubeBaja = -9.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				tree_stumpRota = 0.0f;
+				tree_stumpCont01 = 0;
+				tree_stumpCont02 = 0;
+				tree_stump = true;
+				tree_stumpTiempo = 0.0f;
 
-			// CASILLA 09
-			fire_dragonSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			fire_dragonRota = 0.0f;
-			fire_dragonCont01 = 0;
-			fire_dragonCont02 = 0;
-			fire_dragon = true;
-			fire_dragonTiempo = 0.0f;
+				// CASILLA 08
+				pine_treeSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				pine_treeRota = 0.0f;
+				pine_treeCont01 = 0;
+				pine_treeCont02 = 0;
+				pine_tree = true;
+				pine_treeTiempo = 0.0f;
 
-			// CASILLA 10
-			scorpion2SubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			scorpion2Rota = 0.0f;
-			scorpion2Cont01 = 0;
-			scorpion2Cont02 = 0;
-			scorpion2 = true;
-			scorpion2Tiempo = 0.0f;
+				// CASILLA 09
+				fire_dragonSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				fire_dragonRota = 0.0f;
+				fire_dragonCont01 = 0;
+				fire_dragonCont02 = 0;
+				fire_dragon = true;
+				fire_dragonTiempo = 0.0f;
 
-			// CASILLA 11
-			wolfSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			wolfRota = 0.0f;
-			wolfCont01 = 0;
-			wolfCont02 = 0;
-			wolf = true;
-			wolfTiempo = 0.0f;
+				// CASILLA 10
+				scorpion2SubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				scorpion2Rota = 0.0f;
+				scorpion2Cont01 = 0;
+				scorpion2Cont02 = 0;
+				scorpion2 = true;
+				scorpion2Tiempo = 0.0f;
 
-			// CASILLA 12
-			BarakaSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			BarakaRota = 0.0f;
-			BarakaCont01 = 0;
-			BarakaCont02 = 0;
-			Baraka = true;
-			BarakaTiempo = 0.0f;
+				// CASILLA 11
+				wolfSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				wolfRota = 0.0f;
+				wolfCont01 = 0;
+				wolfCont02 = 0;
+				wolf = true;
+				wolfTiempo = 0.0f;
 
-			// CASILLA 13
-			boSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			boRota = 0.0f;
-			boCont01 = 0;
-			boCont02 = 0;
-			bo = true;
-			boTiempo = 0.0f;
+				// CASILLA 12
+				BarakaSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				BarakaRota = 0.0f;
+				BarakaCont01 = 0;
+				BarakaCont02 = 0;
+				Baraka = true;
+				BarakaTiempo = 0.0f;
 
-			// CASILLA 14
-			cassieSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			cassieRota = 0.0f;
-			cassieCont01 = 0;
-			cassieCont02 = 0;
-			cassie = true;
-			cassieTiempo = 0.0f;
+				// CASILLA 13
+				boSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				boRota = 0.0f;
+				boCont01 = 0;
+				boCont02 = 0;
+				bo = true;
+				boTiempo = 0.0f;
 
-			// CASILLA 15
-			skullSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			skullRota = 0.0f;
-			skullCont01 = 0;
-			skullCont02 = 0;
-			skull = true;
-			skullTiempo = 0.0f;
+				// CASILLA 14
+				cassieSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				cassieRota = 0.0f;
+				cassieCont01 = 0;
+				cassieCont02 = 0;
+				cassie = true;
+				cassieTiempo = 0.0f;
 
-			// CASILLA 16
-			rockySubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			rockyRota = 0.0f;
-			rockyCont01 = 0;
-			rockyCont02 = 0;
-			rocky = true;
-			rockyTiempo = 0.0f;
+				// CASILLA 15
+				skullSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				skullRota = 0.0f;
+				skullCont01 = 0;
+				skullCont02 = 0;
+				skull = true;
+				skullTiempo = 0.0f;
 
-			// CASILLA 17
-			drneoSubeBaja = -15.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			drneoRota = 0.0f;
-			drneoCont01 = 0;
-			drneoCont02 = 0;
-			drneo = true;
-			drneoTiempo = 0.0f;
+				// CASILLA 16
+				rockySubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				rockyRota = 0.0f;
+				rockyCont01 = 0;
+				rockyCont02 = 0;
+				rocky = true;
+				rockyTiempo = 0.0f;
 
-			// CASILLA 18
-			frogSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			frogRota = 0.0f;
-			frogCont01 = 0;
-			frogCont02 = 0;
-			frog = true;
-			frogTiempo = 0.0f;
+				// CASILLA 17
+				drneoSubeBaja = -15.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				drneoRota = 0.0f;
+				drneoCont01 = 0;
+				drneoCont02 = 0;
+				drneo = true;
+				drneoTiempo = 0.0f;
 
-			// CASILLA 19
-			polarSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			polarRota = 0.0f;
-			polarCont01 = 0;
-			polarCont02 = 0;
-			polar = true;
-			polarTiempo = 0.0f;
+				// CASILLA 18
+				frogSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				frogRota = 0.0f;
+				frogCont01 = 0;
+				frogCont02 = 0;
+				frog = true;
+				frogTiempo = 0.0f;
 
-			// CASILLA 20
-			wizardSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			wizardRota = 0.0f;
-			wizardCont01 = 0;
-			wizardCont02 = 0;
-			wizard = true;
-			wizardTiempo = 0.0f;
+				// CASILLA 19
+				polarSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				polarRota = 0.0f;
+				polarCont01 = 0;
+				polarCont02 = 0;
+				polar = true;
+				polarTiempo = 0.0f;
 
-			// CASILLA 21
-			pinstripeSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			pinstripeRota = 0.0f;
-			pinstripeCont01 = 0;
-			pinstripeCont02 = 0;
-			pinstripe = true;
-			pinstripeTiempo = 0.0f;
+				// CASILLA 20
+				wizardSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				wizardRota = 0.0f;
+				wizardCont01 = 0;
+				wizardCont02 = 0;
+				wizard = true;
+				wizardTiempo = 0.0f;
 
-			// CASILLA 22
-			 lionSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			 lionRota = 0.0f;
-			 lionCont01 = 0;
-			 lionCont02 = 0;
-			 lion = true;
-			 lionTiempo = 0.0f;
+				// CASILLA 21
+				pinstripeSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				pinstripeRota = 0.0f;
+				pinstripeCont01 = 0;
+				pinstripeCont02 = 0;
+				pinstripe = true;
+				pinstripeTiempo = 0.0f;
 
-			// CASILLA 23
-			babytSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			babytRota = 0.0f;
-			babytCont01 = 0;
-			babytCont02 = 0;
-			babyt = true;
-			babytTiempo = 0.0f;
+				// CASILLA 22
+				lionSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				lionRota = 0.0f;
+				lionCont01 = 0;
+				lionCont02 = 0;
+				lion = true;
+				lionTiempo = 0.0f;
 
-			// CASILLA 24
-			akuakuSubeBaja = -14.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			akuakuRota = 0.0f;
-			akuakuCont01 = 0;
-			akuakuCont02 = 0;
-			akuaku = true;
-			akuakuTiempo = 0.0f;
+				// CASILLA 23
+				babytSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				babytRota = 0.0f;
+				babytCont01 = 0;
+				babytCont02 = 0;
+				babyt = true;
+				babytTiempo = 0.0f;
 
-			// CASILLA 25
-			palm_treeSubeBaja = -15.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			palm_treeRota = 0.0f;
-			palm_treeCont01 = 0;
-			palm_treeCont02 = 0;
-			palm_tree = true;
-			palm_treeTiempo = 0.0f;
+				// CASILLA 24
+				akuakuSubeBaja = -14.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				akuakuRota = 0.0f;
+				akuakuCont01 = 0;
+				akuakuCont02 = 0;
+				akuaku = true;
+				akuakuTiempo = 0.0f;
 
-			// CASILLA 26
-			flowersSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			flowersRota = 0.0f;
-			flowersCont01 = 0;
-			flowersCont02 = 0;
-			flowers = true;
-			flowersTiempo = 0.0f;
+				// CASILLA 25
+				palm_treeSubeBaja = -15.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				palm_treeRota = 0.0f;
+				palm_treeCont01 = 0;
+				palm_treeCont02 = 0;
+				palm_tree = true;
+				palm_treeTiempo = 0.0f;
 
-			// CASILLA 27
-			basicSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			basicRota = 0.0f;
-			basicCont01 = 0;
-			basicCont02 = 0;
-			basic = true;
-			basicTiempo = 0.0f;
+				// CASILLA 26
+				flowersSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				flowersRota = 0.0f;
+				flowersCont01 = 0;
+				flowersCont02 = 0;
+				flowers = true;
+				flowersTiempo = 0.0f;
 
-			// CASILLA 28
-			 brianSubeBaja = -14.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			 brianRota = 0.0f;
-			  brianCont01 = 0;
-			  brianCont02 = 0;
-			  brian = true;
-			  brianTiempo = 0.0f;
+				// CASILLA 27
+				basicSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				basicRota = 0.0f;
+				basicCont01 = 0;
+				basicCont02 = 0;
+				basic = true;
+				basicTiempo = 0.0f;
 
-			// CASILLA 29
-			ernieSubeBaja = -13.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			ernieRota = 0.0f;
-			ernieCont01 = 0;
-			ernieCont02 = 0;
-			ernie = true;
-			ernieTiempo = 0.0f;
+				// CASILLA 28
+				brianSubeBaja = -14.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				brianRota = 0.0f;
+				brianCont01 = 0;
+				brianCont02 = 0;
+				brian = true;
+				brianTiempo = 0.0f;
 
-			// CASILLA 30
-			luisaSubeBaja = -13.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			luisaRota = 0.0f;
-			luisaCont01 = 0;
-			luisaCont02 = 0;
-			luisa = true;
-			luisaTiempo = 0.0f;
+				// CASILLA 29
+				ernieSubeBaja = -13.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				ernieRota = 0.0f;
+				ernieCont01 = 0;
+				ernieCont02 = 0;
+				ernie = true;
+				ernieTiempo = 0.0f;
 
-			// CASILLA 31
-			megSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			megRota = 0.0f;
-			megCont01 = 0;
-			megCont02 = 0;
-			meg = true;
-			megTiempo = 0.0f;
+				// CASILLA 30
+				luisaSubeBaja = -13.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				luisaRota = 0.0f;
+				luisaCont01 = 0;
+				luisaCont02 = 0;
+				luisa = true;
+				luisaTiempo = 0.0f;
 
-			// CASILLA 32
-			peterSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			peterRota = 0.0f;
-			peterCont01 = 0;
-			peterCont02 = 0;
-			peter = true;
-			peterTiempo = 0.0f;
+				// CASILLA 31
+				megSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				megRota = 0.0f;
+				megCont01 = 0;
+				megCont02 = 0;
+				meg = true;
+				megTiempo = 0.0f;
 
-			// CASILLA 33
-			joeSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			joeRota = 0.0f;
-			joeCont01 = 0;
-			joeCont02 = 0;
-			joe = true;
-			joeTiempo = 0.0f;
+				// CASILLA 32
+				peterSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				peterRota = 0.0f;
+				peterCont01 = 0;
+				peterCont02 = 0;
+				peter = true;
+				peterTiempo = 0.0f;
 
-			// CASILLA 34
-			chrisSubeBaja = -20.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			chrisRota = 0.0f;
-			chrisCont01 = 0;
-			chrisCont02 = 0;
-			chris = true;
-			chrisTiempo = 0.0f;
+				// CASILLA 33
+				joeSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				joeRota = 0.0f;
+				joeCont01 = 0;
+				joeCont02 = 0;
+				joe = true;
+				joeTiempo = 0.0f;
 
-			// CASILLA 35
-			casaSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			casaRota = 0.0f;
-			casaCont01 = 0;
-			casaCont02 = 0;
-			casa = true;
-			casaTiempo = 0.0f;
+				// CASILLA 34
+				chrisSubeBaja = -20.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				chrisRota = 0.0f;
+				chrisCont01 = 0;
+				chrisCont02 = 0;
+				chris = true;
+				chrisTiempo = 0.0f;
 
-			// CASILLA 36
-			treeSubeBaja = -12.9f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			treeRota = 0.0f;
-			treeCont01 = 0;
-			treeCont02 = 0;
-			tree = true;
-			treeTiempo = 0.0f;
+				// CASILLA 35
+				casaSubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				casaRota = 0.0f;
+				casaCont01 = 0;
+				casaCont02 = 0;
+				casa = true;
+				casaTiempo = 0.0f;
 
-			// CASILLA 37
-			navidadSubeBaja = -14.0f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			navidadRota = 0.0f;
-			navidadCont01 = 0;
-			navidadCont02 = 0;
-			navidad = true;
-			navidadTiempo = 0.0f;
+				// CASILLA 36
+				treeSubeBaja = -12.9f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				treeRota = 0.0f;
+				treeCont01 = 0;
+				treeCont02 = 0;
+				tree = true;
+				treeTiempo = 0.0f;
 
-			// CASILLA 38
-			vinnySubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			vinnyRota = 0.0f;
-			vinnyCont01 = 0;
-			vinnyCont02 = 0;
-			vinny = true;
-			vinnyTiempo = 0.0f;
+				// CASILLA 37
+				navidadSubeBaja = -14.0f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				navidadRota = 0.0f;
+				navidadCont01 = 0;
+				navidadCont02 = 0;
+				navidad = true;
+				navidadTiempo = 0.0f;
 
-			// CASILLA 39
-			flowers2SubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			flowers2Rota = 0.0f;
-			flowers2Cont01 = 0;
-			flowers2Cont02 = 0;
-			flowers2 = true;
-			flowers2Tiempo = 0.0f;
+				// CASILLA 38
+				vinnySubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				vinnyRota = 0.0f;
+				vinnyCont01 = 0;
+				vinnyCont02 = 0;
+				vinny = true;
+				vinnyTiempo = 0.0f;
 
-			// CASILLA 40
-			carterSubeBaja = -13.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
-			carterRota = 0.0f;
-			carterCont01 = 0;
-			carterCont02 = 0;
-			carter = true;
-			carterTiempo = 0.0f;
+				// CASILLA 39
+				flowers2SubeBaja = -12.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				flowers2Rota = 0.0f;
+				flowers2Cont01 = 0;
+				flowers2Cont02 = 0;
+				flowers2 = true;
+				flowers2Tiempo = 0.0f;
 
-			// COCINADO EN LAS CASILLAS
-			cocinado01 = 0;
-			cocinado02 = 0;
-			cocinado03 = 0;
-			cocinado04 = 0;
-			cocinado05 = 0;
-			cocinado06 = 0;
-			cocinado07 = 0;
-			cocinado08 = 0;
-			cocinado09 = 0;
-			cocinado10 = 0;
-			cocinado11 = 0;
-			cocinado12 = 0;
-			cocinado13 = 0;
-			cocinado14 = 0;
-			cocinado15 = 0;
-			cocinado16 = 0;
-			cocinado17 = 0;
-			cocinado18 = 0;
-			cocinado19 = 0;
-			cocinado20 = 0;
-			cocinado21 = 0;
-			cocinado22 = 0;
-			cocinado23 = 0;
-			cocinado24 = 0;
-			cocinado25 = 0;
-			cocinado26 = 0;
-			cocinado27 = 0;
-			cocinado28 = 0;
-			cocinado29 = 0;
-			cocinado30 = 0;
-			cocinado31 = 0;
-			cocinado32 = 0;
-			cocinado33 = 0;
-			cocinado34 = 0;
-			cocinado35 = 0;
-			cocinado36 = 0;
-			cocinado37 = 0;
-			cocinado38 = 0;
-			cocinado39 = 0;
+				// CASILLA 40
+				carterSubeBaja = -13.5f; //PARA BAJARLO Y NO SE VEA EN EL TABLERO
+				carterRota = 0.0f;
+				carterCont01 = 0;
+				carterCont02 = 0;
+				carter = true;
+				carterTiempo = 0.0f;
+
+				// COCINADO EN LAS CASILLAS
+				cocinado01 = 0;
+				cocinado02 = 0;
+				cocinado03 = 0;
+				cocinado04 = 0;
+				cocinado05 = 0;
+				cocinado06 = 0;
+				cocinado07 = 0;
+				cocinado08 = 0;
+				cocinado09 = 0;
+				cocinado10 = 0;
+				cocinado11 = 0;
+				cocinado12 = 0;
+				cocinado13 = 0;
+				cocinado14 = 0;
+				cocinado15 = 0;
+				cocinado16 = 0;
+				cocinado17 = 0;
+				cocinado18 = 0;
+				cocinado19 = 0;
+				cocinado20 = 0;
+				cocinado21 = 0;
+				cocinado22 = 0;
+				cocinado23 = 0;
+				cocinado24 = 0;
+				cocinado25 = 0;
+				cocinado26 = 0;
+				cocinado27 = 0;
+				cocinado28 = 0;
+				cocinado29 = 0;
+				cocinado30 = 0;
+				cocinado31 = 0;
+				cocinado32 = 0;
+				cocinado33 = 0;
+				cocinado34 = 0;
+				cocinado35 = 0;
+				cocinado36 = 0;
+				cocinado37 = 0;
+				cocinado38 = 0;
+				cocinado39 = 0;
+
+				cambio += 1;
+
+				if (cambio > 1)
+				{
+					cambio = 0;
+				}
+			}
 		}
 
 									// ##################################### ACTIVAR ANIMACION DE LOS MODELOS DE CASILLAS ##################################### \\
@@ -5378,22 +5431,6 @@ int main()
 			dianocheTiempo = glfwGetTime();
 		}
 
-		/*	if ((glfwGetTime() - dianocheTiempo) < 120)
-		{
-
-			skyboxDia.DrawSkybox(camera.calculateViewMatrix(), projection);
-			mainLight.SetDirection(sunDirection);
-		}
-		else if ((glfwGetTime() - dianocheTiempo) < 240)
-		{
-			auxLight = &mainLight2;
-			skyboxNoche.DrawSkybox(camera.calculateViewMatrix(), projection);
-		}
-		else
-		{
-			dianocheTiempo = glfwGetTime();
-		}*/
-
 		shaderList[0].UseShader();
 		uniformModel = shaderList[0].GetModelLocation();
 		uniformProjection = shaderList[0].GetProjectionLocation();
@@ -5421,8 +5458,6 @@ int main()
 		shaderList[0].SetPointLights(pointLights, pointLightCount);
 		shaderList[0].SetSpotLights(spotLights, spotLightCount);
 
-
-
 		glm::mat4 model(1.0);
 		glm::mat4 modelaux(1.0);
 		glm::vec2 toffset = glm::vec2(0.0f, 0.0f);
@@ -5439,6 +5474,13 @@ int main()
 		glm::mat4 modelauxCintura(1.0);
 		glm::mat4 modelauxPiernaDerecha(1.0);
 		glm::mat4 modelauxPiernaIzquierda(1.0);
+
+		// MATRIZ AUXILIAR PARA EL AVATAR DE RECORRIDO (CRASH)
+		glm::mat4 modelauxTorsoC(1.0);
+		glm::mat4 modelauxBrazoDerechoC(1.0);
+		glm::mat4 modelauxBrazoIzquierdoC(1.0);
+		glm::mat4 modelauxPiernaDerechaC(1.0);
+		glm::mat4 modelauxPiernaIzquierdaC(1.0);
 
 		// MTRAIZ AUXILIAR PARA LA ANIMACION DE LOS PERSONAJES
 		glm::mat4 modelauxSubZeroAnimacion(1.0);
@@ -5504,15 +5546,6 @@ int main()
 		{
 			casilla01M.RenderModel();
 		}
-		/*else
-		{
-			dianocheTiempo = glfwGetTime();
-		}*/
-
-		//casilla01A.RenderModel(); // Amarillo
-		//casilla01M.RenderModel(); // Azul
-		//casilla01AR.RenderModel(); // Cocinadas
-
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -5536,11 +5569,6 @@ int main()
 		{
 			casilla02M.RenderModel();
 		}
-
-
-		//casilla02M.RenderModel();
-		//casilla02A.RenderModel();
-		//casilla02AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -5566,10 +5594,6 @@ int main()
 			casilla03M.RenderModel();
 		}
 
-		//casilla03M.RenderModel();
-		//casilla03A.RenderModel();
-		//casilla03AR.RenderModel();
-
 		model = modelauxCasillas; // A PARTIR DE 
 
 		// 4
@@ -5593,10 +5617,6 @@ int main()
 		{
 			casilla04M.RenderModel();
 		}
-
-		//casilla04M.RenderModel();
-		//casilla04A.RenderModel();
-		//casilla04AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -5622,10 +5642,6 @@ int main()
 			casilla05M.RenderModel();
 		}
 
-		//casilla05M.RenderModel();
-		//casilla05A.RenderModel();
-		//casilla05AR.RenderModel();
-
 		model = modelauxCasillas; // A PARTIR DE 
 
 		// 6
@@ -5649,10 +5665,6 @@ int main()
 		{
 			casilla06M.RenderModel();
 		}
-
-		//casilla06M.RenderModel();
-		//casilla06A.RenderModel();
-		//casilla06AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -5678,11 +5690,6 @@ int main()
 			casilla07M.RenderModel();
 		}
 
-
-		//casilla07M.RenderModel();
-		//casilla07A.RenderModel();
-		//casilla07AR.RenderModel();
-
 		model = modelauxCasillas; // A PARTIR DE 
 
 		// 8
@@ -5706,11 +5713,6 @@ int main()
 		{
 			casilla08M.RenderModel();
 		}
-
-
-		//casilla08M.RenderModel();
-		//casilla08A.RenderModel();
-		//casilla08AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -5737,10 +5739,6 @@ int main()
 			casilla09M.RenderModel();
 		}
 
-		//casilla09M.RenderModel();
-		//casilla09A.RenderModel();
-		//casilla09AR.RenderModel();
-
 		model = modelauxCasillas; // A PARTIR DE 
 
 		// 10
@@ -5764,11 +5762,6 @@ int main()
 		{
 			casilla10M.RenderModel();
 		}
-
-
-		//casilla10M.RenderModel();
-		//casilla10A.RenderModel();
-		//casilla10AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -5794,10 +5787,6 @@ int main()
 			casilla11M.RenderModel();
 		}
 
-		//casilla11M.RenderModel();
-		//casilla11A.RenderModel();
-		//casilla11AR.RenderModel();
-
 		model = modelauxCasillas; // A PARTIR DE 
 
 		// 12
@@ -5821,11 +5810,6 @@ int main()
 		{
 			casilla12M.RenderModel();
 		}
-
-
-		//casilla12M.RenderModel();
-		//casilla12A.RenderModel();
-		//casilla12AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -5851,10 +5835,6 @@ int main()
 			casilla13M.RenderModel();
 		}
 
-		//casilla13M.RenderModel();
-		//casilla13A.RenderModel();
-		//casilla13AR.RenderModel();
-
 		model = modelauxCasillas; // A PARTIR DE 
 
 		// 14
@@ -5878,11 +5858,6 @@ int main()
 		{
 			casilla14M.RenderModel();
 		}
-
-
-		//casilla14M.RenderModel();
-		//casilla14A.RenderModel();
-		//casilla14AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -5910,10 +5885,6 @@ int main()
 			casilla15M.RenderModel();
 		}
 
-		//casilla15M.RenderModel();
-		//casilla15A.RenderModel();
-		//casilla15AR.RenderModel();
-
 		model = modelauxCasillas; // A PARTIR DE 
 
 		// 16
@@ -5937,10 +5908,6 @@ int main()
 		{
 			casilla16M.RenderModel();
 		}
-
-		//casilla16M.RenderModel();
-		//casilla16A.RenderModel();
-		//casilla16AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -5966,10 +5933,6 @@ int main()
 			casilla17M.RenderModel();
 		}
 
-		//casilla17M.RenderModel();
-		//casilla17A.RenderModel();
-		//casilla17AR.RenderModel();
-
 		model = modelauxCasillas; // A PARTIR DE 
 
 		// 18
@@ -5993,10 +5956,6 @@ int main()
 		{
 			casilla18M.RenderModel();
 		}
-
-		//casilla18M.RenderModel();
-		//casilla18A.RenderModel();
-		//casilla18AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -6022,10 +5981,6 @@ int main()
 			casilla19M.RenderModel();
 		}
 
-		//casilla19M.RenderModel();
-		//casilla19A.RenderModel();
-		//casilla19AR.RenderModel();
-
 		model = modelauxCasillas; // A PARTIR DE 
 
 		// 20
@@ -6048,10 +6003,6 @@ int main()
 		{
 			casilla20M.RenderModel();
 		}
-
-		//casilla20M.RenderModel();
-		//casilla20A.RenderModel();
-		//casilla20AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -6077,10 +6028,6 @@ int main()
 			casilla21M.RenderModel();
 		}
 
-		//casilla21M.RenderModel();
-		//casilla21A.RenderModel();
-		//casilla21AR.RenderModel();
-
 		model = modelauxCasillas; // A PARTIR DE 
 
 		// 22
@@ -6104,10 +6051,6 @@ int main()
 		{
 			casilla22M.RenderModel();
 		}
-
-		//casilla22M.RenderModel();
-		//casilla22A.RenderModel();
-		//casilla22AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -6133,10 +6076,6 @@ int main()
 			casilla23M.RenderModel();
 		}
 
-		//casilla23M.RenderModel();
-		//casilla23A.RenderModel();
-		//casilla23AR.RenderModel();
-
 		model = modelauxCasillas; // A PARTIR DE 
 
 		// 24
@@ -6160,10 +6099,6 @@ int main()
 		{
 			casilla24M.RenderModel();
 		}
-
-		//casilla24M.RenderModel();
-		//casilla24A.RenderModel();
-		//casilla24AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -6189,10 +6124,6 @@ int main()
 			casilla25M.RenderModel();
 		}
 
-		//casilla25M.RenderModel();
-		//casilla25A.RenderModel();
-		//casilla25AR.RenderModel();
-
 		model = modelauxCasillas; // A PARTIR DE 
 
 		// 26
@@ -6217,10 +6148,6 @@ int main()
 			casilla26M.RenderModel();
 		}
 
-		//casilla26M.RenderModel();
-		//casilla26A.RenderModel();
-		//casilla26AR.RenderModel();
-
 		model = modelauxCasillas; // A PARTIR DE 
 
 		// 27
@@ -6235,8 +6162,6 @@ int main()
 		{
 			casilla27AR.RenderModel();
 		}
-
-
 		if (esDia)
 		{
 			casilla27A.RenderModel();
@@ -6245,9 +6170,6 @@ int main()
 		{
 			casilla27M.RenderModel();
 		}
-		//casilla27M.RenderModel();
-		//casilla27A.RenderModel();
-		//casilla27AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -6263,8 +6185,6 @@ int main()
 		{
 			casilla28AR.RenderModel();
 		}
-
-
 		if (esDia)
 		{
 			casilla28A.RenderModel();
@@ -6273,9 +6193,6 @@ int main()
 		{
 			casilla28M.RenderModel();
 		}
-		//casilla28M.RenderModel();
-		//casilla28A.RenderModel();
-		//casilla28AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -6301,10 +6218,6 @@ int main()
 			casilla29M.RenderModel();
 		}
 
-		//casilla29M.RenderModel();
-		//casilla29A.RenderModel();
-		//casilla29AR.RenderModel();
-
 		model = modelauxCasillas; // A PARTIR DE 
 
 		// 30
@@ -6319,8 +6232,6 @@ int main()
 		{
 			casilla30AR.RenderModel();
 		}
-
-
 		if (esDia)
 		{
 			casilla30A.RenderModel();
@@ -6329,10 +6240,6 @@ int main()
 		{
 			casilla30M.RenderModel();
 		}
-
-		//casilla30M.RenderModel();
-		//casilla30A.RenderModel();
-		//casilla30AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -6348,7 +6255,6 @@ int main()
 		{
 			casilla31AR.RenderModel();
 		}
-
 		if (esDia)
 		{
 			casilla31A.RenderModel();
@@ -6357,10 +6263,6 @@ int main()
 		{
 			casilla31M.RenderModel();
 		}
-
-		//casilla31M.RenderModel();
-		//casilla31A.RenderModel();
-		//casilla31AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -6386,10 +6288,6 @@ int main()
 			casilla32M.RenderModel();
 		}
 
-		//casilla32M.RenderModel();
-		//casilla32A.RenderModel();
-		//casilla32AR.RenderModel();
-
 		model = modelauxCasillas; // A PARTIR DE 
 
 		// 33
@@ -6414,10 +6312,6 @@ int main()
 			casilla33M.RenderModel();
 		}
 
-		//casilla33M.RenderModel();
-		//casilla33A.RenderModel();
-		//casilla33AR.RenderModel();
-
 		model = modelauxCasillas; // A PARTIR DE 
 
 		// 34
@@ -6441,10 +6335,6 @@ int main()
 		{
 			casilla34M.RenderModel();
 		}
-
-		//casilla34M.RenderModel();
-		//casilla34A.RenderModel();
-		//casilla34AR.RenderModel();
 
 		model = modelauxCasillas; // A PARTIR DE 
 
@@ -6986,131 +6876,246 @@ int main()
 
 											// ##################################### SUBZERO AVATAR ##################################### \\
 
-		// AVATAR SUB ZERO PARA RECORRIDO
-		model = glm::mat4(1.0);
-
-		model = glm::translate(model, glm::vec3(-100.0f, 19.8f, 100.0f));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-
-		// RECORRIDO AVATAR
-		// EL PRIMER TRANSLATE (HASTA LLEGAR A UNA PARTE)
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, mueveAvatar01));
-		model = glm::rotate(model, rotaAvatar01 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-
-		// RECORRIDO AVATAR
-		// EL PRIMER TRANSLATE (HASTA LLEGAR A UNA PARTE)
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, mueveAvatar02));
-		model = glm::rotate(model, rotaAvatar02 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-
-		// RECORRIDO AVATAR
-		// EL PRIMER TRANSLATE (HASTA LLEGAR A UNA PARTE)
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, mueveAvatar03));
-		model = glm::rotate(model, rotaAvatar03 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-
-		// RECORRIDO AVATAR
-		// EL PRIMER TRANSLATE (HASTA LLEGAR A UNA PARTE)
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, mueveAvatar04));
-		model = glm::rotate(model, rotaAvatar04 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-
-
-		modelauxTorso = model; // GUARDA TORSO
-
-		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		torsoSubZero.RenderModel();
-
-		model = modelauxTorso; // A PARTIR DE TORSO
-
-		// LUZ LIGADA AL PERSONAJE
-		glm::vec3 posicion = glm::vec3(model[3]);
-		glm::vec3 direccion = glm::vec3(model[2]);
-
-		if (esNoche)
+		if (cambio < 1)
 		{
-			spotLights[1].SetFlash(posicion, direccion);
+			//// AVATAR SUB ZERO PARA RECORRIDO
+			model = glm::mat4(1.0);
+
+			model = glm::translate(model, glm::vec3(-100.0f, 19.8f, 100.0f));
+			model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+			// RECORRIDO AVATAR
+			// EL PRIMER TRANSLATE (HASTA LLEGAR A UNA PARTE)
+			model = glm::translate(model, glm::vec3(0.0f, 0.0f, mueveAvatar01));
+			model = glm::rotate(model, rotaAvatar01 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+			// RECORRIDO AVATAR
+			// EL PRIMER TRANSLATE (HASTA LLEGAR A UNA PARTE)
+			model = glm::translate(model, glm::vec3(0.0f, 0.0f, mueveAvatar02));
+			model = glm::rotate(model, rotaAvatar02 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+			// RECORRIDO AVATAR
+			// EL PRIMER TRANSLATE (HASTA LLEGAR A UNA PARTE)
+			model = glm::translate(model, glm::vec3(0.0f, 0.0f, mueveAvatar03));
+			model = glm::rotate(model, rotaAvatar03 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+			// RECORRIDO AVATAR
+			// EL PRIMER TRANSLATE (HASTA LLEGAR A UNA PARTE)
+			model = glm::translate(model, glm::vec3(0.0f, 0.0f, mueveAvatar04));
+			model = glm::rotate(model, rotaAvatar04 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+
+			modelauxTorso = model; // GUARDA TORSO
+
+			model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			torsoSubZero.RenderModel();
+
+			model = modelauxTorso; // A PARTIR DE TORSO
+
+			// LUZ LIGADA AL PERSONAJE
+			glm::vec3 posicion = glm::vec3(model[3]);
+			glm::vec3 direccion = glm::vec3(model[2]);
+
+			if (esNoche)
+			{
+				spotLights[1].SetFlash(posicion, direccion);
+			}
+
+			model = glm::translate(model, glm::vec3(-3.5f, 2.0f, -0.3f));
+			model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+
+			modelauxBrazoDerecho = model; // GUARDA BRAZO DERECHO
+
+			model = glm::scale(model, glm::vec3(1.2f, 1.2f, 1.2f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			esfera.RenderModel();
+
+			model = modelauxBrazoDerecho; // A PARTIR DE BRAZO DERECHO
+
+			model = glm::translate(model, glm::vec3(-0.3f, 0.0f, 0.1f));
+			model = glm::rotate(model, -rotaBrazoD * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+			model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			brazoDerechoSubZero.RenderModel();
+
+			model = modelauxTorso; // A PARTIR DE TORSO
+
+			model = glm::translate(model, glm::vec3(3.5f, 2.0f, -0.3f));
+			model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+
+			modelauxBrazoIzquierdo = model; // GUARDA BRAZO IZQUIERDO
+
+			model = glm::scale(model, glm::vec3(1.2f, 1.2f, 1.2f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			esfera.RenderModel();
+
+			model = modelauxBrazoIzquierdo; // A PARTIR DE BRAZO IZQUIERDO
+
+			model = glm::translate(model, glm::vec3(0.3f, 0.0f, 0.1f));
+			model = glm::rotate(model, rotaBrazoI * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+			model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			brazoIzquieroSubZero.RenderModel();
+
+			model = modelauxTorso; // A PARTIR DE TORSO
+
+			model = glm::translate(model, glm::vec3(0.0f, -5.0f, 0.0f));
+
+			modelauxCintura = model; // GUARDA CINTURA
+
+			model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			cinturaSubZero.RenderModel();
+
+			model = modelauxCintura; //  PARTIR DE LA CINTURA
+
+			model = glm::translate(model, glm::vec3(-1.3f, -1.5f, 0.0f));
+
+			modelauxPiernaDerecha = model; // GUARDA PIERNA DERECHA
+
+			model = glm::scale(model, glm::vec3(1.2f, 1.2f, 1.2f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			esfera.RenderModel();
+
+			model = modelauxPiernaDerecha; // A PARTIR DE LA PIERNA DERECHA
+
+			model = glm::translate(model, glm::vec3(0.0f, 0.3f, 0.0f));
+			model = glm::rotate(model, rotaPiernaD * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+			model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			piernaDerechaSubZero.RenderModel();
+
+			model = modelauxCintura; //  PARTIR DE LA CINTURA
+
+			model = glm::translate(model, glm::vec3(1.3f, -1.5f, 0.0f));
+
+			modelauxPiernaIzquierda = model; // GUARDA PIERNA IZQUIERDA
+
+			model = glm::scale(model, glm::vec3(1.2f, 1.2f, 1.2f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			esfera.RenderModel();
+
+			model = modelauxPiernaIzquierda; // A PARTIR DE LA PIERNA IZQUIERDA
+
+			model = glm::translate(model, glm::vec3(0.0f, 0.3f, 0.0f));
+			model = glm::rotate(model, rotaPiernaI * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+			model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			piernaIzquierdaSubZero.RenderModel();
+
 		}
 
-		model = glm::translate(model, glm::vec3(-3.5f, 2.0f, -0.3f));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+												// ##################################### CRASH AVATAR ##################################### 
+		if (cambio > 0)
+		{
+			// AVATAR CRASH PARA RECORRIDO
+			model = glm::mat4(1.0);
 
-		modelauxBrazoDerecho = model; // GUARDA BRAZO DERECHO
+			model = glm::translate(model, glm::vec3(-100.0f, 15.2f, 100.0f));
+			model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 
-		model = glm::scale(model, glm::vec3(1.2f, 1.2f, 1.2f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		esfera.RenderModel();
+			// RECORRIDO AVATAR
+			// EL PRIMER TRANSLATE (HASTA LLEGAR A UNA PARTE)
+			model = glm::translate(model, glm::vec3(0.0f, 0.0f, mueveAvatar01));
+			model = glm::rotate(model, rotaAvatar01 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 
-		model = modelauxBrazoDerecho; // A PARTIR DE BRAZO DERECHO
+			// RECORRIDO AVATAR
+			// EL PRIMER TRANSLATE (HASTA LLEGAR A UNA PARTE)
+			model = glm::translate(model, glm::vec3(0.0f, 0.0f, mueveAvatar02));
+			model = glm::rotate(model, rotaAvatar02 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 
-		model = glm::translate(model, glm::vec3(-0.3f, 0.0f, 0.1f));
-		model = glm::rotate(model, -rotaBrazoD * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		brazoDerechoSubZero.RenderModel();
+			// RECORRIDO AVATAR
+			// EL PRIMER TRANSLATE (HASTA LLEGAR A UNA PARTE)
+			model = glm::translate(model, glm::vec3(0.0f, 0.0f, mueveAvatar03));
+			model = glm::rotate(model, rotaAvatar03 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 
-		model = modelauxTorso; // A PARTIR DE TORSO
+			// RECORRIDO AVATAR
+			// EL PRIMER TRANSLATE (HASTA LLEGAR A UNA PARTE)
+			model = glm::translate(model, glm::vec3(0.0f, 0.0f, mueveAvatar04));
+			model = glm::rotate(model, rotaAvatar04 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 
-		model = glm::translate(model, glm::vec3(3.5f, 2.0f, -0.3f));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+			modelauxTorsoC = model; // GUARDA TORSO
 
-		modelauxBrazoIzquierdo = model; // GUARDA BRAZO IZQUIERDO
+			model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			cuerpoCrash.RenderModel();
 
-		model = glm::scale(model, glm::vec3(1.2f, 1.2f, 1.2f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		esfera.RenderModel();
+			model = modelauxTorsoC; // A PARTIR DE TORSO
 
-		model = modelauxBrazoIzquierdo; // A PARTIR DE BRAZO IZQUIERDO
+			model = glm::translate(model, glm::vec3(-2.55f, 3.8f, -0.3f));
+			model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 
-		model = glm::translate(model, glm::vec3(0.3f, 0.0f, 0.1f));
-		model = glm::rotate(model, rotaBrazoI * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		brazoIzquieroSubZero.RenderModel();
+			modelauxBrazoDerechoC = model; // GUARDA BRAZO DERECHO
 
-		model = modelauxTorso; // A PARTIR DE TORSO
+			model = glm::scale(model, glm::vec3(1.4f, 1.4f, 1.4f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			esferaN.RenderModel();
 
-		model = glm::translate(model, glm::vec3(0.0f, -5.0f, 0.0f));
+			model = modelauxBrazoDerechoC; // A PARTIR DE BRAZO DERECHO
 
-		modelauxCintura = model; // GUARDA CINTURA
+			model = glm::translate(model, glm::vec3(-0.28f, 0.0f, 0.3f));
+			model = glm::rotate(model, -rotaBrazoD * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+			model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			brazoDerechoCrash.RenderModel();
 
-		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		cinturaSubZero.RenderModel();
+			model = modelauxTorsoC; // A PARTIR DE TORSO
 
-		model = modelauxCintura; //  PARTIR DE LA CINTURA
+			model = glm::translate(model, glm::vec3(2.55f, 3.8f, -0.3f));
+			model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 
-		model = glm::translate(model, glm::vec3(-1.3f, -1.5f, 0.0f));
+			modelauxBrazoIzquierdoC = model; // GUARDA BRAZO IZQUIERDO
 
-		modelauxPiernaDerecha = model; // GUARDA PIERNA DERECHA
+			model = glm::scale(model, glm::vec3(1.4f, 1.4f, 1.4f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			esferaN.RenderModel();
 
-		model = glm::scale(model, glm::vec3(1.2f, 1.2f, 1.2f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		esfera.RenderModel();
+			model = modelauxBrazoIzquierdoC; // A PARTIR DE BRAZO IZQUIERDO
 
-		model = modelauxPiernaDerecha; // A PARTIR DE LA PIERNA DERECHA
+			model = glm::translate(model, glm::vec3(0.28f, 0.0f, 0.3f));
+			model = glm::rotate(model, -rotaBrazoD * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+			model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			brazoIzquierdoCrash.RenderModel();
 
-		model = glm::translate(model, glm::vec3(0.0f, 0.3f, 0.0f));
-		model = glm::rotate(model, rotaPiernaD * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		piernaDerechaSubZero.RenderModel();
+			model = modelauxTorsoC; //  PARTIR DE TORSO
 
-		model = modelauxCintura; //  PARTIR DE LA CINTURA
+			model = glm::translate(model, glm::vec3(-1.0f, -4.8f, 0.0f));
 
-		model = glm::translate(model, glm::vec3(1.3f, -1.5f, 0.0f));
+			modelauxPiernaDerechaC = model; // GUARDA PIERNA DERECHA
 
-		modelauxPiernaIzquierda = model; // GUARDA PIERNA IZQUIERDA
+			model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			esferaN.RenderModel();
 
-		model = glm::scale(model, glm::vec3(1.2f, 1.2f, 1.2f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		esfera.RenderModel();
+			model = modelauxPiernaDerechaC; // A PARTIR DE LA PIERNA DERECHA
 
-		model = modelauxPiernaIzquierda; // A PARTIR DE LA PIERNA IZQUIERDA
+			model = glm::translate(model, glm::vec3(0.0f, -0.3f, 0.0f));
+			model = glm::rotate(model, rotaPiernaD * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+			model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			piernaDerechaCrash.RenderModel();
 
-		model = glm::translate(model, glm::vec3(0.0f, 0.3f, 0.0f));
-		model = glm::rotate(model, rotaPiernaI * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		piernaIzquierdaSubZero.RenderModel();
+			model = modelauxTorsoC; //  PARTIR DE TORSO
+
+			model = glm::translate(model, glm::vec3(1.0f, -4.8f, 0.0f));
+
+			modelauxPiernaIzquierdaC = model; // GUARDA PIERNA IZQUIERDA
+
+			model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			esferaN.RenderModel();
+
+			model = modelauxPiernaIzquierdaC; // A PARTIR DE LA PIERNA IZQUIERDA
+
+			model = glm::translate(model, glm::vec3(0.0f, -0.3f, 0.0f));
+			model = glm::rotate(model, rotaPiernaI * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+			model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			piernaIzquierdaCrash.RenderModel();
+
+		}
 
 											// ##################################### MODELOS DE ANIMACIONES ##################################### \\
 
@@ -7161,9 +7166,9 @@ int main()
 
 		// CRASH
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-15.0f + (10.0 * sin(anguloVariaCrash) * cos(anguloVariaCrash)) / (10.0 + sin(anguloVariaCrash) * sin(anguloVariaCrash)) 
-												, 6.3f, 
-												-45.0 + (10.0 * cos(anguloVariaCrash)) / (10.0 + sin(anguloVariaCrash) * sin(anguloVariaCrash)) ));
+		model = glm::translate(model, glm::vec3(-15.0f, 
+												6.3f + (abs(5.0f * sin(glm::radians(anguloVariaCrash * 2.0f)))),
+												-45.0));
 		model = glm::rotate(model, rotaCrash * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -7174,7 +7179,7 @@ int main()
 		if ((glfwGetTime() - tiempoTransformacion) < 10)
 		{
 			model = glm::mat4(1.0);
-			model = glm::translate(model, glm::vec3(-210.0f, 10.1f, 0.0));
+			model = glm::translate(model, glm::vec3(-210.0f, 12.1f, 0.0));
 			model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 			model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
 			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -7183,23 +7188,31 @@ int main()
 		else if ((glfwGetTime() - tiempoTransformacion) < 20)
 		{
 			model = glm::mat4(1.0);
-			model = glm::translate(model, glm::vec3(-210.0f, 10.1f, 0.0));
+			model = glm::translate(model, glm::vec3(-210.0f, 12.1f, 0.0));
 			model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 			model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
 			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 			scorpionOriginal.RenderModel();
 
-			if (escala01 < 50 && escala02 < 50 && escala03 < 50)
+			if (escala01 < 10 && escala02 < 10 && escala03 < 10)
 			{
 				escala01 += escala01Offset * deltaTime;
 				escala02 += escala02Offset * deltaTime;
 				escala03 += escala03Offset * deltaTime;
 			}
+
+			if (escala04 < 0.7 && escala05 < 1.0 && escala06 < 0.7)
+			{
+				escala04 += escala04Offset * (deltaTime/7);
+				escala05 += escala05Offset * (deltaTime/7);
+				escala06 += escala06Offset * (deltaTime/7);
+			}
+			fire += fireOffset * deltaTime;
 		}
 		else if ((glfwGetTime() - tiempoTransformacion) < 30)
 		{
 			model = glm::mat4(1.0);
-			model = glm::translate(model, glm::vec3(-210.0f, 10.1f, 0.0));
+			model = glm::translate(model, glm::vec3(-210.0f, 12.1f, 0.0));
 			model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 			model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
 			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -7211,11 +7224,19 @@ int main()
 				escala02 -= escala02Offset * deltaTime;
 				escala03 -= escala03Offset * deltaTime;
 			}
+
+			if (escala04 > 0.0 && escala05 > 0.0 && escala06 > 0.0)
+			{
+				escala04 -= escala04Offset * (deltaTime / 7);
+				escala05 -= escala05Offset * (deltaTime / 7);
+				escala06 -= escala06Offset * (deltaTime / 7);
+			}
+			fire -= fireOffset * deltaTime;
 		}
 		else if ((glfwGetTime() - tiempoTransformacion) < 40)
 		{
 			model = glm::mat4(1.0);
-			model = glm::translate(model, glm::vec3(-210.0f, 10.1f, 0.0));
+			model = glm::translate(model, glm::vec3(-210.0f, 12.1f, 0.0));
 			model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 			model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
 			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -7224,23 +7245,31 @@ int main()
 		else if ((glfwGetTime() - tiempoTransformacion) < 50)
 		{
 			model = glm::mat4(1.0);
-			model = glm::translate(model, glm::vec3(-210.0f, 10.1f, 0.0));
+			model = glm::translate(model, glm::vec3(-210.0f, 12.1f, 0.0));
 			model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 			model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
 			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 			scorpionTransformacion.RenderModel();
 
-			if (escala01 < 50 && escala02 < 50 && escala03 < 50)
+			if (escala01 < 10 && escala02 < 10 && escala03 < 10)
 			{
 				escala01 += escala01Offset * deltaTime;
 				escala02 += escala02Offset * deltaTime;
 				escala03 += escala03Offset * deltaTime;
 			}
+
+			if (escala04 < 0.7 && escala05 < 1.0 && escala06 < 0.7)
+			{
+				escala04 += escala04Offset * (deltaTime / 7);
+				escala05 += escala05Offset * (deltaTime / 7);
+				escala06 += escala06Offset * (deltaTime / 7);
+			}
+			fire += fireOffset * deltaTime;
 		}
 		else if ((glfwGetTime() - tiempoTransformacion) < 60)
 		{
 			model = glm::mat4(1.0);
-			model = glm::translate(model, glm::vec3(-210.0f, 10.1f, 0.0));
+			model = glm::translate(model, glm::vec3(-210.0f, 12.1f, 0.0));
 			model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 			model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
 			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -7252,6 +7281,14 @@ int main()
 				escala02 -= escala02Offset * deltaTime;
 				escala03 -= escala03Offset * deltaTime;
 			}
+
+			if (escala04 > 0.0 && escala05 > 0.0 && escala06 > 0.0)
+			{
+				escala04 -= escala04Offset * (deltaTime / 7);
+				escala05 -= escala05Offset * (deltaTime / 7);
+				escala06 -= escala06Offset * (deltaTime / 7);
+			}
+			fire -= fireOffset * deltaTime;
 		}
 		else
 		{
@@ -7259,11 +7296,23 @@ int main()
 		}
 
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-210.0f, 10.1f, 0.0));
-		model = glm::rotate(model, -135 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(-210.0f, 19.0f, 0.0));
 		model = glm::scale(model, glm::vec3(escala01, escala02, escala03));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		fireball.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-210.0f, 2.5f, 0.0));
+		model = glm::scale(model, glm::vec3(0.7f, 0.7f, 0.7f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		base01.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-210.0f, 2.5f, 0.0));
+		model = glm::rotate(model, fire * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(escala04, escala05, escala06));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		base02.RenderModel();
 
 												// ##################################### CARRO ##################################### \\
 
@@ -7586,15 +7635,6 @@ int main()
 		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		casaCynthia.RenderModel();
-
-
-		////Casa Cynthia
-		//model = glm::mat4(1.0);
-		//model = glm::translate(model, glm::vec3(-210.0f, -1.0f, 0.0f));
-		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		//model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
-		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//casaCynthia.RenderModel();
 
 		//Casa Cynthia
 		model = glm::mat4(1.0);
